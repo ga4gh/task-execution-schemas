@@ -1,0 +1,328 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "",
+    "title": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/taskop/{value}": {
+      "get": {
+        "summary": "TaskOpService.Get",
+        "operationId": "Get",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "tags": [
+          "TaskOpService"
+        ]
+      },
+      "delete": {
+        "summary": "TaskOpService.Cancel",
+        "operationId": "Cancel",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "tags": [
+          "TaskOpService"
+        ]
+      }
+    },
+    "/v1/tasks": {
+      "post": {
+        "summary": "TaskService.Create",
+        "operationId": "Create",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTask"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTask"
+            }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/tasks/{value}": {
+      "get": {
+        "summary": "TaskService.Get",
+        "operationId": "Get",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      },
+      "delete": {
+        "summary": "TaskService.Delete",
+        "operationId": "Delete",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/tasks:run": {
+      "post": {
+        "summary": "TaskService.Run",
+        "operationId": "Run",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskRun"
+            }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ga4gh_task_execDisk": {
+      "properties": {
+        "autoDelete": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "mountPoint": {
+          "type": "string",
+          "format": "string"
+        },
+        "name": {
+          "type": "string",
+          "format": "string"
+        },
+        "readOnly": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "sizeGb": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "source": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execDockerExecutor": {
+      "properties": {
+        "cmd": {
+          "type": "string",
+          "format": "string"
+        },
+        "imageName": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execFileParameter": {
+      "properties": {
+        "path": {
+          "type": "string",
+          "format": "string"
+        },
+        "storagePath": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execResources": {
+      "properties": {
+        "disks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execDisk"
+          }
+        },
+        "minimumCpuCores": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "minimumRamGb": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "preemptible": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      }
+    },
+    "ga4gh_task_execTask": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "format": "string"
+        },
+        "docker": {
+          "$ref": "#/definitions/ga4gh_task_execDockerExecutor"
+        },
+        "inputParameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execFileParameter"
+          }
+        },
+        "name": {
+          "type": "string",
+          "format": "string"
+        },
+        "outputParameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execFileParameter"
+          }
+        },
+        "projectId": {
+          "type": "string",
+          "format": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/ga4gh_task_execResources"
+        },
+        "taskId": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskId": {
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskOpId": {
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskRun": {
+      "properties": {
+        "ephemeralTask": {
+          "type": "string",
+          "format": "string"
+        },
+        "taskArgs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execFileParameter"
+          }
+        },
+        "taskId": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    }
+  }
+}

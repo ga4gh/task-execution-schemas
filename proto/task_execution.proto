@@ -1,0 +1,109 @@
+
+
+syntax = "proto3";
+
+package ga4gh_task_exec;
+
+import "google/api/annotations.proto";
+
+message FileParameter {
+  string path = 1;
+  string storagePath = 2;
+}
+
+message DockerExecutor {
+  string imageName = 1;
+  string cmd = 2;
+}
+
+message Disk {
+  string name = 1;
+  uint32 sizeGb = 2;
+  string source = 3;
+  bool autoDelete = 4;
+  bool readOnly = 5;
+  string mountPoint = 6;  
+}
+
+message Resources {
+  uint32 minimumCpuCores = 1;
+  bool preemptible = 2;
+  uint32 minimumRamGb = 3;
+  repeated Disk disks = 4;
+  repeated string zones = 5;
+}
+
+message Task {
+  string name = 1;
+  string projectId = 2;
+  string description = 3;
+  repeated FileParameter inputParameters = 4;
+  repeated FileParameter outputParameters = 5;
+  Resources resources = 6;
+  string taskId = 7;
+  DockerExecutor docker = 8;  
+}
+
+message TaskRun {
+  repeated FileParameter taskArgs = 1;
+  string taskId = 2;
+  string ephemeralTask = 3;
+}
+
+message TaskId {
+  string value = 1;
+}
+
+message TaskOpId {
+  string value = 1;
+}
+
+message TaskOp {
+  string name = 1;
+  map<string,string> metadata = 2;
+  bool done = 3;
+}
+
+service TaskService {
+  rpc Create(Task) returns (Task) {
+    option (google.api.http) = {
+      post: "/v1/tasks"
+      body: "*"
+    };
+  }
+  
+  rpc Delete(TaskId) returns (TaskId) {
+    option (google.api.http) = {
+      delete: "/v1/tasks/{value}"
+    };    
+  }
+  
+  rpc Get(TaskId) returns (TaskId) {
+    option (google.api.http) = {
+      get: "/v1/tasks/{value}"
+    };    
+  }
+  
+  rpc Run(TaskRun) returns (TaskOpId) {
+    option (google.api.http) = {
+      post: "/v1/tasks:run"
+      body: "*"
+    };    
+  }
+}
+
+
+service TaskOpService {
+  rpc Cancel(TaskOpId) returns (TaskOpId) {
+    option (google.api.http) = {
+      delete: "/v1/taskop/{value}"
+    };
+  }
+  
+  rpc Get(TaskOpId) returns (TaskOpId) {
+    option (google.api.http) = {
+      get: "/v1/taskop/{value}"
+    };
+  }
+  
+}
