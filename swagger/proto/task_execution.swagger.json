@@ -17,8 +17,8 @@
   "paths": {
     "/v1/taskop/{value}": {
       "get": {
-        "summary": "TaskOpService.Get",
-        "operationId": "Get",
+        "summary": "TaskOpService.GetTaskOp",
+        "operationId": "GetTaskOp",
         "responses": {
           "default": {
             "description": "Description",
@@ -41,8 +41,8 @@
         ]
       },
       "delete": {
-        "summary": "TaskOpService.Cancel",
-        "operationId": "Cancel",
+        "summary": "TaskOpService.CancelTaskOp",
+        "operationId": "CancelTaskOp",
         "responses": {
           "default": {
             "description": "Description",
@@ -67,8 +67,8 @@
     },
     "/v1/tasks": {
       "post": {
-        "summary": "TaskService.Create",
-        "operationId": "Create",
+        "summary": "TaskService.CreateTask",
+        "operationId": "CreateTask",
         "responses": {
           "default": {
             "description": "Description",
@@ -94,8 +94,8 @@
     },
     "/v1/tasks/{value}": {
       "get": {
-        "summary": "TaskService.Get",
-        "operationId": "Get",
+        "summary": "TaskService.GetTask",
+        "operationId": "GetTask",
         "responses": {
           "default": {
             "description": "Description",
@@ -118,8 +118,8 @@
         ]
       },
       "delete": {
-        "summary": "TaskService.Delete",
-        "operationId": "Delete",
+        "summary": "TaskService.DeleteTask",
+        "operationId": "DeleteTask",
         "responses": {
           "default": {
             "description": "Description",
@@ -144,8 +144,8 @@
     },
     "/v1/tasks:run": {
       "post": {
-        "summary": "TaskService.Run",
-        "operationId": "Run",
+        "summary": "TaskService.RunTask",
+        "operationId": "RunTask",
         "responses": {
           "default": {
             "description": "Description",

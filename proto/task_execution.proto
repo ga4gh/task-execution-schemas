@@ -65,26 +65,26 @@ message TaskOp {
 }
 
 service TaskService {
-  rpc Create(Task) returns (Task) {
+  rpc CreateTask(Task) returns (Task) {
     option (google.api.http) = {
       post: "/v1/tasks"
       body: "*"
     };
   }
   
-  rpc Delete(TaskId) returns (TaskId) {
+  rpc DeleteTask(TaskId) returns (TaskId) {
     option (google.api.http) = {
       delete: "/v1/tasks/{value}"
     };    
   }
   
-  rpc Get(TaskId) returns (TaskId) {
+  rpc GetTask(TaskId) returns (TaskId) {
     option (google.api.http) = {
       get: "/v1/tasks/{value}"
     };    
   }
   
-  rpc Run(TaskRun) returns (TaskOpId) {
+  rpc RunTask(TaskRun) returns (TaskOpId) {
     option (google.api.http) = {
       post: "/v1/tasks:run"
       body: "*"
@@ -94,13 +94,13 @@ service TaskService {
 
 
 service TaskOpService {
-  rpc Cancel(TaskOpId) returns (TaskOpId) {
+  rpc CancelTaskOp(TaskOpId) returns (TaskOpId) {
     option (google.api.http) = {
       delete: "/v1/taskop/{value}"
     };
   }
   
-  rpc Get(TaskOpId) returns (TaskOpId) {
+  rpc GetTaskOp(TaskOpId) returns (TaskOpId) {
     option (google.api.http) = {
       get: "/v1/taskop/{value}"
     };
