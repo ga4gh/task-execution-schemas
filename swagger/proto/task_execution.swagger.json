@@ -17,7 +17,7 @@
   "paths": {
     "/v1/taskop/{value}": {
       "get": {
-        "summary": "TaskOpService.GetTaskOp",
+        "summary": "TaskService.GetTaskOp",
         "operationId": "GetTaskOp",
         "responses": {
           "default": {
@@ -37,11 +37,11 @@
           }
         ],
         "tags": [
-          "TaskOpService"
+          "TaskService"
         ]
       },
       "delete": {
-        "summary": "TaskOpService.CancelTaskOp",
+        "summary": "TaskService.CancelTaskOp",
         "operationId": "CancelTaskOp",
         "responses": {
           "default": {
@@ -61,7 +61,7 @@
           }
         ],
         "tags": [
-          "TaskOpService"
+          "TaskService"
         ]
       }
     },
@@ -160,7 +160,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskRun"
+              "$ref": "#/definitions/ga4gh_task_execTaskRunRequest"
             }
           }
         ],
@@ -171,6 +171,28 @@
     }
   },
   "definitions": {
+    "TaskArgsInputsEntry": {
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/ga4gh_task_execFileParameter"
+        }
+      }
+    },
+    "TaskArgsOutputsEntry": {
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/ga4gh_task_execFileParameter"
+        }
+      }
+    },
     "ga4gh_task_execDisk": {
       "properties": {
         "autoDelete": {
@@ -259,7 +281,10 @@
           "format": "string"
         },
         "docker": {
-          "$ref": "#/definitions/ga4gh_task_execDockerExecutor"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execDockerExecutor"
+          }
         },
         "inputParameters": {
           "type": "array",
@@ -290,6 +315,29 @@
         }
       }
     },
+    "ga4gh_task_execTaskArgs": {
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TaskArgsInputsEntry"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TaskArgsOutputsEntry"
+          }
+        },
+        "projectId": {
+          "type": "string",
+          "format": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/ga4gh_task_execResources"
+        }
+      }
+    },
     "ga4gh_task_execTaskId": {
       "properties": {
         "value": {
@@ -306,17 +354,13 @@
         }
       }
     },
-    "ga4gh_task_execTaskRun": {
+    "ga4gh_task_execTaskRunRequest": {
       "properties": {
         "ephemeralTask": {
-          "type": "string",
-          "format": "string"
+          "$ref": "#/definitions/ga4gh_task_execTask"
         },
         "taskArgs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileParameter"
-          }
+          "$ref": "#/definitions/ga4gh_task_execTaskArgs"
         },
         "taskId": {
           "type": "string",
