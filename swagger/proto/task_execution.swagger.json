@@ -100,7 +100,7 @@
           "default": {
             "description": "Description",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskId"
+              "$ref": "#/definitions/ga4gh_task_execTask"
             }
           }
         },
@@ -172,6 +172,7 @@
   },
   "definitions": {
     "TaskArgsInputsEntry": {
+      "type": "object",
       "properties": {
         "key": {
           "type": "string",
@@ -183,6 +184,7 @@
       }
     },
     "TaskArgsOutputsEntry": {
+      "type": "object",
       "properties": {
         "key": {
           "type": "string",
@@ -194,6 +196,7 @@
       }
     },
     "ga4gh_task_execDisk": {
+      "type": "object",
       "properties": {
         "autoDelete": {
           "type": "boolean",
@@ -222,6 +225,7 @@
       }
     },
     "ga4gh_task_execDockerExecutor": {
+      "type": "object",
       "properties": {
         "cmd": {
           "type": "string",
@@ -234,6 +238,7 @@
       }
     },
     "ga4gh_task_execFileParameter": {
+      "type": "object",
       "properties": {
         "path": {
           "type": "string",
@@ -246,6 +251,7 @@
       }
     },
     "ga4gh_task_execResources": {
+      "type": "object",
       "properties": {
         "disks": {
           "type": "array",
@@ -275,6 +281,7 @@
       }
     },
     "ga4gh_task_execTask": {
+      "type": "object",
       "properties": {
         "description": {
           "type": "string",
@@ -316,6 +323,7 @@
       }
     },
     "ga4gh_task_execTaskArgs": {
+      "type": "object",
       "properties": {
         "inputs": {
           "type": "array",
@@ -339,6 +347,7 @@
       }
     },
     "ga4gh_task_execTaskId": {
+      "type": "object",
       "properties": {
         "value": {
           "type": "string",
@@ -347,6 +356,7 @@
       }
     },
     "ga4gh_task_execTaskOpId": {
+      "type": "object",
       "properties": {
         "value": {
           "type": "string",
@@ -355,6 +365,7 @@
       }
     },
     "ga4gh_task_execTaskRunRequest": {
+      "type": "object",
       "properties": {
         "ephemeralTask": {
           "$ref": "#/definitions/ga4gh_task_execTask"
