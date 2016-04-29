@@ -23,7 +23,7 @@
           "default": {
             "description": "Description",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
+              "$ref": "#/definitions/ga4gh_task_execTaskOp"
             }
           }
         },
@@ -195,6 +195,19 @@
         }
       }
     },
+    "TaskOpMetadataEntry": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
     "ga4gh_task_execDisk": {
       "type": "object",
       "properties": {
@@ -350,6 +363,25 @@
       "type": "object",
       "properties": {
         "value": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskOp": {
+      "type": "object",
+      "properties": {
+        "done": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TaskOpMetadataEntry"
+          }
+        },
+        "name": {
           "type": "string",
           "format": "string"
         }

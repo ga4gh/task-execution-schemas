@@ -116,7 +116,7 @@ service TaskService {
   }
 
   /// Get info about a running task
-  rpc GetTaskOp(TaskOpId) returns (TaskOpId) {
+  rpc GetTaskOp(TaskOpId) returns (TaskOp) {
       option (google.api.http) = {
         get: "/v1/taskop/{value}"
       };
