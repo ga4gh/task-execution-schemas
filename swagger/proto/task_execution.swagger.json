@@ -15,6 +15,23 @@
     "application/json"
   ],
   "paths": {
+    "/v1/taskop": {
+      "get": {
+        "summary": "TaskService.ListTaskOp",
+        "operationId": "ListTaskOp",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskOpListResponse"
+            }
+          }
+        },
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
     "/v1/taskop/{value}": {
       "get": {
         "summary": "TaskService.GetTaskOp",
@@ -66,6 +83,21 @@
       }
     },
     "/v1/tasks": {
+      "get": {
+        "summary": "TaskService.ListTask",
+        "operationId": "ListTask",
+        "responses": {
+          "default": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execTaskListResponse"
+            }
+          }
+        },
+        "tags": [
+          "TaskService"
+        ]
+      },
       "post": {
         "summary": "TaskService.CreateTask",
         "operationId": "CreateTask",
@@ -179,7 +211,8 @@
           "format": "string"
         },
         "value": {
-          "$ref": "#/definitions/ga4gh_task_execFileParameter"
+          "type": "string",
+          "format": "string"
         }
       }
     },
@@ -191,7 +224,8 @@
           "format": "string"
         },
         "value": {
-          "$ref": "#/definitions/ga4gh_task_execFileParameter"
+          "type": "string",
+          "format": "string"
         }
       }
     },
@@ -250,14 +284,14 @@
         }
       }
     },
-    "ga4gh_task_execFileParameter": {
+    "ga4gh_task_execLocalCopy": {
       "type": "object",
       "properties": {
-        "path": {
+        "disk": {
           "type": "string",
           "format": "string"
         },
-        "storagePath": {
+        "path": {
           "type": "string",
           "format": "string"
         }
@@ -293,6 +327,20 @@
         }
       }
     },
+    "ga4gh_task_execState": {
+      "type": "string",
+      "enum": [
+        "Unknown",
+        "Queued",
+        "Running",
+        "Paused",
+        "Complete",
+        "Error",
+        "SystemError",
+        "Canceled"
+      ],
+      "default": "Unknown"
+    },
     "ga4gh_task_execTask": {
       "type": "object",
       "properties": {
@@ -309,7 +357,7 @@
         "inputParameters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileParameter"
+            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
           }
         },
         "name": {
@@ -319,7 +367,7 @@
         "outputParameters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileParameter"
+            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
           }
         },
         "projectId": {
@@ -368,20 +416,58 @@
         }
       }
     },
+    "ga4gh_task_execTaskListRequest": {
+      "type": "object",
+      "properties": {
+        "namePrefix": {
+          "type": "string",
+          "format": "string"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageToken": {
+          "type": "string",
+          "format": "string"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskListResponse": {
+      "type": "object",
+      "properties": {
+        "nextPageToken": {
+          "type": "string",
+          "format": "string"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execTask"
+          }
+        }
+      }
+    },
     "ga4gh_task_execTaskOp": {
       "type": "object",
       "properties": {
-        "done": {
-          "type": "boolean",
-          "format": "boolean"
-        },
         "metadata": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/TaskOpMetadataEntry"
           }
         },
-        "name": {
+        "state": {
+          "$ref": "#/definitions/ga4gh_task_execState"
+        },
+        "task": {
+          "$ref": "#/definitions/ga4gh_task_execTask"
+        },
+        "taskOpId": {
           "type": "string",
           "format": "string"
         }
@@ -391,6 +477,62 @@
       "type": "object",
       "properties": {
         "value": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskOpListRequest": {
+      "type": "object",
+      "properties": {
+        "namePrefix": {
+          "type": "string",
+          "format": "string"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageToken": {
+          "type": "string",
+          "format": "string"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+    "ga4gh_task_execTaskOpListResponse": {
+      "type": "object",
+      "properties": {
+        "nextPageToken": {
+          "type": "string",
+          "format": "string"
+        },
+        "tasksOps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execTaskOp"
+          }
+        }
+      }
+    },
+    "ga4gh_task_execTaskParameter": {
+      "type": "object",
+      "properties": {
+        "defaultValue": {
+          "type": "string",
+          "format": "string"
+        },
+        "description": {
+          "type": "string",
+          "format": "string"
+        },
+        "localCopy": {
+          "$ref": "#/definitions/ga4gh_task_execLocalCopy"
+        },
+        "name": {
           "type": "string",
           "format": "string"
         }
