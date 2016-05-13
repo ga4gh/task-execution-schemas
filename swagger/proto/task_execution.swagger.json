@@ -17,6 +17,7 @@
   "paths": {
     "/v1/taskop": {
       "get": {
+        "summary": "List the TaskOps",
         "operationId": "ListTaskOp",
         "responses": {
           "200": {
@@ -83,6 +84,7 @@
     },
     "/v1/tasks": {
       "get": {
+        "summary": "List the tasks",
         "operationId": "ListTask",
         "responses": {
           "200": {
@@ -232,7 +234,7 @@
         "source": {
           "type": "string",
           "format": "string",
-          "title": "Source data, this would refer to an existing disk the execution engine \ncould identify. Leave blank if is to be a newly created disk"
+          "title": "Source data, this would refer to an existing disk the execution engine\ncould identify. Leave blank if is to be a newly created disk"
         }
       },
       "description": "Attached disk request."

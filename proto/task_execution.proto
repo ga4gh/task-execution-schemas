@@ -194,6 +194,7 @@ service TaskService {
     };
   }
 
+  //List the tasks
   rpc ListTask(TaskListRequest) returns (TaskListResponse) {
     option (google.api.http) = {
       get: "/v1/tasks"
@@ -215,6 +216,7 @@ service TaskService {
       };
   }
 
+  //List the TaskOps
   rpc ListTaskOp(TaskOpListRequest) returns (TaskOpListResponse) {
     option (google.api.http) = {
       get: "/v1/taskop"
