@@ -362,7 +362,7 @@
           "title": "System defined identifier of task"
         }
       },
-      "title": "/ The description of a task to be run"
+      "title": "The description of a task to be run"
     },
     "ga4gh_task_execTaskArgs": {
       "type": "object",
@@ -389,7 +389,7 @@
           "$ref": "#/definitions/ga4gh_task_execResources"
         }
       },
-      "title": "/ Arguments for task to be instanced"
+      "title": "Arguments for task to be instanced"
     },
     "ga4gh_task_execTaskId": {
       "type": "object",

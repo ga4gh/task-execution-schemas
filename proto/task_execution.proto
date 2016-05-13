@@ -13,7 +13,7 @@ message LocalCopy {
   string disk = 2;
 }
 
-// Parameters for task
+//Parameters for task
 message TaskParameter {
   string name = 1;
   string description = 2;
@@ -21,15 +21,15 @@ message TaskParameter {
   LocalCopy localCopy = 4;
 }
 
-// A command line to be executed and the docker container to run it
+//A command line to be executed and the docker container to run it
 message DockerExecutor {
-  // Docker Image name
+  //Docker Image name
   string imageName = 1;
-  // The command to be executed
+  //The command to be executed
   string cmd = 2;
 }
 
-// Attached disk request.
+//Attached disk request.
 message Disk {
   //Name of attached disk
   string name = 1;
@@ -54,7 +54,7 @@ message Resources {
   repeated string zones = 5;
 }
 
-/// The description of a task to be run
+//The description of a task to be run
 message Task {
   //user name for task
   string name = 1;
@@ -74,7 +74,7 @@ message Task {
   repeated DockerExecutor docker = 8;
 }
 
-/// Arguments for task to be instanced
+//Arguments for task to be instanced
 message TaskArgs {
   string projectId = 1;
   map<string, string> inputs = 2;
@@ -170,7 +170,7 @@ message TaskOp {
   State state = 5;
 }
 
-/// Web service to get, create, list and delete Tasks
+//Web service to get, create, list and delete Tasks
 service TaskService {
   //Create a task
   rpc CreateTask(Task) returns (Task) {
