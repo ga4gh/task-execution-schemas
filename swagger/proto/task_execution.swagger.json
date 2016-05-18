@@ -444,6 +444,9 @@
     "ga4gh_task_execTaskOp": {
       "type": "object",
       "properties": {
+        "log": {
+          "$ref": "#/definitions/ga4gh_task_execTaskOpLog"
+        },
         "metadata": {
           "type": "object",
           "additionalProperties": {
@@ -514,6 +517,41 @@
           "items": {
             "$ref": "#/definitions/ga4gh_task_execTaskOp"
           }
+        }
+      }
+    },
+    "ga4gh_task_execTaskOpLog": {
+      "type": "object",
+      "properties": {
+        "commandLine": {
+          "type": "string",
+          "format": "string",
+          "title": "The command line that was run"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "string",
+          "title": "When the command completed"
+        },
+        "exitCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Exit code of the program"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "string",
+          "title": "When the command was executed"
+        },
+        "stderr": {
+          "type": "string",
+          "format": "string",
+          "title": "Sample of stderr (not guaranteed to be entire log)"
+        },
+        "stdout": {
+          "type": "string",
+          "format": "string",
+          "title": "Sample of stdout (not guaranteed to be entire log)"
         }
       }
     },
