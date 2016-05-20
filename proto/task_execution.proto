@@ -7,27 +7,43 @@ package ga4gh_task_exec;
 // Import HTTP RESTful annotations
 import "google/api/annotations.proto";
 
-/// Mapping long term file storage to path used in docker container
-message FileParameter {
-  string path = 1;        /// Path inside the docker container
-  string storagePath = 2; /// Path of the data's long term storage
+//File
+message LocalCopy {
+  string path = 1;
+  string disk = 2;
 }
 
-/// A command line to be executed and the docker container to run it
+//Parameters for task
+message TaskParameter {
+  string name = 1;
+  string description = 2;
+  string defaultValue = 3;
+  LocalCopy localCopy = 4;
+}
+
+//A command line to be executed and the docker container to run it
 message DockerExecutor {
-  string imageName = 1;   /// Docker Image name
-  string cmd = 2;         /// The command to be executed
+  //Docker Image name
+  string imageName = 1;
+  //The command to be executed
+  string cmd = 2;
 }
 
-/// Attached disk request. 
+//Attached disk request.
 message Disk {
-  string name = 1;        /// Name of attached disk
-  uint32 sizeGb = 2;      /// Minium size
-  string source = 3;      /// Source data, this would refer to an existing disk the execution engine
-                          /// could identify. Leave blank if is to be a newly created disk
-  bool autoDelete = 4;    /// Automatically delete after usage
-  bool readOnly = 5;      /// mount into docker as read only
-  string mountPoint = 6;  /// mount point for disk inside the docker container
+  //Name of attached disk
+  string name = 1;
+  //Minium size
+  uint32 sizeGb = 2;
+  //Source data, this would refer to an existing disk the execution engine
+  //could identify. Leave blank if is to be a newly created disk
+  string source = 3;
+  //Automatically delete after usage
+  bool autoDelete = 4;
+  //mount into docker as read only
+  bool readOnly = 5;
+  //mount point for disk inside the docker container
+  string mountPoint = 6;
 }
 
 message Resources {
@@ -38,95 +54,181 @@ message Resources {
   repeated string zones = 5;
 }
 
-/// The description of a task to be run
+//The description of a task to be run
 message Task {
-  string name = 1;         /// user name for task
-  string projectId = 2;    /// parameter for execution engine to define/store group information
-  string description = 3;  /// free text description of task
-  repeated FileParameter inputParameters = 4;  /// Files to be copied into system before tasks
-  repeated FileParameter outputParameters = 5; /// Files to be copied out of the system after tasks
-  Resources resources = 6; /// Define required system resources to run job
-  string taskId = 7;       /// System defined identifier of task
-  repeated DockerExecutor docker = 8;  /// An array of docker executions that will be run sequentially
+  //user name for task
+  string name = 1;
+  //parameter for execution engine to define/store group information
+  string projectId = 2;
+  //free text description of task
+  string description = 3;
+  //Files to be copied into system before tasks
+  repeated TaskParameter inputParameters = 4;
+  //Files to be copied out of the system after tasks
+  repeated TaskParameter outputParameters = 5;
+  //Define required system resources to run job
+  Resources resources = 6;
+  //System defined identifier of task
+  string taskId = 7;
+  //An array of docker executions that will be run sequentially
+  repeated DockerExecutor docker = 8;
 }
 
-/// Arguments for task to be instanced
+//Arguments for task to be instanced
 message TaskArgs {
   string projectId = 1;
-  map<string, FileParameter> inputs = 2;
-  map<string, FileParameter> outputs = 3;
+  map<string, string> inputs = 2;
+  map<string, string> outputs = 3;
   Resources resources = 4;
 }
 
-/// Task run request
+//Task run request
+//Define either a taskId or an ephemeralTask
 message TaskRunRequest {
-  TaskArgs taskArgs = 1; /// arguments for task instance
-  // Define either a taskId or an ephemeralTask
-  string taskId = 2;     /// ID of the task that will be used to create this task instance
-  Task ephemeralTask = 3;/// description of a task that be used to create this task instance
+  //arguments for task instance
+  TaskArgs taskArgs = 1;
+  //ID of the task that will be used to create this task instance
+  string taskId = 2;
+  //description of a task that be used to create this task instance
+  Task ephemeralTask = 3;
 }
 
-/// ID of a Task description
+message TaskListRequest {
+  //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
+  string projectId = 1;
+  //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
+  string namePrefix	= 2;
+  //Number of pipelines to return at once. Defaults to 256, and max is 2048.
+  uint32 pageSize = 3;
+  //Token to use to indicate where to start getting results. If unspecified, returns the first page of results.
+  string pageToken = 4;
+}
+
+message TaskListResponse {
+  repeated Task tasks  = 1;
+  string nextPageToken = 2;
+}
+
+message TaskOpListRequest {
+  //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
+  string projectId = 1;
+  //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
+  string namePrefix	= 2;
+  //Number of pipelines to return at once. Defaults to 256, and max is 2048.
+  uint32 pageSize = 3;
+  //Token to use to indicate where to start getting results. If unspecified, returns the first page of results.
+  string pageToken = 4;
+}
+
+message TaskOpListResponse {
+  repeated TaskOp tasksOps  = 1;
+  string nextPageToken = 2;
+}
+
+//ID of a Task description
 message TaskId {
   string value = 1;
 }
 
-/// ID of an instance of a Task
+//ID of an instance of a Task
 message TaskOpId {
   string value = 1;
 }
 
-/// The description of the running instance of a task
-message TaskOp {
-  string name = 1;
-  map<string,string> metadata = 2;
-  bool done = 3;
+enum State {
+  Unknown = 0;
+  Queued = 1;
+  Running = 2;
+  Paused = 3;
+  Complete = 4;
+  Error = 5;
+  SystemError = 6;
+  Canceled = 7;
 }
 
-/// Web service to get, create, list and delete Tasks
+message TaskOpLog {
+  //The command line that was run
+  string commandLine = 1;
+  //When the command was executed
+  string startTime = 2;
+  //When the command completed
+  string endTime = 3;
+  //Sample of stdout (not guaranteed to be entire log)
+  string stdout = 4;
+  //Sample of stderr (not guaranteed to be entire log)
+  string stderr = 5;
+  //Exit code of the program
+  int32  exitCode = 6;
+}
+
+//The description of the running instance of a task
+message TaskOp {
+  string taskOpId = 1;
+  map<string,string> metadata = 2;
+  Task task = 3;
+  TaskArgs taskArgs = 4;
+  State state = 5;
+  repeated TaskOpLog logs = 6;
+}
+
+//Web service to get, create, list and delete Tasks
 service TaskService {
-  /// Create a task
+  //Create a task
   rpc CreateTask(Task) returns (Task) {
     option (google.api.http) = {
       post: "/v1/tasks"
       body: "*"
     };
   }
-  
-  /// Delete a task
+
+  //Delete a task
   rpc DeleteTask(TaskId) returns (TaskId) {
     option (google.api.http) = {
       delete: "/v1/tasks/{value}"
-    };    
+    };
   }
-  
-  /// Get a task by its ID
+
+  //Get a task by its ID
   rpc GetTask(TaskId) returns (Task) {
     option (google.api.http) = {
       get: "/v1/tasks/{value}"
-    };    
+    };
   }
-  
-  /// Run a task
+
+  //List the tasks
+  rpc ListTask(TaskListRequest) returns (TaskListResponse) {
+    option (google.api.http) = {
+      get: "/v1/tasks"
+    };
+  }
+
+  //Run a task
   rpc RunTask(TaskRunRequest) returns (TaskOpId) {
     option (google.api.http) = {
       post: "/v1/tasks:run"
       body: "*"
-    };    
+    };
   }
 
-  /// Get info about a running task
+  //Get info about a running task
   rpc GetTaskOp(TaskOpId) returns (TaskOp) {
       option (google.api.http) = {
         get: "/v1/taskop/{value}"
       };
   }
 
-  /// Cancel a running task
+  //List the TaskOps
+  rpc ListTaskOp(TaskOpListRequest) returns (TaskOpListResponse) {
+    option (google.api.http) = {
+      get: "/v1/taskop"
+    };
+  }
+
+  //Cancel a running task
   rpc CancelTaskOp(TaskOpId) returns (TaskOpId) {
     option (google.api.http) = {
       delete: "/v1/taskop/{value}"
     };
   }
-    
+
 }
