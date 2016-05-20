@@ -168,7 +168,7 @@ message TaskOp {
   Task task = 3;
   TaskArgs taskArgs = 4;
   State state = 5;
-  TaskOpLog log = 6;
+  repeated TaskOpLog logs = 6;
 }
 
 //Web service to get, create, list and delete Tasks

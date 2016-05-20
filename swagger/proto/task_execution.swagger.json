@@ -444,8 +444,11 @@
     "ga4gh_task_execTaskOp": {
       "type": "object",
       "properties": {
-        "log": {
-          "$ref": "#/definitions/ga4gh_task_execTaskOpLog"
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execTaskOpLog"
+          }
         },
         "metadata": {
           "type": "object",
