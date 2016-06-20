@@ -7,18 +7,14 @@ package ga4gh_task_exec;
 // Import HTTP RESTful annotations
 import "google/api/annotations.proto";
 
-//File
-message LocalCopy {
-  string path = 1;
-  string disk = 2;
-}
-
-//Parameters for task
+//Parameters for Task
 message TaskParameter {
   string name = 1;
   string description = 2;
-  string defaultValue = 3;
-  LocalCopy localCopy = 4;
+  string storage = 3;
+  string path = 4;
+  string disk = 5;
+  bool   directory = 6;
 }
 
 //A command line to be executed and the docker container to run it
@@ -63,34 +59,15 @@ message Task {
   //free text description of task
   string description = 3;
   //Files to be copied into system before tasks
-  repeated TaskParameter inputParameters = 4;
+  repeated TaskParameter inputs = 4;
   //Files to be copied out of the system after tasks
-  repeated TaskParameter outputParameters = 5;
+  repeated TaskParameter outputs = 5;
   //Define required system resources to run job
   Resources resources = 6;
   //System defined identifier of task
   string taskId = 7;
   //An array of docker executions that will be run sequentially
   repeated DockerExecutor docker = 8;
-}
-
-//Arguments for task to be instanced
-message TaskArgs {
-  string projectId = 1;
-  map<string, string> inputs = 2;
-  map<string, string> outputs = 3;
-  Resources resources = 4;
-}
-
-//Task run request
-//Define either a taskId or an ephemeralTask
-message TaskRunRequest {
-  //arguments for task instance
-  TaskArgs taskArgs = 1;
-  //ID of the task that will be used to create this task instance
-  string taskId = 2;
-  //description of a task that be used to create this task instance
-  Task ephemeralTask = 3;
 }
 
 message TaskListRequest {
@@ -109,7 +86,7 @@ message TaskListResponse {
   string nextPageToken = 2;
 }
 
-message TaskOpListRequest {
+message JobListRequest {
   //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
   string projectId = 1;
   //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
@@ -120,8 +97,8 @@ message TaskOpListRequest {
   string pageToken = 4;
 }
 
-message TaskOpListResponse {
-  repeated TaskOp tasksOps  = 1;
+message JobListResponse {
+  repeated Job jobs  = 1;
   string nextPageToken = 2;
 }
 
@@ -131,7 +108,7 @@ message TaskId {
 }
 
 //ID of an instance of a Task
-message TaskOpId {
+message JobId {
   string value = 1;
 }
 
@@ -146,7 +123,7 @@ enum State {
   Canceled = 7;
 }
 
-message TaskOpLog {
+message JobLog {
   //The command line that was run
   string commandLine = 1;
   //When the command was executed
@@ -162,72 +139,43 @@ message TaskOpLog {
 }
 
 //The description of the running instance of a task
-message TaskOp {
-  string taskOpId = 1;
+message Job {
+  string jobId = 1;
   map<string,string> metadata = 2;
   Task task = 3;
-  TaskArgs taskArgs = 4;
-  State state = 5;
-  repeated TaskOpLog logs = 6;
+  State state = 4;
+  repeated JobLog logs = 5;
 }
 
 //Web service to get, create, list and delete Tasks
 service TaskService {
-  //Create a task
-  rpc CreateTask(Task) returns (Task) {
-    option (google.api.http) = {
-      post: "/v1/tasks"
-      body: "*"
-    };
-  }
-
-  //Delete a task
-  rpc DeleteTask(TaskId) returns (TaskId) {
-    option (google.api.http) = {
-      delete: "/v1/tasks/{value}"
-    };
-  }
-
-  //Get a task by its ID
-  rpc GetTask(TaskId) returns (Task) {
-    option (google.api.http) = {
-      get: "/v1/tasks/{value}"
-    };
-  }
-
-  //List the tasks
-  rpc ListTask(TaskListRequest) returns (TaskListResponse) {
-    option (google.api.http) = {
-      get: "/v1/tasks"
-    };
-  }
 
   //Run a task
-  rpc RunTask(TaskRunRequest) returns (TaskOpId) {
+  rpc RunTask(Task) returns (JobId) {
     option (google.api.http) = {
-      post: "/v1/tasks:run"
+      post: "/v1/jobs"
       body: "*"
+    };
+  }
+
+  //List the TaskOps
+  rpc ListJobs(JobListRequest) returns (JobListResponse) {
+    option (google.api.http) = {
+      get: "/v1/jobs"
     };
   }
 
   //Get info about a running task
-  rpc GetTaskOp(TaskOpId) returns (TaskOp) {
+  rpc GetJob(JobId) returns (Job) {
       option (google.api.http) = {
-        get: "/v1/taskop/{value}"
+        get: "/v1/jobs/{value}"
       };
   }
 
-  //List the TaskOps
-  rpc ListTaskOp(TaskOpListRequest) returns (TaskOpListResponse) {
-    option (google.api.http) = {
-      get: "/v1/taskop"
-    };
-  }
-
   //Cancel a running task
-  rpc CancelTaskOp(TaskOpId) returns (TaskOpId) {
+  rpc CancelJob(JobId) returns (JobId) {
     option (google.api.http) = {
-      delete: "/v1/taskop/{value}"
+      delete: "/v1/jobs/{value}"
     };
   }
 
