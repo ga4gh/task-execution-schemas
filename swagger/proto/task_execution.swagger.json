@@ -109,48 +109,15 @@
     }
   },
   "definitions": {
-    "ga4gh_task_execDisk": {
-      "type": "object",
-      "properties": {
-        "autoDelete": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "Automatically delete after usage"
-        },
-        "mountPoint": {
-          "type": "string",
-          "format": "string",
-          "title": "mount point for disk inside the docker container"
-        },
-        "name": {
-          "type": "string",
-          "format": "string",
-          "title": "Name of attached disk"
-        },
-        "readOnly": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "mount into docker as read only"
-        },
-        "sizeGb": {
-          "type": "integer",
-          "format": "int64",
-          "title": "Minium size"
-        },
-        "source": {
-          "type": "string",
-          "format": "string",
-          "title": "Source data, this would refer to an existing disk the execution engine\ncould identify. Leave blank if is to be a newly created disk"
-        }
-      },
-      "description": "Attached disk request."
-    },
     "ga4gh_task_execDockerExecutor": {
       "type": "object",
       "properties": {
         "cmd": {
-          "type": "string",
-          "format": "string",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "string"
+          },
           "title": "The command to be executed"
         },
         "imageName": {
@@ -278,30 +245,35 @@
     "ga4gh_task_execResources": {
       "type": "object",
       "properties": {
-        "disks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execDisk"
-          }
-        },
         "minimumCpuCores": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "title": "Minimum number of CPUs"
         },
         "minimumRamGb": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "title": "Minimum RAM required"
         },
         "preemptible": {
           "type": "boolean",
-          "format": "boolean"
+          "format": "boolean",
+          "title": "Can schedule on resource that resource that can be preempted, like AWS Spot Instances"
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execVolume"
+          },
+          "title": "Volumes to be mounted into the docker container"
         },
         "zones": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "string"
-          }
+          },
+          "title": "optional scheduling information for systems where multiple compute zones are avalible"
         }
       }
     },
@@ -375,30 +347,57 @@
       "properties": {
         "description": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "optional text description"
         },
         "directory": {
           "type": "boolean",
-          "format": "boolean"
+          "format": "boolean",
+          "title": "data is a directory, if used for an output all the files in the directory\nwill be copied to the storage location"
         },
-        "disk": {
+        "location": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "location in long term storage, is a url specific to the implementing \nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
         },
         "name": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "name of the parameter"
         },
         "path": {
           "type": "string",
-          "format": "string"
-        },
-        "storage": {
-          "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "path in the machine file system. Note, this MUST be a path that exists\nwithin one of the defined volumes"
         }
       },
       "title": "Parameters for Task"
+    },
+    "ga4gh_task_execVolume": {
+      "type": "object",
+      "properties": {
+        "mountPoint": {
+          "type": "string",
+          "format": "string",
+          "title": "mount point for volume inside the docker container"
+        },
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "Name of attached volume"
+        },
+        "sizeGb": {
+          "type": "integer",
+          "format": "int64",
+          "title": "Minimum size"
+        },
+        "source": {
+          "type": "string",
+          "format": "string",
+          "title": "Source volume, this would refer to an existing volume the execution engine\ncould identify. Leave blank if is to be a newly created volume\nVolumes loaded from a source will be mounted as read only"
+        }
+      },
+      "description": "Attached volume request."
     }
   }
 }

@@ -9,12 +9,20 @@ import "google/api/annotations.proto";
 
 //Parameters for Task
 message TaskParameter {
+  //name of the parameter
   string name = 1;
+  //optional text description
   string description = 2;
-  string storage = 3;
+  //location in long term storage, is a url specific to the implementing 
+  //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
+  //file:///path/to/my/file
+  string location = 3;
+  //path in the machine file system. Note, this MUST be a path that exists
+  //within one of the defined volumes
   string path = 4;
-  string disk = 5;
-  bool   directory = 6;
+  //data is a directory, if used for an output all the files in the directory
+  //will be copied to the storage location
+  bool   directory = 5;
 }
 
 //A command line to be executed and the docker container to run it
@@ -22,31 +30,33 @@ message DockerExecutor {
   //Docker Image name
   string imageName = 1;
   //The command to be executed
-  string cmd = 2;
+  repeated string cmd = 2;
 }
 
-//Attached disk request.
-message Disk {
-  //Name of attached disk
+//Attached volume request.
+message Volume {
+  //Name of attached volume
   string name = 1;
-  //Minium size
+  //Minimum size
   uint32 sizeGb = 2;
-  //Source data, this would refer to an existing disk the execution engine
-  //could identify. Leave blank if is to be a newly created disk
+  //Source volume, this would refer to an existing volume the execution engine
+  //could identify. Leave blank if is to be a newly created volume
+  //Volumes loaded from a source will be mounted as read only
   string source = 3;
-  //Automatically delete after usage
-  bool autoDelete = 4;
-  //mount into docker as read only
-  bool readOnly = 5;
-  //mount point for disk inside the docker container
+  //mount point for volume inside the docker container
   string mountPoint = 6;
 }
 
 message Resources {
+  //Minimum number of CPUs
   uint32 minimumCpuCores = 1;
+  //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
   bool preemptible = 2;
+  //Minimum RAM required
   uint32 minimumRamGb = 3;
-  repeated Disk disks = 4;
+  //Volumes to be mounted into the docker container
+  repeated Volume volumes = 4;
+  //optional scheduling information for systems where multiple compute zones are avalible
   repeated string zones = 5;
 }
 
