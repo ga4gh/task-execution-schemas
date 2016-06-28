@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "",
-    "title": ""
+    "title": "proto/task_execution.proto",
+    "version": "version not set"
   },
   "schemes": [
     "http",
@@ -15,142 +15,30 @@
     "application/json"
   ],
   "paths": {
-    "/v1/taskop/{value}": {
+    "/v1/jobs": {
       "get": {
-        "summary": "TaskService.GetTaskOp",
-        "operationId": "GetTaskOp",
+        "summary": "List the TaskOps",
+        "operationId": "ListJobs",
         "responses": {
-          "default": {
+          "200": {
             "description": "Description",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskOp"
+              "$ref": "#/definitions/ga4gh_task_execJobListResponse"
             }
           }
         },
-        "parameters": [
-          {
-            "name": "value",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "string"
-          }
-        ],
         "tags": [
           "TaskService"
         ]
       },
-      "delete": {
-        "summary": "TaskService.CancelTaskOp",
-        "operationId": "CancelTaskOp",
-        "responses": {
-          "default": {
-            "description": "Description",
-            "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "value",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "string"
-          }
-        ],
-        "tags": [
-          "TaskService"
-        ]
-      }
-    },
-    "/v1/tasks": {
       "post": {
-        "summary": "TaskService.CreateTask",
-        "operationId": "CreateTask",
-        "responses": {
-          "default": {
-            "description": "Description",
-            "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTask"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTask"
-            }
-          }
-        ],
-        "tags": [
-          "TaskService"
-        ]
-      }
-    },
-    "/v1/tasks/{value}": {
-      "get": {
-        "summary": "TaskService.GetTask",
-        "operationId": "GetTask",
-        "responses": {
-          "default": {
-            "description": "Description",
-            "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTask"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "value",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "string"
-          }
-        ],
-        "tags": [
-          "TaskService"
-        ]
-      },
-      "delete": {
-        "summary": "TaskService.DeleteTask",
-        "operationId": "DeleteTask",
-        "responses": {
-          "default": {
-            "description": "Description",
-            "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskId"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "value",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "string"
-          }
-        ],
-        "tags": [
-          "TaskService"
-        ]
-      }
-    },
-    "/v1/tasks:run": {
-      "post": {
-        "summary": "TaskService.RunTask",
+        "summary": "Run a task",
         "operationId": "RunTask",
         "responses": {
-          "default": {
+          "200": {
             "description": "Description",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskOpId"
+              "$ref": "#/definitions/ga4gh_task_execJobId"
             }
           }
         },
@@ -160,8 +48,58 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTaskRunRequest"
+              "$ref": "#/definitions/ga4gh_task_execTask"
             }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/jobs/{value}": {
+      "get": {
+        "summary": "Get info about a running task",
+        "operationId": "GetJob",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execJob"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      },
+      "delete": {
+        "summary": "Cancel a running task",
+        "operationId": "CancelJob",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execJobId"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "string"
           }
         ],
         "tags": [
@@ -171,245 +109,295 @@
     }
   },
   "definitions": {
-    "TaskArgsInputsEntry": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string",
-          "format": "string"
-        },
-        "value": {
-          "$ref": "#/definitions/ga4gh_task_execFileParameter"
-        }
-      }
-    },
-    "TaskArgsOutputsEntry": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string",
-          "format": "string"
-        },
-        "value": {
-          "$ref": "#/definitions/ga4gh_task_execFileParameter"
-        }
-      }
-    },
-    "TaskOpMetadataEntry": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string",
-          "format": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
-    "ga4gh_task_execDisk": {
-      "type": "object",
-      "properties": {
-        "autoDelete": {
-          "type": "boolean",
-          "format": "boolean"
-        },
-        "mountPoint": {
-          "type": "string",
-          "format": "string"
-        },
-        "name": {
-          "type": "string",
-          "format": "string"
-        },
-        "readOnly": {
-          "type": "boolean",
-          "format": "boolean"
-        },
-        "sizeGb": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "source": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
     "ga4gh_task_execDockerExecutor": {
       "type": "object",
       "properties": {
         "cmd": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "string"
+          },
+          "title": "The command to be executed"
+        },
+        "imageName": {
+          "type": "string",
+          "format": "string",
+          "title": "Docker Image name"
+        }
+      },
+      "title": "A command line to be executed and the docker container to run it"
+    },
+    "ga4gh_task_execJob": {
+      "type": "object",
+      "properties": {
+        "jobId": {
           "type": "string",
           "format": "string"
         },
-        "imageName": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execJobLog"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "state": {
+          "$ref": "#/definitions/ga4gh_task_execState"
+        },
+        "task": {
+          "$ref": "#/definitions/ga4gh_task_execTask"
+        }
+      },
+      "title": "The description of the running instance of a task"
+    },
+    "ga4gh_task_execJobId": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "title": "ID of an instance of a Task"
+    },
+    "ga4gh_task_execJobListRequest": {
+      "type": "object",
+      "properties": {
+        "namePrefix": {
+          "type": "string",
+          "format": "string",
+          "description": "Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned."
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Number of pipelines to return at once. Defaults to 256, and max is 2048."
+        },
+        "pageToken": {
+          "type": "string",
+          "format": "string",
+          "description": "Token to use to indicate where to start getting results. If unspecified, returns the first page of results."
+        },
+        "projectId": {
+          "type": "string",
+          "format": "string",
+          "description": "Required. The name of the project to search for pipelines. Caller must have READ access to this project."
+        }
+      }
+    },
+    "ga4gh_task_execJobListResponse": {
+      "type": "object",
+      "properties": {
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execJob"
+          }
+        },
+        "nextPageToken": {
           "type": "string",
           "format": "string"
         }
       }
     },
-    "ga4gh_task_execFileParameter": {
+    "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
-        "path": {
+        "commandLine": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "The command line that was run"
         },
-        "storagePath": {
+        "endTime": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "When the command completed"
+        },
+        "exitCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Exit code of the program"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "string",
+          "title": "When the command was executed"
+        },
+        "stderr": {
+          "type": "string",
+          "format": "string",
+          "title": "Sample of stderr (not guaranteed to be entire log)"
+        },
+        "stdout": {
+          "type": "string",
+          "format": "string",
+          "title": "Sample of stdout (not guaranteed to be entire log)"
         }
       }
     },
     "ga4gh_task_execResources": {
       "type": "object",
       "properties": {
-        "disks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execDisk"
-          }
-        },
         "minimumCpuCores": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "title": "Minimum number of CPUs"
         },
         "minimumRamGb": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "title": "Minimum RAM required"
         },
         "preemptible": {
           "type": "boolean",
-          "format": "boolean"
+          "format": "boolean",
+          "title": "Can schedule on resource that resource that can be preempted, like AWS Spot Instances"
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execVolume"
+          },
+          "title": "Volumes to be mounted into the docker container"
         },
         "zones": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "string"
-          }
+          },
+          "title": "optional scheduling information for systems where multiple compute zones are avalible"
         }
       }
+    },
+    "ga4gh_task_execState": {
+      "type": "string",
+      "enum": [
+        "Unknown",
+        "Queued",
+        "Running",
+        "Paused",
+        "Complete",
+        "Error",
+        "SystemError",
+        "Canceled"
+      ],
+      "default": "Unknown"
     },
     "ga4gh_task_execTask": {
       "type": "object",
       "properties": {
         "description": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "free text description of task"
         },
         "docker": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ga4gh_task_execDockerExecutor"
-          }
+          },
+          "title": "An array of docker executions that will be run sequentially"
         },
-        "inputParameters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileParameter"
-          }
-        },
-        "name": {
-          "type": "string",
-          "format": "string"
-        },
-        "outputParameters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileParameter"
-          }
-        },
-        "projectId": {
-          "type": "string",
-          "format": "string"
-        },
-        "resources": {
-          "$ref": "#/definitions/ga4gh_task_execResources"
-        },
-        "taskId": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
-    "ga4gh_task_execTaskArgs": {
-      "type": "object",
-      "properties": {
         "inputs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TaskArgsInputsEntry"
-          }
+            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
+          },
+          "title": "Files to be copied into system before tasks"
+        },
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "user name for task"
         },
         "outputs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TaskArgsOutputsEntry"
-          }
+            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
+          },
+          "title": "Files to be copied out of the system after tasks"
         },
         "projectId": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "parameter for execution engine to define/store group information"
         },
         "resources": {
-          "$ref": "#/definitions/ga4gh_task_execResources"
-        }
-      }
-    },
-    "ga4gh_task_execTaskId": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
-    "ga4gh_task_execTaskOp": {
-      "type": "object",
-      "properties": {
-        "done": {
-          "type": "boolean",
-          "format": "boolean"
-        },
-        "metadata": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TaskOpMetadataEntry"
-          }
-        },
-        "name": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
-    "ga4gh_task_execTaskOpId": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string",
-          "format": "string"
-        }
-      }
-    },
-    "ga4gh_task_execTaskRunRequest": {
-      "type": "object",
-      "properties": {
-        "ephemeralTask": {
-          "$ref": "#/definitions/ga4gh_task_execTask"
-        },
-        "taskArgs": {
-          "$ref": "#/definitions/ga4gh_task_execTaskArgs"
+          "$ref": "#/definitions/ga4gh_task_execResources",
+          "title": "Define required system resources to run job"
         },
         "taskId": {
           "type": "string",
-          "format": "string"
+          "format": "string",
+          "title": "System defined identifier of task"
         }
-      }
+      },
+      "title": "The description of a task to be run"
+    },
+    "ga4gh_task_execTaskParameter": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "format": "string",
+          "title": "optional text description"
+        },
+        "directory": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "data is a directory, if used for an output all the files in the directory\nwill be copied to the storage location"
+        },
+        "location": {
+          "type": "string",
+          "format": "string",
+          "title": "location in long term storage, is a url specific to the implementing \nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+        },
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "name of the parameter"
+        },
+        "path": {
+          "type": "string",
+          "format": "string",
+          "title": "path in the machine file system. Note, this MUST be a path that exists\nwithin one of the defined volumes"
+        }
+      },
+      "title": "Parameters for Task"
+    },
+    "ga4gh_task_execVolume": {
+      "type": "object",
+      "properties": {
+        "mountPoint": {
+          "type": "string",
+          "format": "string",
+          "title": "mount point for volume inside the docker container"
+        },
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "Name of attached volume"
+        },
+        "sizeGb": {
+          "type": "integer",
+          "format": "int64",
+          "title": "Minimum size"
+        },
+        "source": {
+          "type": "string",
+          "format": "string",
+          "title": "Source volume, this would refer to an existing volume the execution engine\ncould identify. Leave blank if is to be a newly created volume\nVolumes loaded from a source will be mounted as read only"
+        }
+      },
+      "description": "Attached volume request."
     }
   }
 }

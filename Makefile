@@ -6,7 +6,7 @@ export PATH
 
 PROTO_INC= -I ./ -I $(GOPATH)/src/github.com/gengo/grpc-gateway/third_party/googleapis/ -I proto/
 
-all: install_tools swagger
+all: swagger
 
 swagger: FORCE
 	protoc $(PROTO_INC) \
