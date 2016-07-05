@@ -124,6 +124,16 @@
           "type": "string",
           "format": "string",
           "title": "Docker Image name"
+        },
+        "stderr": {
+          "type": "string",
+          "format": "string",
+          "title": "Path for stderr recording, blank if not storing to file"
+        },
+        "stdout": {
+          "type": "string",
+          "format": "string",
+          "title": "Path for stdout recording, blank if not storing to file"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
