@@ -31,6 +31,10 @@ message DockerExecutor {
   string imageName = 1;
   //The command to be executed
   repeated string cmd = 2;
+  //Path for stdout recording, blank if not storing to file
+  string stdout = 3;
+  //Path for stderr recording, blank if not storing to file
+  string stderr = 4;
 }
 
 //Attached volume request.
