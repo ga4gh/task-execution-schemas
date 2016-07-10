@@ -57,6 +57,23 @@
         ]
       }
     },
+    "/v1/jobs-service": {
+      "get": {
+        "summary": "Get Service Info",
+        "operationId": "GetServiceInfo",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "schema": {
+              "$ref": "#/definitions/ga4gh_task_execServiceInfo"
+            }
+          }
+        },
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
     "/v1/jobs/{value}": {
       "get": {
         "summary": "Get info about a running task",
@@ -286,6 +303,24 @@
           "title": "optional scheduling information for systems where multiple compute zones are avalible"
         }
       }
+    },
+    "ga4gh_task_execServiceInfo": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "string"
+          },
+          "title": "System specific key/value pairs\nExample for a shared file system based storage system:\nstorageType=sharedFile, baseDir=/path/to/shared/directory"
+        }
+      },
+      "title": "Information about Task Execution Service\nMay include information related (but not limited to)\nresource availability and storage system information"
+    },
+    "ga4gh_task_execServiceInfoRequest": {
+      "type": "object",
+      "title": "Blank request message for service request"
     },
     "ga4gh_task_execState": {
       "type": "string",
