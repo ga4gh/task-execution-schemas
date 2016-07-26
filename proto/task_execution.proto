@@ -171,7 +171,7 @@ message ServiceInfo {
   //System specific key/value pairs
   //Example for a shared file system based storage system:
   //storageType=sharedFile, baseDir=/path/to/shared/directory
-  map<string,string> metadata = 1;
+  map<string,string> storageConfig = 1;
 }
 
 //Web service to get, create, list and delete Tasks

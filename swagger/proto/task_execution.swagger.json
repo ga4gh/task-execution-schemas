@@ -307,7 +307,7 @@
     "ga4gh_task_execServiceInfo": {
       "type": "object",
       "properties": {
-        "metadata": {
+        "storageConfig": {
           "type": "object",
           "additionalProperties": {
             "type": "string",
