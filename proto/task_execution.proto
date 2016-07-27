@@ -161,8 +161,28 @@ message Job {
   repeated JobLog logs = 5;
 }
 
+//Blank request message for service request
+message ServiceInfoRequest {}
+
+//Information about Task Execution Service
+//May include information related (but not limited to)
+//resource availability and storage system information
+message ServiceInfo {
+  //System specific key/value pairs
+  //Example for a shared file system based storage system:
+  //storageType=sharedFile, baseDir=/path/to/shared/directory
+  map<string,string> storageConfig = 1;
+}
+
 //Web service to get, create, list and delete Tasks
 service TaskService {
+
+  //Get Service Info
+  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo) {
+    option (google.api.http) = {
+      get: "/v1/jobs-service"
+    };
+  }
 
   //Run a task
   rpc RunTask(Task) returns (JobId) {
