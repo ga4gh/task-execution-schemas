@@ -395,6 +395,11 @@
     "ga4gh_task_execTaskParameter": {
       "type": "object",
       "properties": {
+        "create": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "if the parameter is an output, should the element be created before executing\nthe command. For example if saving the working directory as an output,\nthe directory needs to exist before the command is called. If false, it is\nassumed that the user will create the element as a part of the operation"
+        },
         "description": {
           "type": "string",
           "format": "string",
