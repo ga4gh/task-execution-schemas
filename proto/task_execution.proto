@@ -23,6 +23,11 @@ message TaskParameter {
   //data is a directory, if used for an output all the files in the directory
   //will be copied to the storage location
   bool   directory = 5;
+  //if the parameter is an output, should the element be created before executing
+  //the command. For example if saving the working directory as an output,
+  //the directory needs to exist before the command is called. If false, it is
+  //assumed that the user will create the element as a part of the operation
+  bool   create = 6;
 }
 
 //A command line to be executed and the docker container to run it
@@ -31,10 +36,12 @@ message DockerExecutor {
   string imageName = 1;
   //The command to be executed
   repeated string cmd = 2;
+  //The working directory that the command will be executed in
+  string workdir = 3;
   //Path for stdout recording, blank if not storing to file
-  string stdout = 3;
+  string stdout = 4;
   //Path for stderr recording, blank if not storing to file
-  string stderr = 4;
+  string stderr = 5;
 }
 
 //Attached volume request.

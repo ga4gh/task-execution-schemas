@@ -21,7 +21,7 @@
         "operationId": "ListJobs",
         "responses": {
           "200": {
-            "description": "Description",
+            "description": "",
             "schema": {
               "$ref": "#/definitions/ga4gh_task_execJobListResponse"
             }
@@ -36,7 +36,7 @@
         "operationId": "RunTask",
         "responses": {
           "200": {
-            "description": "Description",
+            "description": "",
             "schema": {
               "$ref": "#/definitions/ga4gh_task_execJobId"
             }
@@ -63,7 +63,7 @@
         "operationId": "GetServiceInfo",
         "responses": {
           "200": {
-            "description": "Description",
+            "description": "",
             "schema": {
               "$ref": "#/definitions/ga4gh_task_execServiceInfo"
             }
@@ -80,7 +80,7 @@
         "operationId": "GetJob",
         "responses": {
           "200": {
-            "description": "Description",
+            "description": "",
             "schema": {
               "$ref": "#/definitions/ga4gh_task_execJob"
             }
@@ -104,7 +104,7 @@
         "operationId": "CancelJob",
         "responses": {
           "200": {
-            "description": "Description",
+            "description": "",
             "schema": {
               "$ref": "#/definitions/ga4gh_task_execJobId"
             }
@@ -151,6 +151,11 @@
           "type": "string",
           "format": "string",
           "title": "Path for stdout recording, blank if not storing to file"
+        },
+        "workdir": {
+          "type": "string",
+          "format": "string",
+          "title": "The working directory that the command will be executed in"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
@@ -390,6 +395,11 @@
     "ga4gh_task_execTaskParameter": {
       "type": "object",
       "properties": {
+        "create": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "if the parameter is an output, should the element be created before executing\nthe command. For example if saving the working directory as an output,\nthe directory needs to exist before the command is called. If false, it is\nassumed that the user will create the element as a part of the operation"
+        },
         "description": {
           "type": "string",
           "format": "string",
