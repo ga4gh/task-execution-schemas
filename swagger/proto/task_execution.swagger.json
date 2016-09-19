@@ -242,9 +242,12 @@
     "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
-        "commandLine": {
-          "type": "string",
-          "format": "string",
+        "cmd": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "string"
+          },
           "title": "The command line that was run"
         },
         "endTime": {
