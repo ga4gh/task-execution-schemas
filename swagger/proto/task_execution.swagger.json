@@ -398,6 +398,11 @@
     "ga4gh_task_execTaskParameter": {
       "type": "object",
       "properties": {
+        "class": {
+          "type": "string",
+          "format": "string",
+          "title": "Type of data, \"File\" or \"Directory\"\nif used for an output all the files in the directory\nwill be copied to the storage location"
+        },
         "create": {
           "type": "boolean",
           "format": "boolean",
@@ -407,11 +412,6 @@
           "type": "string",
           "format": "string",
           "title": "optional text description"
-        },
-        "directory": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "data is a directory, if used for an output all the files in the directory\nwill be copied to the storage location"
         },
         "location": {
           "type": "string",
