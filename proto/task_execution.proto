@@ -20,9 +20,10 @@ message TaskParameter {
   //path in the machine file system. Note, this MUST be a path that exists
   //within one of the defined volumes
   string path = 4;
-  //data is a directory, if used for an output all the files in the directory
+  //Type of data, "File" or "Directory"
+  //if used for an output all the files in the directory
   //will be copied to the storage location
-  bool   directory = 5;
+  string class = 5;
   //if the parameter is an output, should the element be created before executing
   //the command. For example if saving the working directory as an output,
   //the directory needs to exist before the command is called. If false, it is
