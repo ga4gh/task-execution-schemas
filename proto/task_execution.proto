@@ -39,6 +39,8 @@ message DockerExecutor {
   repeated string cmd = 2;
   //The working directory that the command will be executed in
   string workdir = 3;
+  //Path for supplying input to stdin, blank if none
+  string stdin = 6;
   //Path for stdout recording, blank if not storing to file
   string stdout = 4;
   //Path for stderr recording, blank if not storing to file
