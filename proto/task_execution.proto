@@ -132,7 +132,7 @@ message TaskId {
 }
 
 //ID of an instance of a Task
-message JobId {
+message JobID {
   string value = 1;
 }
 
@@ -195,7 +195,7 @@ service TaskService {
   }
 
   //Run a task
-  rpc RunTask(Task) returns (JobId) {
+  rpc RunTask(Task) returns (JobID) {
     option (google.api.http) = {
       post: "/v1/jobs"
       body: "*"
@@ -210,14 +210,14 @@ service TaskService {
   }
 
   //Get info about a running task
-  rpc GetJob(JobId) returns (Job) {
+  rpc GetJob(JobID) returns (Job) {
       option (google.api.http) = {
         get: "/v1/jobs/{value}"
       };
   }
 
   //Cancel a running task
-  rpc CancelJob(JobId) returns (JobId) {
+  rpc CancelJob(JobID) returns (JobID) {
     option (google.api.http) = {
       delete: "/v1/jobs/{value}"
     };
