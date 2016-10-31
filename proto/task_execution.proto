@@ -39,6 +39,8 @@ message DockerExecutor {
   repeated string cmd = 2;
   //The working directory that the command will be executed in
   string workdir = 3;
+  //Path for supplying input to stdin, blank if none
+  string stdin = 6;
   //Path for stdout recording, blank if not storing to file
   string stdout = 4;
   //Path for stderr recording, blank if not storing to file
@@ -77,7 +79,7 @@ message Task {
   //user name for task
   string name = 1;
   //parameter for execution engine to define/store group information
-  string projectId = 2;
+  string projectID = 2;
   //free text description of task
   string description = 3;
   //Files to be copied into system before tasks
@@ -87,14 +89,14 @@ message Task {
   //Define required system resources to run job
   Resources resources = 6;
   //System defined identifier of task
-  string taskId = 7;
+  string taskID = 7;
   //An array of docker executions that will be run sequentially
   repeated DockerExecutor docker = 8;
 }
 
 message TaskListRequest {
   //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
-  string projectId = 1;
+  string projectID = 1;
   //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
   string namePrefix	= 2;
   //Number of pipelines to return at once. Defaults to 256, and max is 2048.
@@ -110,7 +112,7 @@ message TaskListResponse {
 
 message JobListRequest {
   //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
-  string projectId = 1;
+  string projectID = 1;
   //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
   string namePrefix	= 2;
   //Number of pipelines to return at once. Defaults to 256, and max is 2048.
@@ -125,12 +127,12 @@ message JobListResponse {
 }
 
 //ID of a Task description
-message TaskId {
+message TaskID {
   string value = 1;
 }
 
 //ID of an instance of a Task
-message JobId {
+message JobID {
   string value = 1;
 }
 
@@ -162,7 +164,7 @@ message JobLog {
 
 //The description of the running instance of a task
 message Job {
-  string jobId = 1;
+  string jobID = 1;
   map<string,string> metadata = 2;
   Task task = 3;
   State state = 4;
@@ -193,7 +195,7 @@ service TaskService {
   }
 
   //Run a task
-  rpc RunTask(Task) returns (JobId) {
+  rpc RunTask(Task) returns (JobID) {
     option (google.api.http) = {
       post: "/v1/jobs"
       body: "*"
@@ -208,14 +210,14 @@ service TaskService {
   }
 
   //Get info about a running task
-  rpc GetJob(JobId) returns (Job) {
+  rpc GetJob(JobID) returns (Job) {
       option (google.api.http) = {
         get: "/v1/jobs/{value}"
       };
   }
 
   //Cancel a running task
-  rpc CancelJob(JobId) returns (JobId) {
+  rpc CancelJob(JobID) returns (JobID) {
     option (google.api.http) = {
       delete: "/v1/jobs/{value}"
     };
