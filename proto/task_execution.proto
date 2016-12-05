@@ -52,7 +52,7 @@ message Volume {
   //Name of attached volume
   string name = 1;
   //Minimum size
-  uint32 sizeGb = 2;
+  double sizeGb = 2;
   //Source volume, this would refer to an existing volume the execution engine
   //could identify. Leave blank if is to be a newly created volume
   //Volumes loaded from a source will be mounted as read only
@@ -67,7 +67,7 @@ message Resources {
   //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
   bool preemptible = 2;
   //Minimum RAM required
-  uint32 minimumRamGb = 3;
+  double minimumRamGb = 3;
   //Volumes to be mounted into the docker container
   repeated Volume volumes = 4;
   //optional scheduling information for systems where multiple compute zones are avalible
