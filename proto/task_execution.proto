@@ -123,7 +123,8 @@ message JobListRequest {
 
 message JobListResponse {
   repeated string jobID  = 1;
-  string nextPageToken = 2;
+  repeated State state = 2;
+  string nextPageToken = 3;
 }
 
 //ID of a Task description
