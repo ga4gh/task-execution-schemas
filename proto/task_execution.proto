@@ -122,7 +122,7 @@ message JobListRequest {
 }
 
 message JobListResponse {
-  repeated Job jobs  = 1;
+  repeated string jobID  = 1;
   string nextPageToken = 2;
 }
 
