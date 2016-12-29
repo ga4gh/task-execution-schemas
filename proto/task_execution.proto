@@ -121,10 +121,14 @@ message JobListRequest {
   string pageToken = 4;
 }
 
+message JobDesc {
+  string jobID  = 1;
+  State state = 2;
+}
+
 message JobListResponse {
-  repeated string jobID  = 1;
-  repeated State state = 2;
-  string nextPageToken = 3;
+   repeated JobDesc jobs = 1;
+   string nextPageToken = 2;
 }
 
 //ID of a Task description
