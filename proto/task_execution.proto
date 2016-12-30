@@ -9,21 +9,31 @@ import "google/api/annotations.proto";
 
 //Parameters for Task
 message TaskParameter {
+  //OPTIONAL
   //name of the parameter
   string name = 1;
-  //optional text description
+  //OPTIONAL
+  //Text description
   string description = 2;
-  //location in long term storage, is a url specific to the implementing 
+  //REQUIRED
+  //location in long term storage, is a url specific to the implementing
   //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
   //file:///path/to/my/file
   string location = 3;
+  //REQUIRED
   //path in the machine file system. Note, this MUST be a path that exists
   //within one of the defined volumes
+  //If the file is mounted in a volume that is mounted read/write the file must
+  //be accessable to processes in the container. Optimizations, suc as hard linking
+  //to a source file, or providing a streaming input from a FUSE mount should only
+  //be done if the volume is mounted as read only
   string path = 4;
+  //REQUIRED
   //Type of data, "File" or "Directory"
   //if used for an output all the files in the directory
   //will be copied to the storage location
   string class = 5;
+  //OPTIONAL: default false
   //if the parameter is an output, should the element be created before executing
   //the command. For example if saving the working directory as an output,
   //the directory needs to exist before the command is called. If false, it is
@@ -33,99 +43,117 @@ message TaskParameter {
 
 //A command line to be executed and the docker container to run it
 message DockerExecutor {
+  //REQUIRED
   //Docker Image name
   string imageName = 1;
+  //REQUIRED
   //The command to be executed
   repeated string cmd = 2;
+  //OPTIONAL: default docker image directory
   //The working directory that the command will be executed in
   string workdir = 3;
+  //OPTIONAL
   //Path for supplying input to stdin, blank if none
   string stdin = 6;
+  //OPTIONAL
   //Path for stdout recording, blank if not storing to file
   string stdout = 4;
+  //OPTIONAL
   //Path for stderr recording, blank if not storing to file
   string stderr = 5;
 }
 
 //Attached volume request.
 message Volume {
+  //OPTIONAL
   //Name of attached volume
   string name = 1;
+  //REQUIRED
   //Minimum size
   double sizeGb = 2;
+  //OPTIONAL
   //Source volume, this would refer to an existing volume the execution engine
   //could identify. Leave blank if is to be a newly created volume
   //Volumes loaded from a source will be mounted as read only
   string source = 3;
+  //REQUIRED
   //mount point for volume inside the docker container
   string mountPoint = 6;
+  //OPTIONAL default False
+  bool   readonly = 7;
 }
 
 message Resources {
+  //OPTIONAL default 1
   //Minimum number of CPUs
   uint32 minimumCpuCores = 1;
   //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
+  //OPTIONAL default false
   bool preemptible = 2;
+  //REQUIRED
   //Minimum RAM required
   double minimumRamGb = 3;
+  //REQUIRED
   //Volumes to be mounted into the docker container
   repeated Volume volumes = 4;
+  //OPTIONAL
   //optional scheduling information for systems where multiple compute zones are avalible
   repeated string zones = 5;
 }
 
 //The description of a task to be run
 message Task {
+  //OPTIONAL
   //user name for task
   string name = 1;
+  //OPTIONAL
   //parameter for execution engine to define/store group information
   string projectID = 2;
+  //OPTIONAL
   //free text description of task
   string description = 3;
+  //REQUIRED
   //Files to be copied into system before tasks
   repeated TaskParameter inputs = 4;
+  //REQUIRED
   //Files to be copied out of the system after tasks
   repeated TaskParameter outputs = 5;
+  //REQUIRED
   //Define required system resources to run job
   Resources resources = 6;
+  //OPTIONAL filled in by system once task is instanced
   //System defined identifier of task
   string taskID = 7;
+  //REQUIRED
   //An array of docker executions that will be run sequentially
   repeated DockerExecutor docker = 8;
 }
 
-message TaskListRequest {
-  //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
-  string projectID = 1;
-  //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
-  string namePrefix	= 2;
-  //Number of pipelines to return at once. Defaults to 256, and max is 2048.
-  uint32 pageSize = 3;
-  //Token to use to indicate where to start getting results. If unspecified, returns the first page of results.
-  string pageToken = 4;
-}
-
-message TaskListResponse {
-  repeated Task tasks  = 1;
-  string nextPageToken = 2;
-}
-
+//Request listing of jobs tracked by server
 message JobListRequest {
-  //Required. The name of the project to search for pipelines. Caller must have READ access to this project.
+  //OPTIONAL
+  //The name of the project to search for pipelines. Caller must have READ access to this project.
   string projectID = 1;
+  //OPTIONAL
   //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
   string namePrefix	= 2;
+  //OPTIONAL
   //Number of pipelines to return at once. Defaults to 256, and max is 2048.
   uint32 pageSize = 3;
+  //OPTIONAL
   //Token to use to indicate where to start getting results. If unspecified, returns the first page of results.
   string pageToken = 4;
 }
 
+//Small description of jobs, returned by server during listing
 message JobDesc {
+  //REQUIRED
   string jobID  = 1;
+  //REQUIRED
   State state = 2;
 }
 
+//Return envelope
 message JobListResponse {
    repeated JobDesc jobs = 1;
    string nextPageToken = 2;
