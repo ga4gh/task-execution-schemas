@@ -121,9 +121,6 @@ message Task {
   //REQUIRED
   //Define required system resources to run job
   Resources resources = 6;
-  //OPTIONAL filled in by system once task is instanced
-  //System defined identifier of task
-  string taskID = 7;
   //REQUIRED
   //An array of docker executions that will be run sequentially
   repeated DockerExecutor docker = 8;
@@ -157,11 +154,6 @@ message JobDesc {
 message JobListResponse {
    repeated JobDesc jobs = 1;
    string nextPageToken = 2;
-}
-
-//ID of a Task description
-message TaskID {
-  string value = 1;
 }
 
 //ID of an instance of a Task

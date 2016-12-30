@@ -402,11 +402,6 @@
           "$ref": "#/definitions/ga4gh_task_execResources",
           "title": "REQUIRED\nDefine required system resources to run job"
         },
-        "taskID": {
-          "type": "string",
-          "format": "string",
-          "title": "OPTIONAL filled in by system once task is instanced\nSystem defined identifier of task"
-        },
         "docker": {
           "type": "array",
           "items": {
