@@ -142,12 +142,20 @@ message JobListRequest {
   string pageToken = 4;
 }
 
+// Small description of tasks, returned by server during listing
+message TaskDesc {
+  string name = 1;
+  string projectID = 2;
+  string description = 3;
+}
+
 //Small description of jobs, returned by server during listing
 message JobDesc {
   //REQUIRED
   string jobID  = 1;
   //REQUIRED
   State state = 2;
+  TaskDesc task = 3;
 }
 
 //Return envelope
