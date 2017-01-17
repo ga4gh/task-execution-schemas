@@ -156,11 +156,6 @@ message JobListResponse {
    string nextPageToken = 2;
 }
 
-//ID of an instance of a Task
-message JobID {
-  string value = 1;
-}
-
 enum State {
   Unknown = 0;
   Queued = 1;
@@ -202,25 +197,44 @@ message ServiceInfoRequest {}
 //Information about Task Execution Service
 //May include information related (but not limited to)
 //resource availability and storage system information
-message ServiceInfo {
+message ServiceInfoResponse {
   //System specific key/value pairs
   //Example for a shared file system based storage system:
   //storageType=sharedFile, baseDir=/path/to/shared/directory
   map<string,string> storageConfig = 1;
 }
 
+message GetJobRequest {
+  string jobID = 1;
+}
+
+message GetJobResponse {
+  Job job = 1;
+}
+
+//ID of an instance of a Task
+message RunTaskResponse {
+  string jobID = 1;
+}
+
+message CancelJobRequest {
+  string jobID = 1;
+}
+
+message CancelJobResponse {}
+
 //Web service to get, create, list and delete Tasks
 service TaskService {
 
   //Get Service Info
-  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo) {
+  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfoResponse) {
     option (google.api.http) = {
       get: "/v1/jobs-service"
     };
   }
 
   //Run a task
-  rpc RunTask(Task) returns (JobID) {
+  rpc RunTask(Task) returns (RunTaskResponse) {
     option (google.api.http) = {
       post: "/v1/jobs"
       body: "*"
@@ -235,16 +249,16 @@ service TaskService {
   }
 
   //Get info about a running task
-  rpc GetJob(JobID) returns (Job) {
+  rpc GetJob(GetJobRequest) returns (GetJobResponse) {
       option (google.api.http) = {
-        get: "/v1/jobs/{value}"
+        get: "/v1/jobs/{jobID}"
       };
   }
 
   //Cancel a running task
-  rpc CancelJob(JobID) returns (JobID) {
+  rpc CancelJob(CancelJobRequest) returns (CancelJobResponse) {
     option (google.api.http) = {
-      delete: "/v1/jobs/{value}"
+      delete: "/v1/jobs/{jobID}"
     };
   }
 
