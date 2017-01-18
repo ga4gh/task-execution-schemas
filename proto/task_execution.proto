@@ -61,6 +61,9 @@ message DockerExecutor {
   //OPTIONAL
   //Path for stderr recording, blank if not storing to file
   string stderr = 5;
+  //OPTIONAL
+  //Port to expose from within the container, blank if none
+  int32 port = 7;
 }
 
 //Attached volume request.
@@ -185,6 +188,10 @@ message JobLog {
   string stderr = 5;
   //Exit code of the program
   int32  exitCode = 6;
+  // ip of worker host
+  string hostIP = 7;
+  // port bound from container to host
+  string hostPort = 8;
 }
 
 //The description of the running instance of a task
