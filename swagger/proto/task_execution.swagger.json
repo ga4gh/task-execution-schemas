@@ -212,6 +212,10 @@
         "state": {
           "$ref": "#/definitions/ga4gh_task_execState",
           "title": "REQUIRED"
+        },
+        "task": {
+          "$ref": "#/definitions/ga4gh_task_execTaskDesc",
+          "title": "REQUIRED short description of task"
         }
       },
       "title": "Small description of jobs, returned by server during listing"
@@ -446,6 +450,27 @@
         }
       },
       "title": "The description of a task to be run"
+    },
+    "ga4gh_task_execTaskDesc": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nuser name for task"
+        },
+        "projectID": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nparameter for execution engine to define/store group information"
+        },
+        "description": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nfree text description of task"
+        }
+      },
+      "title": "Small description of tasks, returned by server during listing"
     },
     "ga4gh_task_execTaskParameter": {
       "type": "object",
