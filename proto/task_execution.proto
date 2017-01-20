@@ -184,6 +184,7 @@ enum State {
   Error = 5;
   SystemError = 6;
   Canceled = 7;
+  Initializing = 8;
 }
 
 message JobLog {

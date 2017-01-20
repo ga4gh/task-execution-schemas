@@ -425,7 +425,8 @@
         "Complete",
         "Error",
         "SystemError",
-        "Canceled"
+        "Canceled",
+        "Initializing"
       ],
       "default": "Unknown"
     },
