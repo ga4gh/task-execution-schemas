@@ -162,10 +162,10 @@
           "format": "string",
           "title": "OPTIONAL\nPath for stderr recording, blank if not storing to file"
         },
-        "portBindings": {
+        "ports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execPortMapping"
+            "$ref": "#/definitions/ga4gh_task_execPorts"
           },
           "title": "OPTIONAL\nPort to expose from within the container, blank if none"
         }
@@ -309,27 +309,27 @@
           "format": "string",
           "title": "ip of worker host"
         },
-        "portBindings": {
+        "ports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execPortMapping"
+            "$ref": "#/definitions/ga4gh_task_execPorts"
           },
-          "title": "port bound from container to host"
+          "title": "ports bound from container to host"
         }
       }
     },
-    "ga4gh_task_execPortMapping": {
+    "ga4gh_task_execPorts": {
       "type": "object",
       "properties": {
-        "containerPort": {
+        "container": {
           "type": "integer",
           "format": "int32",
           "title": "REQUIRED \nExposed port on container"
         },
-        "hostBinding": {
+        "host": {
           "type": "integer",
           "format": "int32",
-          "title": "REQUIRED \nMust be greater than 1024;\nUse 0 to have host find an open port;\nDocker cmd will fail if this port is already allocated on the worker"
+          "title": "OPTIONAL \nMust be greater than 1024;\nDefaults to 0"
         }
       },
       "title": "host to container port mappings"
