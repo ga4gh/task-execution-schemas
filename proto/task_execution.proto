@@ -42,15 +42,14 @@ message TaskParameter {
 }
 
 //host to container port mappings
-message PortMapping {
+message Ports {
   //REQUIRED 
   //Exposed port on container
-  int32 containerPort = 1;
-  //REQUIRED 
+  int32 container = 1;
+  //OPTIONAL 
   //Must be greater than 1024;
-  //Use 0 to have host find an open port;
-  //Docker cmd will fail if this port is already allocated on the worker
-  int32 hostBinding = 2;
+  //Defaults to 0
+  int32 host = 2;
 }
 
 //A command line to be executed and the docker container to run it
@@ -75,7 +74,7 @@ message DockerExecutor {
   string stderr = 5;
   //OPTIONAL
   //Port to expose from within the container, blank if none
-  repeated PortMapping portBindings = 7;
+  repeated Ports ports = 7;
 }
 
 //Attached volume request.
@@ -95,7 +94,7 @@ message Volume {
   //mount point for volume inside the docker container
   string mountPoint = 6;
   //OPTIONAL default False
-  bool   readonly = 7;
+  bool readonly = 7;
 }
 
 message Resources {
@@ -217,8 +216,8 @@ message JobLog {
   int32  exitCode = 6;
   // ip of worker host
   string hostIP = 7;
-  // port bound from container to host
-  repeated PortMapping portBindings = 8;
+  // ports bound from container to host
+  repeated Ports ports = 8;
 }
 
 //The description of the running instance of a task
