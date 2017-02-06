@@ -161,9 +161,37 @@
           "type": "string",
           "format": "string",
           "title": "OPTIONAL\nPath for stderr recording, blank if not storing to file"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "OPTIONAL\nPort to expose from within the container, blank if none"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
+    },
+    "ga4gh_task_execFileLog": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "format": "string",
+          "title": "REQUIRED\nlocation in long term storage that the output file was copied to\nis a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+        },
+        "path": {
+          "type": "string",
+          "format": "string",
+          "title": "REQUIRED\npath in the machine file system that originated the file"
+        },
+        "size": {
+          "type": "string",
+          "format": "int64",
+          "title": "REQUIRED\nSize of produced file"
+        }
+      },
+      "title": "Log of file output by workflow"
     },
     "ga4gh_task_execJob": {
       "type": "object",
@@ -190,6 +218,13 @@
           "items": {
             "$ref": "#/definitions/ga4gh_task_execJobLog"
           }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execFileLog"
+          },
+          "title": "List of all files copied out to the object store as well as some basic\nmeta-data about them. This is an expanded list, if the task outputs \nlist directories, this record details every individual file"
         }
       },
       "title": "The description of the running instance of a task"
@@ -205,6 +240,10 @@
         "state": {
           "$ref": "#/definitions/ga4gh_task_execState",
           "title": "REQUIRED"
+        },
+        "task": {
+          "$ref": "#/definitions/ga4gh_task_execTaskDesc",
+          "title": "REQUIRED short description of task"
         }
       },
       "title": "Small description of jobs, returned by server during listing"
@@ -296,8 +335,36 @@
           "type": "integer",
           "format": "int32",
           "title": "Exit code of the program"
+        },
+        "hostIP": {
+          "type": "string",
+          "format": "string",
+          "title": "ip of worker host"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "ports bound from container to host"
         }
       }
+    },
+    "ga4gh_task_execPorts": {
+      "type": "object",
+      "properties": {
+        "container": {
+          "type": "integer",
+          "format": "int32",
+          "title": "REQUIRED\nExposed port on container"
+        },
+        "host": {
+          "type": "integer",
+          "format": "int32",
+          "title": "OPTIONAL\nMust be greater than 1024;\nDefaults to 0"
+        }
+      },
+      "title": "host to container port mappings"
     },
     "ga4gh_task_execResources": {
       "type": "object",
@@ -362,7 +429,8 @@
         "Complete",
         "Error",
         "SystemError",
-        "Canceled"
+        "Canceled",
+        "Initializing"
       ],
       "default": "Unknown"
     },
@@ -411,6 +479,27 @@
         }
       },
       "title": "The description of a task to be run"
+    },
+    "ga4gh_task_execTaskDesc": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nuser name for task"
+        },
+        "projectID": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nparameter for execution engine to define/store group information"
+        },
+        "description": {
+          "type": "string",
+          "format": "string",
+          "title": "OPTIONAL\nfree text description of task"
+        }
+      },
+      "title": "Small description of tasks, returned by server during listing"
     },
     "ga4gh_task_execTaskParameter": {
       "type": "object",

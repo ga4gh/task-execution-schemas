@@ -41,6 +41,17 @@ message TaskParameter {
   bool   create = 6;
 }
 
+//host to container port mappings
+message Ports {
+  //REQUIRED
+  //Exposed port on container
+  int32 container = 1;
+  //OPTIONAL
+  //Must be greater than 1024;
+  //Defaults to 0
+  int32 host = 2;
+}
+
 //A command line to be executed and the docker container to run it
 message DockerExecutor {
   //REQUIRED
@@ -61,6 +72,9 @@ message DockerExecutor {
   //OPTIONAL
   //Path for stderr recording, blank if not storing to file
   string stderr = 5;
+  //OPTIONAL
+  //Port to expose from within the container, blank if none
+  repeated Ports ports = 7;
 }
 
 //Attached volume request.
@@ -80,7 +94,7 @@ message Volume {
   //mount point for volume inside the docker container
   string mountPoint = 6;
   //OPTIONAL default False
-  bool   readonly = 7;
+  bool readonly = 7;
 }
 
 message Resources {
@@ -142,12 +156,27 @@ message JobListRequest {
   string pageToken = 4;
 }
 
+// Small description of tasks, returned by server during listing
+message TaskDesc {
+  //OPTIONAL
+  //user name for task
+  string name = 1;
+  //OPTIONAL
+  //parameter for execution engine to define/store group information
+  string projectID = 2;
+  //OPTIONAL
+  //free text description of task
+  string description = 3;
+}
+
 //Small description of jobs, returned by server during listing
 message JobDesc {
   //REQUIRED
   string jobID  = 1;
   //REQUIRED
   State state = 2;
+  // REQUIRED short description of task
+  TaskDesc task = 3;
 }
 
 //Return envelope
@@ -170,6 +199,7 @@ enum State {
   Error = 5;
   SystemError = 6;
   Canceled = 7;
+  Initializing = 8;
 }
 
 message JobLog {
@@ -185,7 +215,29 @@ message JobLog {
   string stderr = 5;
   //Exit code of the program
   int32  exitCode = 6;
+  // ip of worker host
+  string hostIP = 7;
+  // ports bound from container to host
+  repeated Ports ports = 8;
 }
+
+
+//Log of file output by workflow
+message FileLog {
+  //REQUIRED
+  //location in long term storage that the output file was copied to
+  //is a url specific to the implementing
+  //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
+  //file:///path/to/my/file
+  string location = 1;
+  //REQUIRED
+  //path in the machine file system that originated the file
+  string path = 2;
+  //REQUIRED
+  //Size of produced file
+  int64  size = 3;
+}
+
 
 //The description of the running instance of a task
 message Job {
@@ -194,6 +246,10 @@ message Job {
   Task task = 3;
   State state = 4;
   repeated JobLog logs = 5;
+  //List of all files copied out to the object store as well as some basic
+  //meta-data about them. This is an expanded list, if the task outputs 
+  //list directories, this record details every individual file
+  repeated FileLog outputs = 6;
 }
 
 //Blank request message for service request
