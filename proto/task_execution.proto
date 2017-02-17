@@ -205,6 +205,24 @@ message JobLog {
   repeated Ports ports = 8;
 }
 
+
+//Log of file output by workflow
+message FileLog {
+  //REQUIRED
+  //location in long term storage that the output file was copied to
+  //is a url specific to the implementing
+  //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
+  //file:///path/to/my/file
+  string location = 1;
+  //REQUIRED
+  //path in the machine file system that originated the file
+  string path = 2;
+  //REQUIRED
+  //Size of produced file
+  int64  size = 3;
+}
+
+
 //The description of the running instance of a task
 message Job {
   string jobID = 1;
@@ -212,6 +230,10 @@ message Job {
   Task task = 3;
   State state = 4;
   repeated JobLog logs = 5;
+  //List of all files copied out to the object store as well as some basic
+  //meta-data about them. This is an expanded list, if the task outputs 
+  //list directories, this record details every individual file
+  repeated FileLog outputs = 6;
 }
 
 //Blank request message for service request

@@ -172,6 +172,27 @@
       },
       "title": "A command line to be executed and the docker container to run it"
     },
+    "ga4gh_task_execFileLog": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "format": "string",
+          "title": "REQUIRED\nlocation in long term storage that the output file was copied to\nis a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+        },
+        "path": {
+          "type": "string",
+          "format": "string",
+          "title": "REQUIRED\npath in the machine file system that originated the file"
+        },
+        "size": {
+          "type": "string",
+          "format": "int64",
+          "title": "REQUIRED\nSize of produced file"
+        }
+      },
+      "title": "Log of file output by workflow"
+    },
     "ga4gh_task_execJob": {
       "type": "object",
       "properties": {
@@ -197,6 +218,13 @@
           "items": {
             "$ref": "#/definitions/ga4gh_task_execJobLog"
           }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execFileLog"
+          },
+          "title": "List of all files copied out to the object store as well as some basic\nmeta-data about them. This is an expanded list, if the task outputs \nlist directories, this record details every individual file"
         }
       },
       "title": "The description of the running instance of a task"
