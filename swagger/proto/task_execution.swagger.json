@@ -161,6 +161,13 @@
           "type": "string",
           "format": "string",
           "title": "OPTIONAL\nPath for stderr recording, blank if not storing to file"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "OPTIONAL\nPort to expose from within the container, blank if none"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
@@ -296,8 +303,36 @@
           "type": "integer",
           "format": "int32",
           "title": "Exit code of the program"
+        },
+        "hostIP": {
+          "type": "string",
+          "format": "string",
+          "title": "ip of worker host"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "ports bound from container to host"
         }
       }
+    },
+    "ga4gh_task_execPorts": {
+      "type": "object",
+      "properties": {
+        "container": {
+          "type": "integer",
+          "format": "int32",
+          "title": "REQUIRED \nExposed port on container"
+        },
+        "host": {
+          "type": "integer",
+          "format": "int32",
+          "title": "OPTIONAL \nMust be greater than 1024;\nDefaults to 0"
+        }
+      },
+      "title": "host to container port mappings"
     },
     "ga4gh_task_execResources": {
       "type": "object",
