@@ -16,10 +16,10 @@ message TaskParameter {
   //Text description
   string description = 2;
   //REQUIRED
-  //location in long term storage, is a url specific to the implementing
+  //url in long term storage, is a url specific to the implementing
   //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
   //file:///path/to/my/file
-  string location = 3;
+  string url = 3;
   //REQUIRED
   //path in the machine file system. Note, this MUST be a path that exists
   //within one of the defined volumes
@@ -31,7 +31,7 @@ message TaskParameter {
   //REQUIRED
   //Type of data, "File" or "Directory"
   //if used for an output all the files in the directory
-  //will be copied to the storage location
+  //will be copied to the storage url
   string class = 5;
   //OPTIONAL: default false
   //if the parameter is an output, should the element be created before executing
@@ -210,11 +210,11 @@ message JobLog {
 //Log of file output by workflow
 message FileLog {
   //REQUIRED
-  //location in long term storage that the output file was copied to
+  //url of long term storage that the output file was copied to
   //is a url specific to the implementing
   //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
   //file:///path/to/my/file
-  string location = 1;
+  string url = 1;
   //REQUIRED
   //path in the machine file system that originated the file
   string path = 2;
