@@ -15,10 +15,11 @@ message TaskParameter {
   //OPTIONAL
   //Text description
   string description = 2;
-  //REQUIRED
+  //OPTIONAL
   //location in long term storage, is a url specific to the implementing
   //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
   //file:///path/to/my/file
+  //This field is only optional if used with the 'contents' field
   string location = 3;
   //REQUIRED
   //path in the machine file system. Note, this MUST be a path that exists
@@ -39,6 +40,9 @@ message TaskParameter {
   //the directory needs to exist before the command is called. If false, it is
   //assumed that the user will create the element as a part of the operation
   bool   create = 6;
+  //OPTIONAL
+  //File contents literal. Maximum of 128 KiB.
+  string contents = 7;
 }
 
 //host to container port mappings

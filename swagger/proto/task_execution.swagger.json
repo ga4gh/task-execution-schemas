@@ -491,7 +491,7 @@
         },
         "location": {
           "type": "string",
-          "title": "REQUIRED\nlocation in long term storage, is a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+          "title": "OPTIONAL\nlocation in long term storage, is a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file\nThis field is only optional if used with the 'contents' field"
         },
         "path": {
           "type": "string",
@@ -505,6 +505,10 @@
           "type": "boolean",
           "format": "boolean",
           "title": "OPTIONAL: default false\nif the parameter is an output, should the element be created before executing\nthe command. For example if saving the working directory as an output,\nthe directory needs to exist before the command is called. If false, it is\nassumed that the user will create the element as a part of the operation"
+        },
+        "contents": {
+          "type": "string",
+          "description": "OPTIONAL\nFile contents literal. Maximum of 128 KiB."
         }
       },
       "title": "Parameters for Task"
