@@ -372,20 +372,20 @@
     "ga4gh_task_execResources": {
       "type": "object",
       "properties": {
-        "minimumCpuCores": {
+        "cpuCores": {
           "type": "integer",
           "format": "int64",
-          "title": "OPTIONAL default 1\nMinimum number of CPUs"
+          "title": "OPTIONAL default 1\nRequired number of CPUs"
         },
         "preemptible": {
           "type": "boolean",
           "format": "boolean",
           "title": "Can schedule on resource that resource that can be preempted, like AWS Spot Instances\nOPTIONAL default false"
         },
-        "minimumRamGb": {
+        "ramGb": {
           "type": "number",
           "format": "double",
-          "title": "REQUIRED\nMinimum RAM required"
+          "title": "REQUIRED\nRequired amount of RAM"
         },
         "volumes": {
           "type": "array",

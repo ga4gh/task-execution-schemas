@@ -99,14 +99,14 @@ message Volume {
 
 message Resources {
   //OPTIONAL default 1
-  //Minimum number of CPUs
-  uint32 minimumCpuCores = 1;
+  //Required number of CPUs
+  uint32 cpuCores = 1;
   //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
   //OPTIONAL default false
   bool preemptible = 2;
   //REQUIRED
-  //Minimum RAM required
-  double minimumRamGb = 3;
+  //Required amount of RAM
+  double ramGb = 3;
   //REQUIRED
   //Volumes to be mounted into the docker container
   repeated Volume volumes = 4;
