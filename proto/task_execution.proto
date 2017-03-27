@@ -188,8 +188,6 @@ enum State {
 }
 
 message JobLog {
-  //The command line that was run
-  repeated string cmd = 1;
   //When the command was executed
   string startTime = 2;
   //When the command completed
