@@ -85,16 +85,9 @@ message Volume {
   //REQUIRED
   //Minimum size
   double sizeGb = 2;
-  //OPTIONAL
-  //Source volume, this would refer to an existing volume the execution engine
-  //could identify. Leave blank if is to be a newly created volume
-  //Volumes loaded from a source will be mounted as read only
-  string source = 3;
   //REQUIRED
   //mount point for volume inside the docker container
   string mountPoint = 6;
-  //OPTIONAL default False
-  bool readonly = 7;
 }
 
 message Resources {
