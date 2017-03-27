@@ -52,8 +52,8 @@ message Ports {
   int32 host = 2;
 }
 
-//A command to be executed
-message Command {
+// Executor executes a task
+message Executor {
   //REQUIRED
   // Image name
   string imageName = 1;
@@ -136,8 +136,8 @@ message Task {
   //Define required system resources to run job
   Resources resources = 6;
   //REQUIRED
-  //A list of commands that will be run sequentially
-  repeated Command commands = 8;
+  //A list of executors that will be run sequentially
+  repeated Executor executors = 8;
 }
 
 //Request listing of jobs tracked by server
