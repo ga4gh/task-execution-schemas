@@ -191,6 +191,13 @@
             "$ref": "#/definitions/ga4gh_task_execPorts"
           },
           "title": "OPTIONAL\nPort to expose from within the container, blank if none"
+        },
+        "environ": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "OPTIONAL\nEnviromental variables to set within the container"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
