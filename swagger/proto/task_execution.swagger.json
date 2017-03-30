@@ -319,13 +319,6 @@
     "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
-        "cmd": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "The command line that was run"
-        },
         "startTime": {
           "type": "string",
           "title": "When the command was executed"
