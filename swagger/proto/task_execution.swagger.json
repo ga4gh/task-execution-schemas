@@ -521,18 +521,9 @@
           "format": "double",
           "title": "REQUIRED\nMinimum size"
         },
-        "source": {
-          "type": "string",
-          "title": "OPTIONAL\nSource volume, this would refer to an existing volume the execution engine\ncould identify. Leave blank if is to be a newly created volume\nVolumes loaded from a source will be mounted as read only"
-        },
         "mountPoint": {
           "type": "string",
           "title": "REQUIRED\nmount point for volume inside the docker container"
-        },
-        "readonly": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "OPTIONAL default False"
         }
       },
       "description": "Attached volume request."
