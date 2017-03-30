@@ -179,9 +179,9 @@ enum State {
 }
 
 message JobLog {
-  //When the command was executed
+  //When the command was executed in ISO 8601 format
   string startTime = 2;
-  //When the command completed
+  //When the command completed in ISO 8601 format
   string endTime = 3;
   //Sample of stdout (not guaranteed to be entire log)
   string stdout = 4;
