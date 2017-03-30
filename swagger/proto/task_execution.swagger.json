@@ -191,6 +191,13 @@
             "$ref": "#/definitions/ga4gh_task_execPorts"
           },
           "title": "OPTIONAL\nPort to expose from within the container, blank if none"
+        },
+        "environ": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "OPTIONAL\nEnviromental variables to set within the container"
         }
       },
       "title": "A command line to be executed and the docker container to run it"
@@ -312,13 +319,6 @@
     "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
-        "cmd": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "The command line that was run"
-        },
         "startTime": {
           "type": "string",
           "title": "When the command was executed"
@@ -525,18 +525,9 @@
           "format": "double",
           "title": "REQUIRED\nMinimum size"
         },
-        "source": {
-          "type": "string",
-          "title": "OPTIONAL\nSource volume, this would refer to an existing volume the execution engine\ncould identify. Leave blank if is to be a newly created volume\nVolumes loaded from a source will be mounted as read only"
-        },
         "mountPoint": {
           "type": "string",
           "title": "REQUIRED\nmount point for volume inside the docker container"
-        },
-        "readonly": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "OPTIONAL default False"
         }
       },
       "description": "Attached volume request."
