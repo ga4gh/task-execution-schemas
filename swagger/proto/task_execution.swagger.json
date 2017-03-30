@@ -375,7 +375,7 @@
         "cpuCores": {
           "type": "integer",
           "format": "int64",
-          "title": "OPTIONAL default 1\nRequired number of CPUs"
+          "title": "OPTIONAL\nRequested number of CPUs"
         },
         "preemptible": {
           "type": "boolean",
@@ -385,7 +385,7 @@
         "ramGb": {
           "type": "number",
           "format": "double",
-          "title": "REQUIRED\nRequired amount of RAM"
+          "title": "OPTIONAL\nRequested amount of RAM in GB"
         },
         "volumes": {
           "type": "array",
@@ -519,7 +519,7 @@
         "sizeGb": {
           "type": "number",
           "format": "double",
-          "title": "REQUIRED\nMinimum size"
+          "title": "OPTIONAL\nRequested disk size in GB"
         },
         "source": {
           "type": "string",
