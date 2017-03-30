@@ -33,12 +33,6 @@ message TaskParameter {
   //if used for an output all the files in the directory
   //will be copied to the storage location
   string class = 5;
-  //OPTIONAL: default false
-  //if the parameter is an output, should the element be created before executing
-  //the command. For example if saving the working directory as an output,
-  //the directory needs to exist before the command is called. If false, it is
-  //assumed that the user will create the element as a part of the operation
-  bool   create = 6;
 }
 
 //host to container port mappings
