@@ -75,6 +75,9 @@ message Executor {
   //OPTIONAL
   //Port to expose from within the container, blank if none
   repeated Ports ports = 7;
+  //OPTIONAL
+  //Enviromental variables to set within the container
+  map<string,string> environ = 8;
 }
 
 //Attached volume request.
