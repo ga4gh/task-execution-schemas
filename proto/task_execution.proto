@@ -45,11 +45,11 @@ message TaskParameter {
 message Ports {
   //REQUIRED 
   //Exposed port on container
-  int32 container = 1;
+  uint32 container = 1;
   //OPTIONAL 
   //Must be greater than 1024;
   //Defaults to 0
-  int32 host = 2;
+  uint32 host = 2;
 }
 
 // Executor executes a task
