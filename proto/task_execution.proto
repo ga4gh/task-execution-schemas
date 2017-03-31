@@ -213,7 +213,7 @@ message Task {
   map<string,string> metadata = 2;
 
   // REQUIRED
-  Task task = 3;
+  CreateTaskRequest request = 3;
 
   // REQUIRED
   State state = 4;

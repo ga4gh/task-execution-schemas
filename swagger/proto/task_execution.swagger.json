@@ -517,8 +517,8 @@
           },
           "title": "REQUIRED"
         },
-        "task": {
-          "$ref": "#/definitions/tesTask",
+        "request": {
+          "$ref": "#/definitions/tesCreateTaskRequest",
           "title": "REQUIRED"
         },
         "state": {
