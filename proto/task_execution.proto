@@ -198,7 +198,9 @@ message Resources {
 // GetTaskRequest describes a request to the GetTask endpoint.
 message GetTaskRequest {
   // REQUIRED
-  string task_id = 1;
+  //
+  // Task identifier.
+  string id = 1;
 }
 
 // OUTPUT ONLY
@@ -207,7 +209,9 @@ message GetTaskRequest {
 message Task {
 
   // REQUIRED
-  string task_id = 1;
+  //
+  // Task identifier.
+  string id = 1;
 
   // REQUIRED
   map<string,string> metadata = 2;
@@ -363,7 +367,9 @@ message ListTasksResponse {
 message TaskDesc {
 
   // REQUIRED
-  string task_id = 1;
+  //
+  // Task identifier.
+  string id = 1;
 
   // REQUIRED
   State state = 2;
@@ -372,7 +378,9 @@ message TaskDesc {
 // CancelTaskRequest describes a request to the CancelTask endpoint.
 message CancelTaskRequest {
   // REQUIRED
-  string task_id = 1;
+  //
+  // Task identifier.
+  string id = 1;
 }
 
 // OUTPUT ONLY
@@ -429,14 +437,14 @@ service TaskService {
   // Get a task.
   rpc GetTask(GetTaskRequest) returns (Task) {
       option (google.api.http) = {
-        get: "/v1/tasks/{task_id}"
+        get: "/v1/tasks/{id}"
       };
   }
 
   // Cancel a task.
   rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/tasks/{task_id}:cancel"
+      post: "/v1/tasks/{id}:cancel"
       body: "*"
     };
   }
