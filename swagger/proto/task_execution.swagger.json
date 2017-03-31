@@ -69,7 +69,7 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execJobID"
+              "$ref": "#/definitions/ga4gh_task_execRunTaskResponse"
             }
           }
         },
@@ -96,7 +96,7 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execServiceInfo"
+              "$ref": "#/definitions/ga4gh_task_execServiceInfoResponse"
             }
           }
         },
@@ -105,7 +105,7 @@
         ]
       }
     },
-    "/v1/jobs/{value}": {
+    "/v1/jobs/{jobID}": {
       "get": {
         "summary": "Get info about a running task",
         "operationId": "GetJob",
@@ -113,13 +113,13 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execJob"
+              "$ref": "#/definitions/ga4gh_task_execGetJobResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "value",
+            "name": "jobID",
             "in": "path",
             "required": true,
             "type": "string"
@@ -136,13 +136,13 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execJobID"
+              "$ref": "#/definitions/ga4gh_task_execCancelJobResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "value",
+            "name": "jobID",
             "in": "path",
             "required": true,
             "type": "string"
@@ -155,12 +155,23 @@
     }
   },
   "definitions": {
-    "ga4gh_task_execDockerExecutor": {
+    "ga4gh_task_execCancelJobRequest": {
+      "type": "object",
+      "properties": {
+        "jobID": {
+          "type": "string"
+        }
+      }
+    },
+    "ga4gh_task_execCancelJobResponse": {
+      "type": "object"
+    },
+    "ga4gh_task_execExecutor": {
       "type": "object",
       "properties": {
         "imageName": {
           "type": "string",
-          "title": "REQUIRED\nDocker Image name"
+          "title": "REQUIRED\nImage name"
         },
         "cmd": {
           "type": "array",
@@ -171,7 +182,7 @@
         },
         "workdir": {
           "type": "string",
-          "title": "OPTIONAL: default docker image directory\nThe working directory that the command will be executed in"
+          "title": "OPTIONAL: default image directory\nThe working directory that the command will be executed in"
         },
         "stdin": {
           "type": "string",
@@ -200,14 +211,14 @@
           "title": "OPTIONAL\nEnviromental variables to set within the container"
         }
       },
-      "title": "A command line to be executed and the docker container to run it"
+      "title": "Executor executes a task"
     },
     "ga4gh_task_execFileLog": {
       "type": "object",
       "properties": {
-        "location": {
+        "url": {
           "type": "string",
-          "title": "REQUIRED\nlocation in long term storage that the output file was copied to\nis a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+          "title": "REQUIRED\nurl of long term storage that the output file was copied to\nis a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
         },
         "path": {
           "type": "string",
@@ -220,6 +231,22 @@
         }
       },
       "title": "Log of file output by workflow"
+    },
+    "ga4gh_task_execGetJobRequest": {
+      "type": "object",
+      "properties": {
+        "jobID": {
+          "type": "string"
+        }
+      }
+    },
+    "ga4gh_task_execGetJobResponse": {
+      "type": "object",
+      "properties": {
+        "job": {
+          "$ref": "#/definitions/ga4gh_task_execJob"
+        }
+      }
     },
     "ga4gh_task_execJob": {
       "type": "object",
@@ -269,15 +296,6 @@
       },
       "title": "Small description of jobs, returned by server during listing"
     },
-    "ga4gh_task_execJobID": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      },
-      "title": "ID of an instance of a Task"
-    },
     "ga4gh_task_execJobListRequest": {
       "type": "object",
       "properties": {
@@ -321,11 +339,11 @@
       "properties": {
         "startTime": {
           "type": "string",
-          "title": "When the command was executed"
+          "title": "When the command was executed in ISO 8601 format"
         },
         "endTime": {
           "type": "string",
-          "title": "When the command completed"
+          "title": "When the command completed in ISO 8601 format"
         },
         "stdout": {
           "type": "string",
@@ -358,12 +376,12 @@
       "properties": {
         "container": {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "title": "REQUIRED \nExposed port on container"
         },
         "host": {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "title": "OPTIONAL \nMust be greater than 1024;\nDefaults to 0"
         }
       },
@@ -392,7 +410,7 @@
           "items": {
             "$ref": "#/definitions/ga4gh_task_execVolume"
           },
-          "title": "REQUIRED\nVolumes to be mounted into the docker container"
+          "title": "REQUIRED\nVolumes to be mounted"
         },
         "zones": {
           "type": "array",
@@ -403,7 +421,20 @@
         }
       }
     },
-    "ga4gh_task_execServiceInfo": {
+    "ga4gh_task_execRunTaskResponse": {
+      "type": "object",
+      "properties": {
+        "jobID": {
+          "type": "string"
+        }
+      },
+      "title": "ID of an instance of a Task"
+    },
+    "ga4gh_task_execServiceInfoRequest": {
+      "type": "object",
+      "title": "Blank request message for service request"
+    },
+    "ga4gh_task_execServiceInfoResponse": {
       "type": "object",
       "properties": {
         "storageConfig": {
@@ -415,10 +446,6 @@
         }
       },
       "title": "Information about Task Execution Service\nMay include information related (but not limited to)\nresource availability and storage system information"
-    },
-    "ga4gh_task_execServiceInfoRequest": {
-      "type": "object",
-      "title": "Blank request message for service request"
     },
     "ga4gh_task_execState": {
       "type": "string",
@@ -468,12 +495,19 @@
           "$ref": "#/definitions/ga4gh_task_execResources",
           "title": "REQUIRED\nDefine required system resources to run job"
         },
-        "docker": {
+        "executors": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execDockerExecutor"
+            "$ref": "#/definitions/ga4gh_task_execExecutor"
           },
-          "title": "REQUIRED\nAn array of docker executions that will be run sequentially"
+          "title": "REQUIRED\nA list of executors that will be run sequentially"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "OPTIONAL\nA key-value map of arbitrary metadata useful to track with this Task request"
         }
       },
       "title": "The description of a task to be run"
@@ -489,9 +523,9 @@
           "type": "string",
           "title": "OPTIONAL\nText description"
         },
-        "location": {
+        "url": {
           "type": "string",
-          "title": "REQUIRED\nlocation in long term storage, is a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+          "title": "REQUIRED\nurl in long term storage, is a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
         },
         "path": {
           "type": "string",
@@ -499,7 +533,7 @@
         },
         "class": {
           "type": "string",
-          "title": "REQUIRED\nType of data, \"File\" or \"Directory\"\nif used for an output all the files in the directory\nwill be copied to the storage location"
+          "title": "REQUIRED\nType of data, \"File\" or \"Directory\"\nif used for an output all the files in the directory\nwill be copied to the storage url"
         },
         "create": {
           "type": "boolean",
@@ -523,7 +557,7 @@
         },
         "mountPoint": {
           "type": "string",
-          "title": "REQUIRED\nmount point for volume inside the docker container"
+          "title": "REQUIRED\nmount point for volume"
         }
       },
       "description": "Attached volume request."
