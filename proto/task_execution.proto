@@ -297,7 +297,7 @@ message OutputFileLog {
   // REQUIRED
   //
   // Size of the file in bytes.
-  int64 size = 3;
+  int64 size_bytes = 3;
 }
 
 // OUTPUT ONLY
