@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package tes;
 
+import "google/type/timeofday.proto";
 // Import HTTP RESTful annotations.
 import "google/api/annotations.proto";
 
@@ -239,13 +240,13 @@ message ExecutorLog {
 
   // OPTIONAL
   //
-  // Time the executor was started, in ISO 8601 format.
-  string start_time = 2;
+  // Time the executor was started.
+  google.type.TimeOfDay start_time = 2;
 
   // OPTIONAL
   //
-  // Time the executor ended, in ISO 8601 format.
-  string end_time = 3;
+  // Time the executor ended.
+  google.type.TimeOfDay end_time = 3;
 
   // OPTIONAL
   //
