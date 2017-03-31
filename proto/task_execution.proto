@@ -337,6 +337,27 @@ message ListTasksRequest {
   // If unspecified, returns the first page of results.
   // See ListTasksResponse.next_page_token
   string page_token = 4;
+
+  // OPTIONAL
+  //
+  // Affects the fields included in the returned Task messages.
+  // See TaskView below.
+  TaskView view = 5;
+}
+
+// TaskView affects the fields returned by the ListTasks endpoint.
+//
+// Some of the fields in task can be large strings (e.g. logs),
+// which can be a burden on the network. In the default BASIC view,
+// these heavyweight fields are not included, however, a client may
+// request the FULL version to include these fields.
+enum TaskView {
+  // Task message will include all fields EXCEPT:
+  //   Task.ExecutorLog.stdout
+  //   Task.ExecutorLog.stderr
+  BASIC = 0;
+  // Task message includes all fields.
+  FULL = 1;
 }
 
 // OUTPUT ONLY
@@ -347,7 +368,7 @@ message ListTasksResponse {
   // REQUIRED
   //
   // List of lightweight task descriptions.
-  repeated TaskDesc tasks = 1;
+  repeated Task tasks = 1;
 
   // OPTIONAL
   //
@@ -356,18 +377,6 @@ message ListTasksResponse {
   string next_page_token = 2;
 }
 
-// OUTPUT ONLY
-//
-// TaskDesc is a lightweight description of a task, which is returned
-// by the ListTasks endpoint.
-message TaskDesc {
-
-  // REQUIRED
-  string task_id = 1;
-
-  // REQUIRED
-  State state = 2;
-}
 
 // CancelTaskRequest describes a request to the CancelTask endpoint.
 message CancelTaskRequest {
