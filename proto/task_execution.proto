@@ -1,299 +1,443 @@
-
-
 syntax = "proto3";
 
-package ga4gh_task_exec;
+package tes;
 
-// Import HTTP RESTful annotations
+// Import HTTP RESTful annotations.
 import "google/api/annotations.proto";
 
-//Parameters for Task
-message TaskParameter {
-  //OPTIONAL
-  //name of the parameter
+// CreateTaskRequest describes a task to be created and run.
+message CreateTaskRequest {
+
+  // OPTIONAL
   string name = 1;
-  //OPTIONAL
-  //Text description
-  string description = 2;
-  //REQUIRED
-  //url in long term storage, is a url specific to the implementing
-  //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
-  //file:///path/to/my/file
-  string url = 3;
-  //REQUIRED
-  //path in the machine file system. Note, this MUST be a path that exists
-  //within one of the defined volumes
-  //If the file is mounted in a volume that is mounted read/write the file must
-  //be accessable to processes in the container. Optimizations, suc as hard linking
-  //to a source file, or providing a streaming input from a FUSE mount should only
-  //be done if the volume is mounted as read only
-  string path = 4;
-  //REQUIRED
-  //Type of data, "File" or "Directory"
-  //if used for an output all the files in the directory
-  //will be copied to the storage url
-  string class = 5;
-  //OPTIONAL: default false
-  //if the parameter is an output, should the element be created before executing
-  //the command. For example if saving the working directory as an output,
-  //the directory needs to exist before the command is called. If false, it is
-  //assumed that the user will create the element as a part of the operation
-  bool   create = 6;
-}
 
-//host to container port mappings
-message Ports {
-  //REQUIRED 
-  //Exposed port on container
-  uint32 container = 1;
-  //OPTIONAL 
-  //Must be greater than 1024;
-  //Defaults to 0
-  uint32 host = 2;
-}
+  // OPTIONAL
+  //
+  // Describes the project this task is associated with.
+  // Commonly used for billing on cloud providers (AWS, Google Cloud, etc).
+  string project = 2;
 
-// Executor executes a task
-message Executor {
-  //REQUIRED
-  // Image name
-  string imageName = 1;
-  //REQUIRED
-  //The command to be executed
-  repeated string cmd = 2;
-  //OPTIONAL: default image directory
-  //The working directory that the command will be executed in
-  string workdir = 3;
-  //OPTIONAL
-  //Path for supplying input to stdin, blank if none
-  string stdin = 6;
-  //OPTIONAL
-  //Path for stdout recording, blank if not storing to file
-  string stdout = 4;
-  //OPTIONAL
-  //Path for stderr recording, blank if not storing to file
-  string stderr = 5;
-  //OPTIONAL
-  //Port to expose from within the container, blank if none
-  repeated Ports ports = 7;
-  //OPTIONAL
-  //Enviromental variables to set within the container
-  map<string,string> environ = 8;
-}
-
-//Attached volume request.
-message Volume {
-  //OPTIONAL
-  //Name of attached volume
-  string name = 1;
-  //REQUIRED
-  //Minimum size
-  double sizeGb = 2;
-  //REQUIRED
-  //mount point for volume
-  string mountPoint = 6;
-}
-
-message Resources {
-  //OPTIONAL default 1
-  //Minimum number of CPUs
-  uint32 minimumCpuCores = 1;
-  //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
-  //OPTIONAL default false
-  bool preemptible = 2;
-  //REQUIRED
-  //Minimum RAM required
-  double minimumRamGb = 3;
-  //REQUIRED
-  //Volumes to be mounted
-  repeated Volume volumes = 4;
-  //OPTIONAL
-  //optional scheduling information for systems where multiple compute zones are avalible
-  repeated string zones = 5;
-}
-
-//The description of a task to be run
-message Task {
-  //OPTIONAL
-  //user name for task
-  string name = 1;
-  //OPTIONAL
-  //parameter for execution engine to define/store group information
-  string projectID = 2;
-  //OPTIONAL
-  //free text description of task
+  // OPTIONAL
   string description = 3;
-  //REQUIRED
-  //Files to be copied into system before tasks
+
+  // OPTIONAL
+  //
+  // Input files.
+  // Inputs will be downloaded and mounted into the executor container.
   repeated TaskParameter inputs = 4;
-  //REQUIRED
-  //Files to be copied out of the system after tasks
+
+  // OPTIONAL
+  //
+  // Output files.
+  // Outputs will be uploaded from the executor container to long-term storage.
   repeated TaskParameter outputs = 5;
-  //REQUIRED
-  //Define required system resources to run job
+
+  // OPTIONAL
+  //
+  // Request that the task be run with these resources.
   Resources resources = 6;
-  //REQUIRED
-  //A list of executors that will be run sequentially
+
+  // REQUIRED
+  //
+  // A list of executors to be run, sequentially.
   repeated Executor executors = 8;
 }
 
-//Request listing of jobs tracked by server
-message JobListRequest {
-  //OPTIONAL
-  //The name of the project to search for pipelines. Caller must have READ access to this project.
-  string projectID = 1;
-  //OPTIONAL
-  //Pipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.
-  string namePrefix	= 2;
-  //OPTIONAL
-  //Number of pipelines to return at once. Defaults to 256, and max is 2048.
-  uint32 pageSize = 3;
-  //OPTIONAL
-  //Token to use to indicate where to start getting results. If unspecified, returns the first page of results.
-  string pageToken = 4;
+// TaskParameter describes input and output files for a Task.
+message TaskParameter {
+
+  // OPTIONAL
+  string name = 1;
+
+  // OPTIONAL
+  string description = 2;
+
+  // REQUIRED
+  //
+  // URL in long term storage, for example:
+  // s3://my-object-store/file1
+  // gs://my-bucket/file2
+  // file:///path/to/my/file
+  // /path/to/my/file
+  // etc...
+  string url = 3;
+
+  // REQUIRED
+  //
+  // Path of the file inside the container.
+  string path = 4;
+
+  // REQUIRED
+  //
+  // Type of the file: "File" or "Directory".
+  string class = 5;
+
+  // OPTIONAL
+  //
+  // If true, this path will be created before the task starts running.
+  // This helps tasks create output directories which the task will
+  // write to.
+  bool create = 6;
 }
 
-//Small description of jobs, returned by server during listing
-message JobDesc {
-  //REQUIRED
-  string jobID  = 1;
-  //REQUIRED
-  State state = 2;
+// Ports describes the port mapping between the container and host.
+message Ports {
+
+  // REQUIRED 
+  //
+  // Port number opened inside the container.
+  uint32 container = 1;
+
+  // OPTIONAL 
+  //
+  // Port number opened on the host. Must be greater than 1024.
+  // Defaults to 0, which assigns a random port on the host.
+  uint32 host = 2;
 }
 
-//Return envelope
-message JobListResponse {
-   repeated JobDesc jobs = 1;
-   string nextPageToken = 2;
-}
+// Executor describes a command to run, and its environment.
+message Executor {
 
-enum State {
-  Unknown = 0;
-  Queued = 1;
-  Running = 2;
-  Paused = 3;
-  Complete = 4;
-  Error = 5;
-  SystemError = 6;
-  Canceled = 7;
-  Initializing = 8;
-}
+  // REQUIRED
+  //
+  // Name of the container image, for example:
+  // ubuntu
+  // quay.io/aptible/ubuntu
+  // gcr.io/my-org/my-image
+  // etc...
+  string image_name = 1;
 
-message JobLog {
-  //When the command was executed in ISO 8601 format
-  string startTime = 2;
-  //When the command completed in ISO 8601 format
-  string endTime = 3;
-  //Sample of stdout (not guaranteed to be entire log)
+  // REQUIRED
+  //
+  // The command to be executed.
+  repeated string cmd = 2;
+
+  // OPTIONAL
+  //
+  // The working directory that the command will be executed in.
+  // Defaults to the directory set by the container image.
+  string workdir = 3;
+
+  // OPTIONAL
+  //
+  // Path inside the container to a file which will be piped
+  // to the command's stdin.
+  string stdin = 6;
+
+  // OPTIONAL
+  //
+  // Path inside the container to a file where the command's
+  // stdout will be written to.
   string stdout = 4;
-  //Sample of stderr (not guaranteed to be entire log)
+
+  // OPTIONAL
+  //
+  // Path inside the container to a file where the command's
+  // stderr will be written to.
   string stderr = 5;
-  //Exit code of the program
-  int32  exitCode = 6;
-  // ip of worker host
-  string hostIP = 7;
-  // ports bound from container to host
+
+  // OPTIONAL
+  //
+  // Port to expose from within the container, blank if none.
+  repeated Ports ports = 7;
+
+  // OPTIONAL
+  //
+  // Enviromental variables to set within the container.
+  map<string,string> environ = 8;
+}
+
+// Volume describes a volume (i.e. directory) which will be
+// mounted into an executor/container.
+message Volume {
+
+  // OPTIONAL
+  string name = 1;
+
+  // REQUIRED
+  //
+  // Requested disk size in gigabytes (GB)
+  double size_gb = 2;
+
+  // REQUIRED
+  //
+  // Path inside the container that the volume will be mounted to.
+  string mount_point = 6;
+}
+
+// Resources describes the resources requested by a task.
+message Resources {
+
+  // OPTIONAL
+  //
+  // Minimum number of CPUs
+  // Default 1
+  uint32 minimum_cpu_cores = 1;
+
+  // OPTIONAL
+  //
+  // Is the task allowed to run on preemptible compute instances (e.g. AWS Spot)?
+  bool preemptible = 2;
+
+  // OPTIONAL
+  //
+  // Minimum RAM required in gigabytes (GB)
+  double minimum_ram_gb = 3;
+
+  // OPTIONAL
+  //
+  // Volumes to be mounted into the container.
+  repeated Volume volumes = 4;
+
+  // OPTIONAL
+  //
+  // Request that the task be run in these compute zones.
+  repeated string zones = 5;
+}
+
+// GetTaskRequest describes a request to the GetTask endpoint.
+message GetTaskRequest {
+  // REQUIRED
+  string task_id = 1;
+}
+
+// OUTPUT ONLY
+//
+// Task describes an instance of a task.
+message Task {
+
+  // REQUIRED
+  string task_id = 1;
+
+  // REQUIRED
+  map<string,string> metadata = 2;
+
+  // REQUIRED
+  Task task = 3;
+
+  // REQUIRED
+  State state = 4;
+
+  // REQUIRED
+  repeated ExecutorLog logs = 5;
+
+  // REQUIRED
+  //
+  // Information about all output files. Directory outputs are
+  // flattened into separate items.
+  repeated OutputFileLog outputs = 6;
+}
+
+// OUTPUT ONLY
+//
+// ExecutorLog describes logging information related to an Executor.
+message ExecutorLog {
+
+  // OPTIONAL
+  //
+  // Time the executor was started, in ISO 8601 format.
+  string start_time = 2;
+
+  // OPTIONAL
+  //
+  // Time the executor ended, in ISO 8601 format.
+  string end_time = 3;
+
+  // OPTIONAL
+  //
+  // Stdout tail.
+  // This is not guaranteed to be the entire log.
+  // Implementations determine the maximum size.
+  string stdout = 4;
+
+  // OPTIONAL
+  //
+  // Stderr tail.
+  // This is not guaranteed to be the entire log.
+  // Implementations determine the maximum size.
+  string stderr = 5;
+
+  // REQUIRED
+  //
+  // Exit code.
+  int32 exit_code = 6;
+
+  // OPTIONAL
+  //
+  // IP address of host.
+  string host_ip = 7;
+
+  // OPTIONAL
+  //
+  // Ports mapped between the container and host.
   repeated Ports ports = 8;
 }
 
+// OUTPUT ONLY
+//
+// OutputFileLog describes a single output file. This describes
+// file details after the task has completed successfully,
+// for logging purposes.
+message OutputFileLog {
 
-//Log of file output by workflow
-message FileLog {
-  //REQUIRED
-  //url of long term storage that the output file was copied to
-  //is a url specific to the implementing
-  //system. For example s3://my-object-store/file1 or gs://my-bucket/file2 or
-  //file:///path/to/my/file
+  // REQUIRED
+  //
+  // URL of the file in storage, e.g. s3://bucket/file.txt
   string url = 1;
-  //REQUIRED
-  //path in the machine file system that originated the file
+
+  // REQUIRED
+  //
+  // Path of the file inside the container.
   string path = 2;
-  //REQUIRED
-  //Size of produced file
-  int64  size = 3;
+
+  // REQUIRED
+  //
+  // Size of the file in bytes.
+  int64 size = 3;
 }
 
-
-//The description of the running instance of a task
-message Job {
-  string jobID = 1;
-  map<string,string> metadata = 2;
-  Task task = 3;
-  State state = 4;
-  repeated JobLog logs = 5;
-  //List of all files copied out to the object store as well as some basic
-  //meta-data about them. This is an expanded list, if the task outputs 
-  //list directories, this record details every individual file
-  repeated FileLog outputs = 6;
+// OUTPUT ONLY
+//
+// Task states.
+enum State {
+  UNKNOWN = 0;
+  QUEUED = 1;
+  INITIALIZING = 2;
+  RUNNING = 3;
+  PAUSED = 4;
+  COMPLETE = 5;
+  ERROR = 6;
+  SYSTEM_ERROR = 7;
+  CANCELED = 8;
 }
 
-//Blank request message for service request
+// ListTasksRequest describes a request to the ListTasks service endpoint.
+message ListTasksRequest {
+
+  // OPTIONAL
+  //
+  // Filter the task list to include tasks in this project.
+  string project = 1;
+
+  // OPTIONAL
+  //
+  // Filter the list to include tasks where the name matches this prefix.
+  // If unspecified, no task name filtering is done.
+  string name_prefix	= 2;
+
+  // OPTIONAL
+  //
+  // Number of tasks to return in one page.
+  // Must be less than 2048. Defaults to 256.
+  uint32 page_size = 3;
+
+  // OPTIONAL
+  //
+  // Page token is used to retrieve the next page of results.
+  // If unspecified, returns the first page of results.
+  // See ListTasksResponse.next_page_token
+  string page_token = 4;
+}
+
+// OUTPUT ONLY
+//
+// ListTasksResponse describes a response from the ListTasks endpoint.
+message ListTasksResponse {
+
+  // REQUIRED
+  //
+  // List of lightweight task descriptions.
+  repeated TaskDesc tasks = 1;
+
+  // OPTIONAL
+  //
+  // Token used to return the next page of results.
+  // See TaskListRequest.next_page_token
+  string next_page_token = 2;
+}
+
+// OUTPUT ONLY
+//
+// TaskDesc is a lightweight description of a task, which is returned
+// by the ListTasks endpoint.
+message TaskDesc {
+
+  // REQUIRED
+  string task_id = 1;
+
+  // REQUIRED
+  State state = 2;
+}
+
+// CancelTaskRequest describes a request to the CancelTask endpoint.
+message CancelTaskRequest {
+  // REQUIRED
+  string task_id = 1;
+}
+
+// OUTPUT ONLY
+//
+// CancelTaskResponse describes a response from the CancelTask endpoint.
+message CancelTaskResponse {}
+
+// ServiceInfoRequest describes a request to the ServiceInfo endpoint.
 message ServiceInfoRequest {}
 
-//Information about Task Execution Service
-//May include information related (but not limited to)
-//resource availability and storage system information
-message ServiceInfoResponse {
-  //System specific key/value pairs
-  //Example for a shared file system based storage system:
-  //storageType=sharedFile, baseDir=/path/to/shared/directory
-  map<string,string> storageConfig = 1;
+// OUTPUT ONLY
+//
+// ServiceInfo describes information about the service,
+// such as storage details, resource availability,
+// and other documentation.
+message ServiceInfo {
+
+  // OPTIONAL
+  //
+  // System specific key/value pairs
+  // Example for a shared file system based storage system:
+  // storageType=sharedFile, baseDir=/path/to/shared/directory
+  map<string,string> storage_config = 1;
 }
 
-message GetJobRequest {
-  string jobID = 1;
-}
-
-message GetJobResponse {
-  Job job = 1;
-}
-
-//ID of an instance of a Task
-message RunTaskResponse {
-  string jobID = 1;
-}
-
-message CancelJobRequest {
-  string jobID = 1;
-}
-
-message CancelJobResponse {}
-
-//Web service to get, create, list and delete Tasks
+// TaskService describes the HTTP/gRPC service API provided by TES
+// services to create, list, get, update tasks.
 service TaskService {
 
-  //Get Service Info
-  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfoResponse) {
+  // GetServiceInfo provides information about the service,
+  // such as storage details, resource availability, and 
+  // other documentation.
+  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo) {
     option (google.api.http) = {
-      get: "/v1/jobs-service"
+      get: "/v1/service-info"
     };
   }
 
-  //Run a task
-  rpc RunTask(Task) returns (RunTaskResponse) {
+  // Create a new task.
+  rpc CreateTask(CreateTaskRequest) returns (Task) {
     option (google.api.http) = {
-      post: "/v1/jobs"
+      post: "/v1/tasks"
       body: "*"
     };
   }
 
-  //List the TaskOps
-  rpc ListJobs(JobListRequest) returns (JobListResponse) {
+  // List tasks.
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse) {
     option (google.api.http) = {
-      get: "/v1/jobs"
+      get: "/v1/tasks"
     };
   }
 
-  //Get info about a running task
-  rpc GetJob(GetJobRequest) returns (GetJobResponse) {
+  // Get a task.
+  rpc GetTask(GetTaskRequest) returns (Task) {
       option (google.api.http) = {
-        get: "/v1/jobs/{jobID}"
+        get: "/v1/tasks/{task_id}"
       };
   }
 
-  //Cancel a running task
-  rpc CancelJob(CancelJobRequest) returns (CancelJobResponse) {
+  // Cancel a task.
+  rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse) {
     option (google.api.http) = {
-      delete: "/v1/jobs/{jobID}"
+      post: "/v1/tasks/{task_id}:cancel"
+      body: "*"
     };
   }
 
