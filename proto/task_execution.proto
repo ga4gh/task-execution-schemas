@@ -44,6 +44,11 @@ message CreateTaskRequest {
   repeated Executor executors = 8;
 }
 
+enum FileType {
+  FILE = 0
+  DIRECTORY = 1
+}
+
 // TaskParameter describes input and output files for a Task.
 message TaskParameter {
 
@@ -70,8 +75,8 @@ message TaskParameter {
 
   // REQUIRED
   //
-  // Type of the file: "File" or "Directory".
-  string class = 5;
+  // Type of the file, FILE or DIRECTORY
+  FileType type = 5;
 
   // OPTIONAL
   //
