@@ -423,7 +423,7 @@ service TaskService {
   // other documentation.
   rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo) {
     option (google.api.http) = {
-      get: "/v1/service-info"
+      get: "/v1/tasks/service-info"
     };
   }
 
