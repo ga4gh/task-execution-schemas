@@ -183,6 +183,12 @@ message JobLog {
   repeated ExecutorLog logs = 1;
   //OPTIONAL
   map<string, string> metadata = 2;
+  //OPTIONAL
+  //When the job was started in ISO 8601 format
+  string startTime = 3;
+  //OPTIONAL
+  //When the job reached a terminal state in ISO 8601 format
+  string endTime = 4;
 }
 
 message ExecutorLog {

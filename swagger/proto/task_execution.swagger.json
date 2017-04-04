@@ -385,6 +385,14 @@
             "type": "string"
           },
           "title": "OPTIONAL"
+        },
+        "startTime": {
+          "type": "string",
+          "title": "OPTIONAL\nWhen the job was started in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "title": "OPTIONAL\nWhen the job reached a terminal state in ISO 8601 format"
         }
       }
     },
