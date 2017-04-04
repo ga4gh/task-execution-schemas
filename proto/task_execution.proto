@@ -245,13 +245,13 @@ message ExecutorLog {
 
   // OPTIONAL
   //
-  // Time the executor was started.
-  google.type.TimeOfDay start_time = 2;
+  // Time the executor started, in RFC 3339 format.
+  string start_time = 2;
 
   // OPTIONAL
   //
-  // Time the executor ended.
-  google.type.TimeOfDay end_time = 3;
+  // Time the executor ended, in RFC 3339 format.
+  string end_time = 3;
 
   // OPTIONAL
   //
