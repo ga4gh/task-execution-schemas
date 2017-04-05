@@ -21,12 +21,8 @@ message TaskParameter {
   //file:///path/to/my/file
   string url = 3;
   //REQUIRED
-  //path in the machine file system. Note, this MUST be a path that exists
-  //within one of the defined volumes
-  //If the file is mounted in a volume that is mounted read/write the file must
-  //be accessable to processes in the container. Optimizations, suc as hard linking
-  //to a source file, or providing a streaming input from a FUSE mount should only
-  //be done if the volume is mounted as read only
+  //path in the executor file system.
+  //All inputs are mounted as read-only.
   string path = 4;
   //REQUIRED
   //Type of data, "File" or "Directory"
@@ -80,19 +76,6 @@ message Executor {
   map<string,string> environ = 8;
 }
 
-//Attached volume request.
-message Volume {
-  //OPTIONAL
-  //Name of attached volume
-  string name = 1;
-  //REQUIRED
-  //Minimum size
-  double sizeGb = 2;
-  //REQUIRED
-  //mount point for volume
-  string mountPoint = 6;
-}
-
 message Resources {
   //OPTIONAL default 1
   //Minimum number of CPUs
@@ -103,9 +86,9 @@ message Resources {
   //REQUIRED
   //Minimum RAM required
   double minimumRamGb = 3;
-  //REQUIRED
-  //Volumes to be mounted
-  repeated Volume volumes = 4;
+  //OPTIONAL
+  //Requested disk size in GB
+  double diskGb = 4;
   //OPTIONAL
   //optional scheduling information for systems where multiple compute zones are avalible
   repeated string zones = 5;
@@ -134,6 +117,11 @@ message Task {
   //REQUIRED
   //A list of executors that will be run sequentially
   repeated Executor executors = 8;
+  //OPTIONAL
+  //A list of additional volumes 
+  //These are shared between executors. Volumes for the executor work dir,
+  //inputs and outputs will be inferred and do not need to be defined here. 
+  repeated string volumes = 9;
 }
 
 //Request listing of jobs tracked by server
