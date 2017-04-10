@@ -15,23 +15,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/service-info": {
-      "get": {
-        "summary": "GetServiceInfo provides information about the service,\nsuch as storage details, resource availability, and \nother documentation.",
-        "operationId": "GetServiceInfo",
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/tesServiceInfo"
-            }
-          }
-        },
-        "tags": [
-          "TaskService"
-        ]
-      }
-    },
     "/v1/tasks": {
       "get": {
         "summary": "List tasks.",
@@ -105,7 +88,24 @@
         ]
       }
     },
-    "/v1/tasks/{task_id}": {
+    "/v1/tasks/service-info": {
+      "get": {
+        "summary": "GetServiceInfo provides information about the service,\nsuch as storage details, resource availability, and \nother documentation.",
+        "operationId": "GetServiceInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/tesServiceInfo"
+            }
+          }
+        },
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/tasks/{id}": {
       "get": {
         "summary": "Get a task.",
         "operationId": "GetTask",
@@ -119,7 +119,7 @@
         },
         "parameters": [
           {
-            "name": "task_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -130,7 +130,7 @@
         ]
       }
     },
-    "/v1/tasks/{task_id}:cancel": {
+    "/v1/tasks/{id}:cancel": {
       "post": {
         "summary": "Cancel a task.",
         "operationId": "CancelTask",
@@ -144,7 +144,7 @@
         },
         "parameters": [
           {
-            "name": "task_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -168,8 +168,9 @@
     "tesCancelTaskRequest": {
       "type": "object",
       "properties": {
-        "task_id": {
+        "id": {
           "type": "string",
+          "description": "Task identifier.",
           "title": "REQUIRED"
         }
       },
@@ -224,6 +225,14 @@
           },
           "description": "A list of executors to be run, sequentially.",
           "title": "REQUIRED"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A key-value map of arbitrary tags.",
+          "title": "OPTIONAL"
         }
       },
       "description": "CreateTaskRequest describes a task to be created and run."
@@ -288,12 +297,12 @@
       "properties": {
         "start_time": {
           "type": "string",
-          "description": "Time the executor was started, in ISO 8601 format.",
+          "description": "Time the executor started, in RFC 3339 format.",
           "title": "OPTIONAL"
         },
         "end_time": {
           "type": "string",
-          "description": "Time the executor ended, in ISO 8601 format.",
+          "description": "Time the executor ended, in RFC 3339 format.",
           "title": "OPTIONAL"
         },
         "stdout": {
@@ -329,11 +338,20 @@
       "description": "ExecutorLog describes logging information related to an Executor.",
       "title": "OUTPUT ONLY"
     },
+    "tesFileType": {
+      "type": "string",
+      "enum": [
+        "FILE",
+        "DIRECTORY"
+      ],
+      "default": "FILE"
+    },
     "tesGetTaskRequest": {
       "type": "object",
       "properties": {
-        "task_id": {
+        "id": {
           "type": "string",
+          "description": "Task identifier.",
           "title": "REQUIRED"
         }
       },
@@ -399,7 +417,7 @@
           "description": "Path of the file inside the container.",
           "title": "REQUIRED"
         },
-        "size": {
+        "size_bytes": {
           "type": "string",
           "format": "int64",
           "description": "Size of the file in bytes.",
@@ -430,10 +448,10 @@
     "tesResources": {
       "type": "object",
       "properties": {
-        "minimum_cpu_cores": {
+        "cpu_cores": {
           "type": "integer",
           "format": "int64",
-          "description": "Minimum number of CPUs\nDefault 1",
+          "description": "Requested number of CPUs",
           "title": "OPTIONAL"
         },
         "preemptible": {
@@ -442,10 +460,10 @@
           "description": "Is the task allowed to run on preemptible compute instances (e.g. AWS Spot)?",
           "title": "OPTIONAL"
         },
-        "minimum_ram_gb": {
+        "ram_gb": {
           "type": "number",
           "format": "double",
-          "description": "Minimum RAM required in gigabytes (GB)",
+          "description": "Requested RAM required in gigabytes (GB)",
           "title": "OPTIONAL"
         },
         "volumes": {
@@ -500,14 +518,15 @@
         "CANCELED"
       ],
       "default": "UNKNOWN",
-      "description": "Task states.",
+      "description": "Task states.\n\n - PAUSED: An implementation *may* have the ability to pause a task,\nbut this is not required.",
       "title": "OUTPUT ONLY"
     },
     "tesTask": {
       "type": "object",
       "properties": {
-        "task_id": {
+        "id": {
           "type": "string",
+          "description": "Task identifier.",
           "title": "REQUIRED"
         },
         "metadata": {
@@ -528,8 +547,9 @@
         "logs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/tesExecutorLog"
+            "$ref": "#/definitions/tesTaskLog"
           },
+          "description": "Task logging information.\nNormally, this will contain only one entry, but in the case where\na task fails and is retried, an entry will be appended to this list.",
           "title": "REQUIRED"
         },
         "outputs": {
@@ -547,8 +567,9 @@
     "tesTaskDesc": {
       "type": "object",
       "properties": {
-        "task_id": {
+        "id": {
           "type": "string",
+          "description": "Task identifier.",
           "title": "REQUIRED"
         },
         "state": {
@@ -557,6 +578,39 @@
         }
       },
       "description": "TaskDesc is a lightweight description of a task, which is returned\nby the ListTasks endpoint.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesTaskLog": {
+      "type": "object",
+      "properties": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesExecutorLog"
+          },
+          "description": "Logs for each executor",
+          "title": "REQUIRED"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Arbitrary logging metadata included by the implementation.",
+          "title": "OPTIONAL"
+        },
+        "start_time": {
+          "type": "string",
+          "description": "When the task started, in RFC 3339 format.",
+          "title": "OPTIONAL"
+        },
+        "end_time": {
+          "type": "string",
+          "description": "When the task ended, in RFC 3339 format.",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "TaskLog describes logging information related to a Task.",
       "title": "OUTPUT ONLY"
     },
     "tesTaskParameter": {
@@ -580,15 +634,20 @@
           "description": "Path of the file inside the container.",
           "title": "REQUIRED"
         },
-        "class": {
-          "type": "string",
-          "description": "Type of the file: \"File\" or \"Directory\".",
+        "type": {
+          "$ref": "#/definitions/tesFileType",
+          "description": "Type of the file, FILE or DIRECTORY",
           "title": "REQUIRED"
         },
         "create": {
           "type": "boolean",
           "format": "boolean",
           "description": "If true, this path will be created before the task starts running.\nThis helps tasks create output directories which the task will\nwrite to.",
+          "title": "OPTIONAL"
+        },
+        "contents": {
+          "type": "string",
+          "description": "File contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded",
           "title": "OPTIONAL"
         }
       },

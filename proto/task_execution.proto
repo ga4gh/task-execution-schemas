@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package tes;
 
-import "google/type/timeofday.proto";
 // Import HTTP RESTful annotations.
 import "google/api/annotations.proto";
 
@@ -42,11 +41,16 @@ message CreateTaskRequest {
   //
   // A list of executors to be run, sequentially.
   repeated Executor executors = 8;
+
+  // OPTIONAL
+  //
+  // A key-value map of arbitrary tags.
+  map<string, string> tags = 9;
 }
 
 enum FileType {
-  FILE = 0
-  DIRECTORY = 1
+  FILE = 0;
+  DIRECTORY = 1;
 }
 
 // TaskParameter describes input and output files for a Task.
@@ -84,6 +88,13 @@ message TaskParameter {
   // This helps tasks create output directories which the task will
   // write to.
   bool create = 6;
+
+  // OPTIONAL
+  //
+  // File contents literal. 
+  // Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
+  // UTF-8 encoded
+  string contents = 7;
 }
 
 // Ports describes the port mapping between the container and host.
@@ -176,9 +187,8 @@ message Resources {
 
   // OPTIONAL
   //
-  // Minimum number of CPUs
-  // Default 1
-  uint32 minimum_cpu_cores = 1;
+  // Requested number of CPUs
+  uint32 cpu_cores = 1;
 
   // OPTIONAL
   //
@@ -187,8 +197,8 @@ message Resources {
 
   // OPTIONAL
   //
-  // Minimum RAM required in gigabytes (GB)
-  double minimum_ram_gb = 3;
+  // Requested RAM required in gigabytes (GB)
+  double ram_gb = 3;
 
   // OPTIONAL
   //
@@ -208,6 +218,8 @@ message GetTaskRequest {
   // Task identifier.
   string id = 1;
 }
+
+
 
 // OUTPUT ONLY
 //
@@ -229,13 +241,43 @@ message Task {
   State state = 4;
 
   // REQUIRED
-  repeated ExecutorLog logs = 5;
+  //
+  // Task logging information.
+  // Normally, this will contain only one entry, but in the case where
+  // a task fails and is retried, an entry will be appended to this list.
+  repeated TaskLog logs = 5;
 
   // REQUIRED
   //
   // Information about all output files. Directory outputs are
   // flattened into separate items.
   repeated OutputFileLog outputs = 6;
+}
+
+// OUTPUT ONLY
+//
+// TaskLog describes logging information related to a Task.
+message TaskLog {
+
+  // REQUIRED
+  //
+  // Logs for each executor
+  repeated ExecutorLog logs = 1;
+
+  // OPTIONAL
+  //
+  // Arbitrary logging metadata included by the implementation.
+  map<string, string> metadata = 2;
+
+  // OPTIONAL
+  //
+  // When the task started, in RFC 3339 format.
+  string start_time = 3;
+
+  // OPTIONAL
+  //
+  // When the task ended, in RFC 3339 format.
+  string end_time = 4;
 }
 
 // OUTPUT ONLY
