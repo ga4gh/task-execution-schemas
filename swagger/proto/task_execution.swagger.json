@@ -226,6 +226,14 @@
           "description": "A list of executors to be run, sequentially.",
           "title": "REQUIRED"
         },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Declared volumes.\nVolumes are shared between executors. Volumes for inputs and outputs are \ninferred and should not be delcared here.",
+          "title": "OPTIONAL"
+        },
         "tags": {
           "type": "object",
           "additionalProperties": {
@@ -466,12 +474,10 @@
           "description": "Requested RAM required in gigabytes (GB)",
           "title": "OPTIONAL"
         },
-        "volumes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesVolume"
-          },
-          "description": "Volumes to be mounted into the container.",
+        "size_gb": {
+          "type": "number",
+          "format": "double",
+          "description": "Requested disk size in gigabytes (GB)",
           "title": "OPTIONAL"
         },
         "zones": {
@@ -639,12 +645,6 @@
           "description": "Type of the file, FILE or DIRECTORY",
           "title": "REQUIRED"
         },
-        "create": {
-          "type": "boolean",
-          "format": "boolean",
-          "description": "If true, this path will be created before the task starts running.\nThis helps tasks create output directories which the task will\nwrite to.",
-          "title": "OPTIONAL"
-        },
         "contents": {
           "type": "string",
           "description": "File contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded",
@@ -652,27 +652,6 @@
         }
       },
       "description": "TaskParameter describes input and output files for a Task."
-    },
-    "tesVolume": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "OPTIONAL"
-        },
-        "size_gb": {
-          "type": "number",
-          "format": "double",
-          "description": "Requested disk size in gigabytes (GB)",
-          "title": "REQUIRED"
-        },
-        "mount_point": {
-          "type": "string",
-          "description": "Path inside the container that the volume will be mounted to.",
-          "title": "REQUIRED"
-        }
-      },
-      "description": "Volume describes a volume (i.e. directory) which will be\nmounted into an executor/container."
     }
   }
 }
