@@ -213,6 +213,43 @@
       },
       "title": "Executor executes a task"
     },
+    "ga4gh_task_execExecutorLog": {
+      "type": "object",
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "title": "When the command was executed in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "title": "When the command completed in ISO 8601 format"
+        },
+        "stdout": {
+          "type": "string",
+          "title": "Sample of stdout (not guaranteed to be entire log)"
+        },
+        "stderr": {
+          "type": "string",
+          "title": "Sample of stderr (not guaranteed to be entire log)"
+        },
+        "exitCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Exit code of the program"
+        },
+        "hostIP": {
+          "type": "string",
+          "title": "ip of worker host"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "ports bound from container to host"
+        }
+      }
+    },
     "ga4gh_task_execFileLog": {
       "type": "object",
       "properties": {
@@ -252,25 +289,23 @@
       "type": "object",
       "properties": {
         "jobID": {
-          "type": "string"
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "type": "string",
+          "title": "REQUIRED"
         },
         "task": {
-          "$ref": "#/definitions/ga4gh_task_execTask"
+          "$ref": "#/definitions/ga4gh_task_execTask",
+          "title": "REQUIRED"
         },
         "state": {
-          "$ref": "#/definitions/ga4gh_task_execState"
+          "$ref": "#/definitions/ga4gh_task_execState",
+          "title": "REQUIRED"
         },
         "logs": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ga4gh_task_execJobLog"
-          }
+          },
+          "description": "REQUIRED\nLength of logs reflects number of retries. \nIf the implementation doesn't support retries this field will always be of length 1."
         },
         "outputs": {
           "type": "array",
@@ -337,37 +372,27 @@
     "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execExecutorLog"
+          },
+          "title": "REQUIRED"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "OPTIONAL"
+        },
         "startTime": {
           "type": "string",
-          "title": "When the command was executed in ISO 8601 format"
+          "title": "OPTIONAL\nWhen the job was started in ISO 8601 format"
         },
         "endTime": {
           "type": "string",
-          "title": "When the command completed in ISO 8601 format"
-        },
-        "stdout": {
-          "type": "string",
-          "title": "Sample of stdout (not guaranteed to be entire log)"
-        },
-        "stderr": {
-          "type": "string",
-          "title": "Sample of stderr (not guaranteed to be entire log)"
-        },
-        "exitCode": {
-          "type": "integer",
-          "format": "int32",
-          "title": "Exit code of the program"
-        },
-        "hostIP": {
-          "type": "string",
-          "title": "ip of worker host"
-        },
-        "ports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execPorts"
-          },
-          "title": "ports bound from container to host"
+          "title": "OPTIONAL\nWhen the job reached a terminal state in ISO 8601 format"
         }
       }
     },
