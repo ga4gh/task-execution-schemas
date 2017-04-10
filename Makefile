@@ -4,7 +4,10 @@ export GOPATH
 PATH := ${PATH}:$(shell pwd)/bin
 export PATH
 
-PROTO_INC= -I ./ -I $(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/ -I proto/
+PROTO_INC= -I ./ \
+	-I $(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/ \
+	-I googleapis/ \
+	-I proto/
 
 all: swagger
 
