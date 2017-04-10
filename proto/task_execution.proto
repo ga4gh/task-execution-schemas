@@ -134,6 +134,9 @@ message Task {
   //REQUIRED
   //A list of executors that will be run sequentially
   repeated Executor executors = 8;
+  //OPTIONAL
+  //A key-value map of arbitrary metadata useful to track with this Task request
+  map<string, string> tags = 9;
 }
 
 //Request listing of jobs tracked by server
