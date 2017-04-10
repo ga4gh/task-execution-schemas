@@ -85,8 +85,8 @@ message Volume {
   //OPTIONAL
   //Name of attached volume
   string name = 1;
-  //REQUIRED
-  //Minimum size
+  //OPTIONAL
+  //Requested disk size in GB
   double sizeGb = 2;
   //REQUIRED
   //mount point for volume
@@ -94,15 +94,15 @@ message Volume {
 }
 
 message Resources {
-  //OPTIONAL default 1
-  //Minimum number of CPUs
-  uint32 minimumCpuCores = 1;
+  //OPTIONAL
+  //Requested number of CPUs
+  uint32 cpuCores = 1;
   //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
   //OPTIONAL default false
   bool preemptible = 2;
-  //REQUIRED
-  //Minimum RAM required
-  double minimumRamGb = 3;
+  //OPTIONAL
+  //Requested amount of RAM in GB
+  double ramGb = 3;
   //REQUIRED
   //Volumes to be mounted
   repeated Volume volumes = 4;
