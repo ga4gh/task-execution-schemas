@@ -213,6 +213,43 @@
       },
       "title": "Executor executes a task"
     },
+    "ga4gh_task_execExecutorLog": {
+      "type": "object",
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "title": "When the command was executed in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "title": "When the command completed in ISO 8601 format"
+        },
+        "stdout": {
+          "type": "string",
+          "title": "Sample of stdout (not guaranteed to be entire log)"
+        },
+        "stderr": {
+          "type": "string",
+          "title": "Sample of stderr (not guaranteed to be entire log)"
+        },
+        "exitCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Exit code of the program"
+        },
+        "hostIP": {
+          "type": "string",
+          "title": "ip of worker host"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execPorts"
+          },
+          "title": "ports bound from container to host"
+        }
+      }
+    },
     "ga4gh_task_execFileLog": {
       "type": "object",
       "properties": {
@@ -252,25 +289,23 @@
       "type": "object",
       "properties": {
         "jobID": {
-          "type": "string"
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "type": "string",
+          "title": "REQUIRED"
         },
         "task": {
-          "$ref": "#/definitions/ga4gh_task_execTask"
+          "$ref": "#/definitions/ga4gh_task_execTask",
+          "title": "REQUIRED"
         },
         "state": {
-          "$ref": "#/definitions/ga4gh_task_execState"
+          "$ref": "#/definitions/ga4gh_task_execState",
+          "title": "REQUIRED"
         },
         "logs": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ga4gh_task_execJobLog"
-          }
+          },
+          "description": "REQUIRED\nLength of logs reflects number of retries. \nIf the implementation doesn't support retries this field will always be of length 1."
         },
         "outputs": {
           "type": "array",
@@ -337,37 +372,27 @@
     "ga4gh_task_execJobLog": {
       "type": "object",
       "properties": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ga4gh_task_execExecutorLog"
+          },
+          "title": "REQUIRED"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "OPTIONAL"
+        },
         "startTime": {
           "type": "string",
-          "title": "When the command was executed in ISO 8601 format"
+          "title": "OPTIONAL\nWhen the job was started in ISO 8601 format"
         },
         "endTime": {
           "type": "string",
-          "title": "When the command completed in ISO 8601 format"
-        },
-        "stdout": {
-          "type": "string",
-          "title": "Sample of stdout (not guaranteed to be entire log)"
-        },
-        "stderr": {
-          "type": "string",
-          "title": "Sample of stderr (not guaranteed to be entire log)"
-        },
-        "exitCode": {
-          "type": "integer",
-          "format": "int32",
-          "title": "Exit code of the program"
-        },
-        "hostIP": {
-          "type": "string",
-          "title": "ip of worker host"
-        },
-        "ports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execPorts"
-          },
-          "title": "ports bound from container to host"
+          "title": "OPTIONAL\nWhen the job reached a terminal state in ISO 8601 format"
         }
       }
     },
@@ -390,20 +415,20 @@
     "ga4gh_task_execResources": {
       "type": "object",
       "properties": {
-        "minimumCpuCores": {
+        "cpuCores": {
           "type": "integer",
           "format": "int64",
-          "title": "OPTIONAL default 1\nMinimum number of CPUs"
+          "title": "OPTIONAL\nRequested number of CPUs"
         },
         "preemptible": {
           "type": "boolean",
           "format": "boolean",
           "title": "Can schedule on resource that resource that can be preempted, like AWS Spot Instances\nOPTIONAL default false"
         },
-        "minimumRamGb": {
+        "ramGb": {
           "type": "number",
           "format": "double",
-          "title": "REQUIRED\nMinimum RAM required"
+          "title": "OPTIONAL\nRequested amount of RAM in GB"
         },
         "diskGb": {
           "type": "number",
@@ -506,6 +531,13 @@
             "type": "string"
           },
           "description": "OPTIONAL\nA list of additional volumes \nThese are shared between executors. Volumes for the executor work dir,\ninputs and outputs will be inferred and do not need to be defined here."
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "A key-value map of arbitrary metadata useful to track with this Task request"
         }
       },
       "title": "The description of a task to be run"

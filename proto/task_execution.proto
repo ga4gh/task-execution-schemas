@@ -77,15 +77,15 @@ message Executor {
 }
 
 message Resources {
-  //OPTIONAL default 1
-  //Minimum number of CPUs
-  uint32 minimumCpuCores = 1;
+  //OPTIONAL
+  //Requested number of CPUs
+  uint32 cpuCores = 1;
   //Can schedule on resource that resource that can be preempted, like AWS Spot Instances
   //OPTIONAL default false
   bool preemptible = 2;
-  //REQUIRED
-  //Minimum RAM required
-  double minimumRamGb = 3;
+  //OPTIONAL
+  //Requested amount of RAM in GB
+  double ramGb = 3;
   //OPTIONAL
   //Requested disk size in GB
   double diskGb = 4;
@@ -122,6 +122,8 @@ message Task {
   //These are shared between executors. Volumes for the executor work dir,
   //inputs and outputs will be inferred and do not need to be defined here. 
   repeated string volumes = 9;
+  //A key-value map of arbitrary metadata useful to track with this Task request
+  map<string, string> tags = 10;
 }
 
 //Request listing of jobs tracked by server
@@ -167,6 +169,19 @@ enum State {
 }
 
 message JobLog {
+  //REQUIRED
+  repeated ExecutorLog logs = 1;
+  //OPTIONAL
+  map<string, string> metadata = 2;
+  //OPTIONAL
+  //When the job was started in ISO 8601 format
+  string startTime = 3;
+  //OPTIONAL
+  //When the job reached a terminal state in ISO 8601 format
+  string endTime = 4;
+}
+
+message ExecutorLog {
   //When the command was executed in ISO 8601 format
   string startTime = 2;
   //When the command completed in ISO 8601 format
@@ -182,7 +197,6 @@ message JobLog {
   // ports bound from container to host
   repeated Ports ports = 8;
 }
-
 
 //Log of file output by workflow
 message FileLog {
@@ -203,10 +217,15 @@ message FileLog {
 
 //The description of the running instance of a task
 message Job {
+  //REQUIRED
   string jobID = 1;
-  map<string,string> metadata = 2;
+  //REQUIRED
   Task task = 3;
+  //REQUIRED
   State state = 4;
+  //REQUIRED
+  //Length of logs reflects number of retries. 
+  //If the implementation doesn't support retries this field will always be of length 1.
   repeated JobLog logs = 5;
   //List of all files copied out to the object store as well as some basic
   //meta-data about them. This is an expanded list, if the task outputs 
