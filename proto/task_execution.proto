@@ -160,12 +160,27 @@ message JobListRequest {
   string pageToken = 4;
 }
 
+// Small description of tasks, returned by server during listing
+message TaskDesc {
+  //OPTIONAL
+  //user name for task
+  string name = 1;
+  //OPTIONAL
+  //parameter for execution engine to define/store group information
+  string projectID = 2;
+  //OPTIONAL
+  //free text description of task
+  string description = 3;
+}
+
 //Small description of jobs, returned by server during listing
 message JobDesc {
   //REQUIRED
   string jobID  = 1;
   //REQUIRED
   State state = 2;
+  // REQUIRED short description of task
+  TaskDesc task = 3;
 }
 
 //Return envelope
