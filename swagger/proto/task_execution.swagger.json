@@ -15,44 +15,44 @@
     "application/json"
   ],
   "paths": {
-    "/v1/jobs": {
+    "/v1/tasks": {
       "get": {
-        "summary": "List the TaskOps",
-        "operationId": "ListJobs",
+        "summary": "List tasks.",
+        "operationId": "ListTasks",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execJobListResponse"
+              "$ref": "#/definitions/tesListTasksResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "projectID",
-            "description": "OPTIONAL\nThe name of the project to search for pipelines. Caller must have READ access to this project.",
+            "name": "project",
+            "description": "OPTIONAL. Filter the task list to include tasks in this project.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "namePrefix",
-            "description": "OPTIONAL\nPipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned.",
+            "name": "name_prefix",
+            "description": "OPTIONAL. Filter the list to include tasks where the name matches this prefix.\nIf unspecified, no task name filtering is done.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "pageSize",
-            "description": "OPTIONAL\nNumber of pipelines to return at once. Defaults to 256, and max is 2048.",
+            "name": "page_size",
+            "description": "OPTIONAL. Number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "pageToken",
-            "description": "OPTIONAL\nToken to use to indicate where to start getting results. If unspecified, returns the first page of results.",
+            "name": "page_token",
+            "description": "OPTIONAL. Page token is used to retrieve the next page of results.\nIf unspecified, returns the first page of results.\nSee ListTasksResponse.next_page_token",
             "in": "query",
             "required": false,
             "type": "string"
@@ -63,13 +63,13 @@
         ]
       },
       "post": {
-        "summary": "Run a task",
-        "operationId": "RunTask",
+        "summary": "Create a new task.",
+        "operationId": "CreateTask",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execRunTaskResponse"
+              "$ref": "#/definitions/tesTask"
             }
           }
         },
@@ -79,7 +79,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execTask"
+              "$ref": "#/definitions/tesCreateTaskRequest"
             }
           }
         ],
@@ -88,15 +88,15 @@
         ]
       }
     },
-    "/v1/jobs-service": {
+    "/v1/tasks/service-info": {
       "get": {
-        "summary": "Get Service Info",
+        "summary": "GetServiceInfo provides information about the service,\nsuch as storage details, resource availability, and \nother documentation.",
         "operationId": "GetServiceInfo",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execServiceInfoResponse"
+              "$ref": "#/definitions/tesServiceInfo"
             }
           }
         },
@@ -105,21 +105,21 @@
         ]
       }
     },
-    "/v1/jobs/{jobID}": {
+    "/v1/tasks/{id}": {
       "get": {
-        "summary": "Get info about a running task",
-        "operationId": "GetJob",
+        "summary": "Get a task.",
+        "operationId": "GetTask",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execGetJobResponse"
+              "$ref": "#/definitions/tesTask"
             }
           }
         },
         "parameters": [
           {
-            "name": "jobID",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -128,24 +128,34 @@
         "tags": [
           "TaskService"
         ]
-      },
-      "delete": {
-        "summary": "Cancel a running task",
-        "operationId": "CancelJob",
+      }
+    },
+    "/v1/tasks/{id}:cancel": {
+      "post": {
+        "summary": "Cancel a task.",
+        "operationId": "CancelTask",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ga4gh_task_execCancelJobResponse"
+              "$ref": "#/definitions/tesCancelTaskResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "jobID",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tesCancelTaskRequest"
+            }
           }
         ],
         "tags": [
@@ -155,228 +165,368 @@
     }
   },
   "definitions": {
-    "ga4gh_task_execCancelJobRequest": {
+    "tesCancelTaskRequest": {
       "type": "object",
       "properties": {
-        "jobID": {
-          "type": "string"
-        }
-      }
-    },
-    "ga4gh_task_execCancelJobResponse": {
-      "type": "object"
-    },
-    "ga4gh_task_execExecutor": {
-      "type": "object",
-      "properties": {
-        "imageName": {
+        "id": {
           "type": "string",
-          "title": "REQUIRED\nImage name"
+          "description": "Task identifier.",
+          "title": "REQUIRED"
+        }
+      },
+      "description": "CancelTaskRequest describes a request to the CancelTask endpoint."
+    },
+    "tesCancelTaskResponse": {
+      "type": "object",
+      "description": "CancelTaskResponse describes a response from the CancelTask endpoint.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesCreateTaskRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "project": {
+          "type": "string",
+          "description": "Describes the project this task is associated with.\nCommonly used for billing on cloud providers (AWS, Google Cloud, etc).",
+          "title": "OPTIONAL"
+        },
+        "description": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesTaskParameter"
+          },
+          "description": "Input files.\nInputs will be downloaded and mounted into the executor container.",
+          "title": "OPTIONAL"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesTaskParameter"
+          },
+          "description": "Output files.\nOutputs will be uploaded from the executor container to long-term storage.",
+          "title": "OPTIONAL"
+        },
+        "resources": {
+          "$ref": "#/definitions/tesResources",
+          "description": "Request that the task be run with these resources.",
+          "title": "OPTIONAL"
+        },
+        "executors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesExecutor"
+          },
+          "description": "A list of executors to be run, sequentially.",
+          "title": "REQUIRED"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A key-value map of arbitrary tags.",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "CreateTaskRequest describes a task to be created and run."
+    },
+    "tesExecutor": {
+      "type": "object",
+      "properties": {
+        "image_name": {
+          "type": "string",
+          "description": "Name of the container image, for example:\nubuntu\nquay.io/aptible/ubuntu\ngcr.io/my-org/my-image\netc...",
+          "title": "REQUIRED"
         },
         "cmd": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "title": "REQUIRED\nThe command to be executed"
+          "description": "The command to be executed.",
+          "title": "REQUIRED"
         },
         "workdir": {
           "type": "string",
-          "title": "OPTIONAL: default image directory\nThe working directory that the command will be executed in"
+          "description": "The working directory that the command will be executed in.\nDefaults to the directory set by the container image.",
+          "title": "OPTIONAL"
         },
         "stdin": {
           "type": "string",
-          "title": "OPTIONAL\nPath for supplying input to stdin, blank if none"
+          "description": "Path inside the container to a file which will be piped\nto the command's stdin.",
+          "title": "OPTIONAL"
         },
         "stdout": {
           "type": "string",
-          "title": "OPTIONAL\nPath for stdout recording, blank if not storing to file"
+          "description": "Path inside the container to a file where the command's\nstdout will be written to.",
+          "title": "OPTIONAL"
         },
         "stderr": {
           "type": "string",
-          "title": "OPTIONAL\nPath for stderr recording, blank if not storing to file"
+          "description": "Path inside the container to a file where the command's\nstderr will be written to.",
+          "title": "OPTIONAL"
         },
         "ports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execPorts"
+            "$ref": "#/definitions/tesPorts"
           },
-          "title": "OPTIONAL\nPort to expose from within the container, blank if none"
+          "description": "Port to expose from within the container, blank if none.",
+          "title": "OPTIONAL"
         },
         "environ": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
           },
-          "title": "OPTIONAL\nEnviromental variables to set within the container"
+          "description": "Enviromental variables to set within the container.",
+          "title": "OPTIONAL"
         }
       },
-      "title": "Executor executes a task"
+      "description": "Executor describes a command to run, and its environment."
     },
-    "ga4gh_task_execExecutorLog": {
+    "tesExecutorLog": {
       "type": "object",
       "properties": {
-        "startTime": {
+        "start_time": {
           "type": "string",
-          "title": "When the command was executed in ISO 8601 format"
+          "description": "Time the executor started, in RFC 3339 format.",
+          "title": "OPTIONAL"
         },
-        "endTime": {
+        "end_time": {
           "type": "string",
-          "title": "When the command completed in ISO 8601 format"
+          "description": "Time the executor ended, in RFC 3339 format.",
+          "title": "OPTIONAL"
         },
         "stdout": {
           "type": "string",
-          "title": "Sample of stdout (not guaranteed to be entire log)"
+          "description": "Stdout tail.\nThis is not guaranteed to be the entire log.\nImplementations determine the maximum size.",
+          "title": "OPTIONAL"
         },
         "stderr": {
           "type": "string",
-          "title": "Sample of stderr (not guaranteed to be entire log)"
+          "description": "Stderr tail.\nThis is not guaranteed to be the entire log.\nImplementations determine the maximum size.",
+          "title": "OPTIONAL"
         },
-        "exitCode": {
+        "exit_code": {
           "type": "integer",
           "format": "int32",
-          "title": "Exit code of the program"
+          "description": "Exit code.",
+          "title": "REQUIRED"
         },
-        "hostIP": {
+        "host_ip": {
           "type": "string",
-          "title": "ip of worker host"
+          "description": "IP address of host.",
+          "title": "OPTIONAL"
         },
         "ports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execPorts"
+            "$ref": "#/definitions/tesPorts"
           },
-          "title": "ports bound from container to host"
+          "description": "Ports mapped between the container and host.",
+          "title": "OPTIONAL"
         }
-      }
+      },
+      "description": "ExecutorLog describes logging information related to an Executor.",
+      "title": "OUTPUT ONLY"
     },
-    "ga4gh_task_execFileLog": {
+    "tesFileType": {
+      "type": "string",
+      "enum": [
+        "FILE",
+        "DIRECTORY"
+      ],
+      "default": "FILE"
+    },
+    "tesGetTaskRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Task identifier.",
+          "title": "REQUIRED"
+        }
+      },
+      "description": "GetTaskRequest describes a request to the GetTask endpoint."
+    },
+    "tesListTasksRequest": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string",
+          "description": "Filter the task list to include tasks in this project.",
+          "title": "OPTIONAL"
+        },
+        "name_prefix": {
+          "type": "string",
+          "description": "Filter the list to include tasks where the name matches this prefix.\nIf unspecified, no task name filtering is done.",
+          "title": "OPTIONAL"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
+          "title": "OPTIONAL"
+        },
+        "page_token": {
+          "type": "string",
+          "description": "Page token is used to retrieve the next page of results.\nIf unspecified, returns the first page of results.\nSee ListTasksResponse.next_page_token",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "ListTasksRequest describes a request to the ListTasks service endpoint."
+    },
+    "tesListTasksResponse": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesTaskDesc"
+          },
+          "description": "List of lightweight task descriptions.",
+          "title": "REQUIRED"
+        },
+        "next_page_token": {
+          "type": "string",
+          "description": "Token used to return the next page of results.\nSee TaskListRequest.next_page_token",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "ListTasksResponse describes a response from the ListTasks endpoint.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesOutputFileLog": {
       "type": "object",
       "properties": {
         "url": {
           "type": "string",
-          "title": "REQUIRED\nurl of long term storage that the output file was copied to\nis a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+          "description": "URL of the file in storage, e.g. s3://bucket/file.txt",
+          "title": "REQUIRED"
         },
         "path": {
           "type": "string",
-          "title": "REQUIRED\npath in the machine file system that originated the file"
+          "description": "Path of the file inside the container.",
+          "title": "REQUIRED"
         },
-        "size": {
+        "size_bytes": {
           "type": "string",
           "format": "int64",
-          "title": "REQUIRED\nSize of produced file"
-        }
-      },
-      "title": "Log of file output by workflow"
-    },
-    "ga4gh_task_execGetJobRequest": {
-      "type": "object",
-      "properties": {
-        "jobID": {
-          "type": "string"
-        }
-      }
-    },
-    "ga4gh_task_execGetJobResponse": {
-      "type": "object",
-      "properties": {
-        "job": {
-          "$ref": "#/definitions/ga4gh_task_execJob"
-        }
-      }
-    },
-    "ga4gh_task_execJob": {
-      "type": "object",
-      "properties": {
-        "jobID": {
-          "type": "string",
-          "title": "REQUIRED"
-        },
-        "task": {
-          "$ref": "#/definitions/ga4gh_task_execTask",
-          "title": "REQUIRED"
-        },
-        "state": {
-          "$ref": "#/definitions/ga4gh_task_execState",
-          "title": "REQUIRED"
-        },
-        "logs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execJobLog"
-          },
-          "description": "REQUIRED\nLength of logs reflects number of retries. \nIf the implementation doesn't support retries this field will always be of length 1."
-        },
-        "outputs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execFileLog"
-          },
-          "title": "List of all files copied out to the object store as well as some basic\nmeta-data about them. This is an expanded list, if the task outputs \nlist directories, this record details every individual file"
-        }
-      },
-      "title": "The description of the running instance of a task"
-    },
-    "ga4gh_task_execJobDesc": {
-      "type": "object",
-      "properties": {
-        "jobID": {
-          "type": "string",
-          "title": "REQUIRED"
-        },
-        "state": {
-          "$ref": "#/definitions/ga4gh_task_execState",
+          "description": "Size of the file in bytes.",
           "title": "REQUIRED"
         }
       },
-      "title": "Small description of jobs, returned by server during listing"
+      "description": "OutputFileLog describes a single output file. This describes\nfile details after the task has completed successfully,\nfor logging purposes.",
+      "title": "OUTPUT ONLY"
     },
-    "ga4gh_task_execJobListRequest": {
+    "tesPorts": {
       "type": "object",
       "properties": {
-        "projectID": {
-          "type": "string",
-          "description": "OPTIONAL\nThe name of the project to search for pipelines. Caller must have READ access to this project."
-        },
-        "namePrefix": {
-          "type": "string",
-          "description": "OPTIONAL\nPipelines with names that match this prefix should be returned. If unspecified, all pipelines in the project, up to pageSize, will be returned."
-        },
-        "pageSize": {
+        "container": {
           "type": "integer",
           "format": "int64",
-          "description": "OPTIONAL\nNumber of pipelines to return at once. Defaults to 256, and max is 2048."
+          "description": "Port number opened inside the container.",
+          "title": "REQUIRED"
         },
-        "pageToken": {
-          "type": "string",
-          "description": "OPTIONAL\nToken to use to indicate where to start getting results. If unspecified, returns the first page of results."
+        "host": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Port number opened on the host. Must be greater than 1024.\nDefaults to 0, which assigns a random port on the host.",
+          "title": "OPTIONAL"
         }
       },
-      "title": "Request listing of jobs tracked by server"
+      "description": "Ports describes the port mapping between the container and host."
     },
-    "ga4gh_task_execJobListResponse": {
+    "tesResources": {
       "type": "object",
       "properties": {
-        "jobs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execJobDesc"
-          }
+        "cpu_cores": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Requested number of CPUs",
+          "title": "OPTIONAL"
         },
-        "nextPageToken": {
-          "type": "string"
-        }
-      },
-      "title": "Return envelope"
-    },
-    "ga4gh_task_execJobLog": {
-      "type": "object",
-      "properties": {
-        "logs": {
+        "preemptible": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "Is the task allowed to run on preemptible compute instances (e.g. AWS Spot)?",
+          "title": "OPTIONAL"
+        },
+        "ram_gb": {
+          "type": "number",
+          "format": "double",
+          "description": "Requested RAM required in gigabytes (GB)",
+          "title": "OPTIONAL"
+        },
+        "volumes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execExecutorLog"
+            "$ref": "#/definitions/tesVolume"
           },
+          "description": "Volumes to be mounted into the container.",
+          "title": "OPTIONAL"
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Request that the task be run in these compute zones.",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "Resources describes the resources requested by a task."
+    },
+    "tesServiceInfo": {
+      "type": "object",
+      "properties": {
+        "storage_config": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "System specific key/value pairs\nExample for a shared file system based storage system:\nstorageType=sharedFile, baseDir=/path/to/shared/directory",
+          "title": "OPTIONAL"
+        }
+      },
+      "description": "ServiceInfo describes information about the service,\nsuch as storage details, resource availability,\nand other documentation.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesServiceInfoRequest": {
+      "type": "object",
+      "description": "ServiceInfoRequest describes a request to the ServiceInfo endpoint."
+    },
+    "tesState": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "QUEUED",
+        "INITIALIZING",
+        "RUNNING",
+        "PAUSED",
+        "COMPLETE",
+        "ERROR",
+        "SYSTEM_ERROR",
+        "CANCELED"
+      ],
+      "default": "UNKNOWN",
+      "description": "Task states.\n\n - PAUSED: An implementation *may* have the ability to pause a task,\nbut this is not required.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesTask": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Task identifier.",
           "title": "REQUIRED"
         },
         "metadata": {
@@ -384,212 +534,145 @@
           "additionalProperties": {
             "type": "string"
           },
-          "title": "OPTIONAL"
+          "title": "REQUIRED"
         },
-        "startTime": {
-          "type": "string",
-          "title": "OPTIONAL\nWhen the job was started in ISO 8601 format"
+        "request": {
+          "$ref": "#/definitions/tesCreateTaskRequest",
+          "title": "REQUIRED"
         },
-        "endTime": {
-          "type": "string",
-          "title": "OPTIONAL\nWhen the job reached a terminal state in ISO 8601 format"
-        }
-      }
-    },
-    "ga4gh_task_execPorts": {
-      "type": "object",
-      "properties": {
-        "container": {
-          "type": "integer",
-          "format": "int64",
-          "title": "REQUIRED \nExposed port on container"
+        "state": {
+          "$ref": "#/definitions/tesState",
+          "title": "REQUIRED"
         },
-        "host": {
-          "type": "integer",
-          "format": "int64",
-          "title": "OPTIONAL \nMust be greater than 1024;\nDefaults to 0"
-        }
-      },
-      "title": "host to container port mappings"
-    },
-    "ga4gh_task_execResources": {
-      "type": "object",
-      "properties": {
-        "cpuCores": {
-          "type": "integer",
-          "format": "int64",
-          "title": "OPTIONAL\nRequested number of CPUs"
-        },
-        "preemptible": {
-          "type": "boolean",
-          "format": "boolean",
-          "title": "Can schedule on resource that resource that can be preempted, like AWS Spot Instances\nOPTIONAL default false"
-        },
-        "ramGb": {
-          "type": "number",
-          "format": "double",
-          "title": "OPTIONAL\nRequested amount of RAM in GB"
-        },
-        "volumes": {
+        "logs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execVolume"
+            "$ref": "#/definitions/tesTaskLog"
           },
-          "title": "REQUIRED\nVolumes to be mounted"
-        },
-        "zones": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "OPTIONAL\noptional scheduling information for systems where multiple compute zones are avalible"
-        }
-      }
-    },
-    "ga4gh_task_execRunTaskResponse": {
-      "type": "object",
-      "properties": {
-        "jobID": {
-          "type": "string"
-        }
-      },
-      "title": "ID of an instance of a Task"
-    },
-    "ga4gh_task_execServiceInfoRequest": {
-      "type": "object",
-      "title": "Blank request message for service request"
-    },
-    "ga4gh_task_execServiceInfoResponse": {
-      "type": "object",
-      "properties": {
-        "storageConfig": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "title": "System specific key/value pairs\nExample for a shared file system based storage system:\nstorageType=sharedFile, baseDir=/path/to/shared/directory"
-        }
-      },
-      "title": "Information about Task Execution Service\nMay include information related (but not limited to)\nresource availability and storage system information"
-    },
-    "ga4gh_task_execState": {
-      "type": "string",
-      "enum": [
-        "Unknown",
-        "Queued",
-        "Running",
-        "Paused",
-        "Complete",
-        "Error",
-        "SystemError",
-        "Canceled",
-        "Initializing"
-      ],
-      "default": "Unknown"
-    },
-    "ga4gh_task_execTask": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "OPTIONAL\nuser name for task"
-        },
-        "projectID": {
-          "type": "string",
-          "title": "OPTIONAL\nparameter for execution engine to define/store group information"
-        },
-        "description": {
-          "type": "string",
-          "title": "OPTIONAL\nfree text description of task"
-        },
-        "inputs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
-          },
-          "title": "REQUIRED\nFiles to be copied into system before tasks"
+          "description": "Task logging information.\nNormally, this will contain only one entry, but in the case where\na task fails and is retried, an entry will be appended to this list.",
+          "title": "REQUIRED"
         },
         "outputs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execTaskParameter"
+            "$ref": "#/definitions/tesOutputFileLog"
           },
-          "title": "REQUIRED\nFiles to be copied out of the system after tasks"
+          "description": "Information about all output files. Directory outputs are\nflattened into separate items.",
+          "title": "REQUIRED"
+        }
+      },
+      "description": "Task describes an instance of a task.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesTaskDesc": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Task identifier.",
+          "title": "REQUIRED"
         },
-        "resources": {
-          "$ref": "#/definitions/ga4gh_task_execResources",
-          "title": "REQUIRED\nDefine required system resources to run job"
-        },
-        "executors": {
+        "state": {
+          "$ref": "#/definitions/tesState",
+          "title": "REQUIRED"
+        }
+      },
+      "description": "TaskDesc is a lightweight description of a task, which is returned\nby the ListTasks endpoint.",
+      "title": "OUTPUT ONLY"
+    },
+    "tesTaskLog": {
+      "type": "object",
+      "properties": {
+        "logs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ga4gh_task_execExecutor"
+            "$ref": "#/definitions/tesExecutorLog"
           },
-          "title": "REQUIRED\nA list of executors that will be run sequentially"
+          "description": "Logs for each executor",
+          "title": "REQUIRED"
         },
-        "tags": {
+        "metadata": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
           },
-          "title": "OPTIONAL\nA key-value map of arbitrary metadata useful to track with this Task request"
+          "description": "Arbitrary logging metadata included by the implementation.",
+          "title": "OPTIONAL"
+        },
+        "start_time": {
+          "type": "string",
+          "description": "When the task started, in RFC 3339 format.",
+          "title": "OPTIONAL"
+        },
+        "end_time": {
+          "type": "string",
+          "description": "When the task ended, in RFC 3339 format.",
+          "title": "OPTIONAL"
         }
       },
-      "title": "The description of a task to be run"
+      "description": "TaskLog describes logging information related to a Task.",
+      "title": "OUTPUT ONLY"
     },
-    "ga4gh_task_execTaskParameter": {
+    "tesTaskParameter": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "OPTIONAL\nname of the parameter"
+          "title": "OPTIONAL"
         },
         "description": {
           "type": "string",
-          "title": "OPTIONAL\nText description"
+          "title": "OPTIONAL"
         },
         "url": {
           "type": "string",
-          "title": "REQUIRED\nurl in long term storage, is a url specific to the implementing\nsystem. For example s3://my-object-store/file1 or gs://my-bucket/file2 or\nfile:///path/to/my/file"
+          "description": "URL in long term storage, for example:\ns3://my-object-store/file1\ngs://my-bucket/file2\nfile:///path/to/my/file\n/path/to/my/file\netc...",
+          "title": "REQUIRED"
         },
         "path": {
           "type": "string",
-          "title": "REQUIRED\npath in the machine file system. Note, this MUST be a path that exists\nwithin one of the defined volumes\nIf the file is mounted in a volume that is mounted read/write the file must\nbe accessable to processes in the container. Optimizations, suc as hard linking\nto a source file, or providing a streaming input from a FUSE mount should only\nbe done if the volume is mounted as read only"
+          "description": "Path of the file inside the container.",
+          "title": "REQUIRED"
         },
-        "class": {
-          "type": "string",
-          "title": "REQUIRED\nType of data, \"File\" or \"Directory\"\nif used for an output all the files in the directory\nwill be copied to the storage url"
+        "type": {
+          "$ref": "#/definitions/tesFileType",
+          "description": "Type of the file, FILE or DIRECTORY",
+          "title": "REQUIRED"
         },
         "create": {
           "type": "boolean",
           "format": "boolean",
-          "title": "OPTIONAL: default false\nif the parameter is an output, should the element be created before executing\nthe command. For example if saving the working directory as an output,\nthe directory needs to exist before the command is called. If false, it is\nassumed that the user will create the element as a part of the operation"
+          "description": "If true, this path will be created before the task starts running.\nThis helps tasks create output directories which the task will\nwrite to.",
+          "title": "OPTIONAL"
         },
         "contents": {
           "type": "string",
-          "title": "OPTIONAL\nFile contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded"
+          "description": "File contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded",
+          "title": "OPTIONAL"
         }
       },
-      "title": "Parameters for Task"
+      "description": "TaskParameter describes input and output files for a Task."
     },
-    "ga4gh_task_execVolume": {
+    "tesVolume": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "title": "OPTIONAL\nName of attached volume"
+          "title": "OPTIONAL"
         },
-        "sizeGb": {
+        "size_gb": {
           "type": "number",
           "format": "double",
-          "title": "OPTIONAL\nRequested disk size in GB"
+          "description": "Requested disk size in gigabytes (GB)",
+          "title": "REQUIRED"
         },
-        "mountPoint": {
+        "mount_point": {
           "type": "string",
-          "title": "REQUIRED\nmount point for volume"
+          "description": "Path inside the container that the volume will be mounted to.",
+          "title": "REQUIRED"
         }
       },
-      "description": "Attached volume request."
+      "description": "Volume describes a volume (i.e. directory) which will be\nmounted into an executor/container."
     }
   }
 }
