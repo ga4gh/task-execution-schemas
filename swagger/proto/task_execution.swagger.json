@@ -567,7 +567,7 @@
         },
         "contents": {
           "type": "string",
-          "description": "OPTIONAL\nFile contents literal. Maximum of 128 KiB."
+          "title": "OPTIONAL\nFile contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded"
         }
       },
       "title": "Parameters for Task"

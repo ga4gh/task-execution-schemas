@@ -40,7 +40,9 @@ message TaskParameter {
   //assumed that the user will create the element as a part of the operation
   bool   create = 6;
   //OPTIONAL
-  //File contents literal. Maximum of 128 KiB.
+  //File contents literal. 
+  //Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
+  //UTF-8 encoded
   string contents = 7;
 }
 
