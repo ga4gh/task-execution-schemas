@@ -214,26 +214,23 @@ message Task {
   string id = 1;
 
   // REQUIRED
-  map<string,string> metadata = 2;
+  CreateTaskRequest request = 2;
 
   // REQUIRED
-  CreateTaskRequest request = 3;
-
-  // REQUIRED
-  State state = 4;
+  State state = 3;
 
   // REQUIRED
   //
   // Task logging information.
   // Normally, this will contain only one entry, but in the case where
   // a task fails and is retried, an entry will be appended to this list.
-  repeated TaskLog logs = 5;
+  repeated TaskLog logs = 4;
 
   // REQUIRED
   //
   // Information about all output files. Directory outputs are
   // flattened into separate items.
-  repeated OutputFileLog outputs = 6;
+  repeated OutputFileLog outputs = 5;
 }
 
 // OUTPUT ONLY

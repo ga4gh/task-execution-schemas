@@ -535,13 +535,6 @@
           "description": "Task identifier.",
           "title": "REQUIRED"
         },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "title": "REQUIRED"
-        },
         "request": {
           "$ref": "#/definitions/tesCreateTaskRequest",
           "title": "REQUIRED"
