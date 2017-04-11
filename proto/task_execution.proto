@@ -44,8 +44,15 @@ message CreateTaskRequest {
 
   // OPTIONAL
   //
+  // Declared volumes.
+  // Volumes are shared between executors. Volumes for inputs and outputs are 
+  // inferred and should not be delcared here.
+  repeated string volumes = 9;
+
+  // OPTIONAL
+  //
   // A key-value map of arbitrary tags.
-  map<string, string> tags = 9;
+  map<string, string> tags = 10;
 }
 
 enum FileType {
@@ -84,17 +91,10 @@ message TaskParameter {
 
   // OPTIONAL
   //
-  // If true, this path will be created before the task starts running.
-  // This helps tasks create output directories which the task will
-  // write to.
-  bool create = 6;
-
-  // OPTIONAL
-  //
   // File contents literal. 
   // Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
   // UTF-8 encoded
-  string contents = 7;
+  string contents = 6;
 }
 
 // Ports describes the port mapping between the container and host.
@@ -164,24 +164,6 @@ message Executor {
   map<string,string> environ = 8;
 }
 
-// Volume describes a volume (i.e. directory) which will be
-// mounted into an executor/container.
-message Volume {
-
-  // OPTIONAL
-  string name = 1;
-
-  // REQUIRED
-  //
-  // Requested disk size in gigabytes (GB)
-  double size_gb = 2;
-
-  // REQUIRED
-  //
-  // Path inside the container that the volume will be mounted to.
-  string mount_point = 6;
-}
-
 // Resources describes the resources requested by a task.
 message Resources {
 
@@ -202,8 +184,8 @@ message Resources {
 
   // OPTIONAL
   //
-  // Volumes to be mounted into the container.
-  repeated Volume volumes = 4;
+  // Requested disk size in gigabytes (GB)
+  double size_gb = 4;
 
   // OPTIONAL
   //
