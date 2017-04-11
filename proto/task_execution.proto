@@ -430,12 +430,20 @@ message ServiceInfoRequest {}
 // and other documentation.
 message ServiceInfo {
 
-  // OPTIONAL
+  // Returns the name of the service, e.g. "ohsu-compbio-funnel".
+  string name = 1;
+
+  // Returns a documentation string, e.g. "Hey, we're OHSU Comp. Bio!".
+  string doc = 2;
+
+  // Lists some, but not necessarily all, storage locations supported by the service.
   //
-  // System specific key/value pairs
-  // Example for a shared file system based storage system:
-  // storageType=sharedFile, baseDir=/path/to/shared/directory
-  map<string,string> storage_config = 1;
+  // Must be in a valid URL format.
+  // e.g. 
+  // file:///path/to/local/funnel-storage
+  // s3://ohsu-compbio-funnel/storage
+  // etc.
+  repeated string storage = 3;
 }
 
 // TaskService describes the HTTP/gRPC service API provided by TES
