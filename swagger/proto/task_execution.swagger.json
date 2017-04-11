@@ -494,13 +494,20 @@
     "tesServiceInfo": {
       "type": "object",
       "properties": {
-        "storage_config": {
-          "type": "object",
-          "additionalProperties": {
+        "name": {
+          "type": "string",
+          "description": "Returns the name of the service, e.g. \"ohsu-compbio-funnel\"."
+        },
+        "doc": {
+          "type": "string",
+          "description": "Returns a documentation string, e.g. \"Hey, we're OHSU Comp. Bio!\"."
+        },
+        "storage": {
+          "type": "array",
+          "items": {
             "type": "string"
           },
-          "description": "System specific key/value pairs\nExample for a shared file system based storage system:\nstorageType=sharedFile, baseDir=/path/to/shared/directory",
-          "title": "OPTIONAL"
+          "description": "Lists some, but not necessarily all, storage locations supported by the service.\n\nMust be in a valid URL format.\ne.g. \nfile:///path/to/local/funnel-storage\ns3://ohsu-compbio-funnel/storage\netc."
         }
       },
       "description": "ServiceInfo describes information about the service,\nsuch as storage details, resource availability,\nand other documentation.",
