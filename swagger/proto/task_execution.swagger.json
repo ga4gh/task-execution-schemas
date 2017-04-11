@@ -56,6 +56,18 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "view",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n - FULL: Task message includes all fields.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "BASIC",
+              "FULL"
+            ],
+            "default": "BASIC"
           }
         ],
         "tags": [
@@ -388,6 +400,11 @@
           "type": "string",
           "description": "Page token is used to retrieve the next page of results.\nIf unspecified, returns the first page of results.\nSee ListTasksResponse.next_page_token",
           "title": "OPTIONAL"
+        },
+        "view": {
+          "$ref": "#/definitions/tesTaskView",
+          "description": "Affects the fields included in the returned Task messages.\nSee TaskView below.",
+          "title": "OPTIONAL"
         }
       },
       "description": "ListTasksRequest describes a request to the ListTasks service endpoint."
@@ -398,7 +415,7 @@
         "tasks": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/tesTaskDesc"
+            "$ref": "#/definitions/tesTask"
           },
           "description": "List of lightweight task descriptions.",
           "title": "REQUIRED"
@@ -570,22 +587,6 @@
       "description": "Task describes an instance of a task.",
       "title": "OUTPUT ONLY"
     },
-    "tesTaskDesc": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Task identifier.",
-          "title": "REQUIRED"
-        },
-        "state": {
-          "$ref": "#/definitions/tesState",
-          "title": "REQUIRED"
-        }
-      },
-      "description": "TaskDesc is a lightweight description of a task, which is returned\nby the ListTasks endpoint.",
-      "title": "OUTPUT ONLY"
-    },
     "tesTaskLog": {
       "type": "object",
       "properties": {
@@ -652,6 +653,15 @@
         }
       },
       "description": "TaskParameter describes input and output files for a Task."
+    },
+    "tesTaskView": {
+      "type": "string",
+      "enum": [
+        "BASIC",
+        "FULL"
+      ],
+      "default": "BASIC",
+      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n - FULL: Task message includes all fields."
     }
   }
 }
