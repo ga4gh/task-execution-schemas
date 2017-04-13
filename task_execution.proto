@@ -5,54 +5,69 @@ package tes;
 // Import HTTP RESTful annotations.
 import "google/api/annotations.proto";
 
-// CreateTaskRequest describes a task to be created and run.
-message CreateTaskRequest {
+// Task describes an instance of a task.
+message Task {
+
+  // OUTPUT ONLY
+  //
+  // Task identifier assigned by the server.
+  string id = 1;
+
+  // OUTPUT ONLY
+  State state = 2;
 
   // OPTIONAL
-  string name = 1;
+  string name = 3;
 
   // OPTIONAL
   //
   // Describes the project this task is associated with.
   // Commonly used for billing on cloud providers (AWS, Google Cloud, etc).
-  string project = 2;
+  string project = 4;
 
   // OPTIONAL
-  string description = 3;
+  string description = 5;
 
   // OPTIONAL
   //
   // Input files.
   // Inputs will be downloaded and mounted into the executor container.
-  repeated TaskParameter inputs = 4;
+  repeated TaskParameter inputs = 6;
 
   // OPTIONAL
   //
   // Output files.
   // Outputs will be uploaded from the executor container to long-term storage.
-  repeated TaskParameter outputs = 5;
+  repeated TaskParameter outputs = 7;
 
   // OPTIONAL
   //
   // Request that the task be run with these resources.
-  Resources resources = 6;
+  Resources resources = 8;
 
   // REQUIRED
   //
   // A list of executors to be run, sequentially.
-  repeated Executor executors = 8;
+  repeated Executor executors = 9;
 
   // OPTIONAL
   //
   // Declared volumes.
   // Volumes are shared between executors. Volumes for inputs and outputs are 
   // inferred and should not be delcared here.
-  repeated string volumes = 9;
+  repeated string volumes = 10;
 
   // OPTIONAL
   //
   // A key-value map of arbitrary tags.
-  map<string, string> tags = 10;
+  map<string, string> tags = 11;
+
+  // OUTPUT ONLY
+  //
+  // Task logging information.
+  // Normally, this will contain only one entry, but in the case where
+  // a task fails and is retried, an entry will be appended to this list.
+  repeated TaskLog logs = 12;
 }
 
 enum FileType {
@@ -193,46 +208,6 @@ message Resources {
   repeated string zones = 5;
 }
 
-// GetTaskRequest describes a request to the GetTask endpoint.
-message GetTaskRequest {
-  // REQUIRED
-  //
-  // Task identifier.
-  string id = 1;
-}
-
-
-
-// OUTPUT ONLY
-//
-// Task describes an instance of a task.
-message Task {
-
-  // REQUIRED
-  //
-  // Task identifier.
-  string id = 1;
-
-  // REQUIRED
-  CreateTaskRequest request = 2;
-
-  // REQUIRED
-  State state = 3;
-
-  // REQUIRED
-  //
-  // Task logging information.
-  // Normally, this will contain only one entry, but in the case where
-  // a task fails and is retried, an entry will be appended to this list.
-  repeated TaskLog logs = 4;
-
-  // REQUIRED
-  //
-  // Information about all output files. Directory outputs are
-  // flattened into separate items.
-  repeated OutputFileLog outputs = 5;
-}
-
 // OUTPUT ONLY
 //
 // TaskLog describes logging information related to a Task.
@@ -257,6 +232,12 @@ message TaskLog {
   //
   // When the task ended, in RFC 3339 format.
   string end_time = 4;
+
+  // REQUIRED
+  //
+  // Information about all output files. Directory outputs are
+  // flattened into separate items.
+  repeated OutputFileLog outputs = 5;
 }
 
 // OUTPUT ONLY
@@ -344,6 +325,30 @@ enum State {
   CANCELED = 8;
 }
 
+// OUTPUT ONLY
+//
+// CreateTaskResponse describes a response from the CreateTask endpoint.
+message CreateTaskResponse {
+  // REQUIRED
+  //
+  // Task identifier assigned by the server.
+  string id = 1;
+}
+
+// GetTaskRequest describes a request to the GetTask endpoint.
+message GetTaskRequest {
+  // REQUIRED
+  //
+  // Task identifier.
+  string id = 1;
+
+  // OPTIONAL
+  //
+  // Affects the fields included in the returned Task messages.
+  // See TaskView below.
+  TaskView view = 2;
+}
+
 // ListTasksRequest describes a request to the ListTasks service endpoint.
 message ListTasksRequest {
 
@@ -386,13 +391,19 @@ message ListTasksRequest {
 // request the FULL version to include these fields.
 enum TaskView {
 
+  // Task message will include ONLY theB fields:
+  //   Task.Id
+  //   Task.State
+  MINIMAL = 0;
+
   // Task message will include all fields EXCEPT:
   //   Task.ExecutorLog.stdout
   //   Task.ExecutorLog.stderr
-  BASIC = 0;
+  //   TaskParameter.Contents in Task.Inputs
+  BASIC = 1;
 
   // Task message includes all fields.
-  FULL = 1;
+  FULL = 2;
 }
 
 // OUTPUT ONLY
@@ -465,7 +476,7 @@ service TaskService {
   }
 
   // Create a new task.
-  rpc CreateTask(CreateTaskRequest) returns (Task) {
+  rpc CreateTask(Task) returns (CreateTaskResponse) {
     option (google.api.http) = {
       post: "/v1/tasks"
       body: "*"
@@ -473,6 +484,7 @@ service TaskService {
   }
 
   // List tasks.
+  // TaskView is requested as such: "v1/tasks?view=BASIC"
   rpc ListTasks(ListTasksRequest) returns (ListTasksResponse) {
     option (google.api.http) = {
       get: "/v1/tasks"
@@ -480,6 +492,7 @@ service TaskService {
   }
 
   // Get a task.
+  // TaskView is requested as such: "v1/tasks/{id}?view=FULL"
   rpc GetTask(GetTaskRequest) returns (Task) {
       option (google.api.http) = {
         get: "/v1/tasks/{id}"
