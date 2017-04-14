@@ -59,7 +59,7 @@
           },
           {
             "name": "view",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY theB fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
             "in": "query",
             "required": false,
             "type": "string",
@@ -139,7 +139,7 @@
           },
           {
             "name": "view",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY theB fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
             "in": "query",
             "required": false,
             "type": "string",
@@ -682,7 +682,7 @@
         "FULL"
       ],
       "default": "MINIMAL",
-      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - MINIMAL: Task message will include ONLY theB fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields."
+      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields."
     }
   }
 }

@@ -391,7 +391,7 @@ message ListTasksRequest {
 // request the FULL version to include these fields.
 enum TaskView {
 
-  // Task message will include ONLY theB fields:
+  // Task message will include ONLY the fields:
   //   Task.Id
   //   Task.State
   MINIMAL = 0;
