@@ -6,14 +6,13 @@ export PATH
 
 PROTO_INC= -I ./ \
 	-I $(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/ \
-	-I proto/
 
 all: swagger
 
 swagger: FORCE
 	protoc $(PROTO_INC) \
-		--swagger_out=logtostderr=true:swagger \
-		proto/task_execution.proto
+		--swagger_out=logtostderr=true:. \
+		task_execution.proto
 
 install-tools:
 	echo $(GOPATH)

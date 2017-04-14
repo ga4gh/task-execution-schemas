@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/task_execution.proto",
+    "title": "task_execution.proto",
     "version": "version not set"
   },
   "schemes": [
@@ -17,7 +17,7 @@
   "paths": {
     "/v1/tasks": {
       "get": {
-        "summary": "List tasks.",
+        "summary": "List tasks.\nTaskView is requested as such: \"v1/tasks?view=BASIC\"",
         "operationId": "ListTasks",
         "responses": {
           "200": {
@@ -59,15 +59,16 @@
           },
           {
             "name": "view",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n - FULL: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
             "in": "query",
             "required": false,
             "type": "string",
             "enum": [
+              "MINIMAL",
               "BASIC",
               "FULL"
             ],
-            "default": "BASIC"
+            "default": "MINIMAL"
           }
         ],
         "tags": [
@@ -81,7 +82,7 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/tesTask"
+              "$ref": "#/definitions/tesCreateTaskResponse"
             }
           }
         },
@@ -91,7 +92,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/tesCreateTaskRequest"
+              "$ref": "#/definitions/tesTask"
             }
           }
         ],
@@ -119,7 +120,7 @@
     },
     "/v1/tasks/{id}": {
       "get": {
-        "summary": "Get a task.",
+        "summary": "Get a task.\nTaskView is requested as such: \"v1/tasks/{id}?view=FULL\"",
         "operationId": "GetTask",
         "responses": {
           "200": {
@@ -135,6 +136,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "view",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "MINIMAL",
+              "BASIC",
+              "FULL"
+            ],
+            "default": "MINIMAL"
           }
         ],
         "tags": [
@@ -193,69 +207,17 @@
       "description": "CancelTaskResponse describes a response from the CancelTask endpoint.",
       "title": "OUTPUT ONLY"
     },
-    "tesCreateTaskRequest": {
+    "tesCreateTaskResponse": {
       "type": "object",
       "properties": {
-        "name": {
+        "id": {
           "type": "string",
-          "title": "OPTIONAL"
-        },
-        "project": {
-          "type": "string",
-          "description": "Describes the project this task is associated with.\nCommonly used for billing on cloud providers (AWS, Google Cloud, etc).",
-          "title": "OPTIONAL"
-        },
-        "description": {
-          "type": "string",
-          "title": "OPTIONAL"
-        },
-        "inputs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesTaskParameter"
-          },
-          "description": "Input files.\nInputs will be downloaded and mounted into the executor container.",
-          "title": "OPTIONAL"
-        },
-        "outputs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesTaskParameter"
-          },
-          "description": "Output files.\nOutputs will be uploaded from the executor container to long-term storage.",
-          "title": "OPTIONAL"
-        },
-        "resources": {
-          "$ref": "#/definitions/tesResources",
-          "description": "Request that the task be run with these resources.",
-          "title": "OPTIONAL"
-        },
-        "executors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesExecutor"
-          },
-          "description": "A list of executors to be run, sequentially.",
+          "description": "Task identifier assigned by the server.",
           "title": "REQUIRED"
-        },
-        "volumes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Declared volumes.\nVolumes are shared between executors. Volumes for inputs and outputs are \ninferred and should not be delcared here.",
-          "title": "OPTIONAL"
-        },
-        "tags": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "A key-value map of arbitrary tags.",
-          "title": "OPTIONAL"
         }
       },
-      "description": "CreateTaskRequest describes a task to be created and run."
+      "description": "CreateTaskResponse describes a response from the CreateTask endpoint.",
+      "title": "OUTPUT ONLY"
     },
     "tesExecutor": {
       "type": "object",
@@ -373,6 +335,11 @@
           "type": "string",
           "description": "Task identifier.",
           "title": "REQUIRED"
+        },
+        "view": {
+          "$ref": "#/definitions/tesTaskView",
+          "description": "Affects the fields included in the returned Task messages.\nSee TaskView below.",
+          "title": "OPTIONAL"
         }
       },
       "description": "GetTaskRequest describes a request to the GetTask endpoint."
@@ -556,16 +523,70 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Task identifier.",
-          "title": "REQUIRED"
-        },
-        "request": {
-          "$ref": "#/definitions/tesCreateTaskRequest",
-          "title": "REQUIRED"
+          "description": "Task identifier assigned by the server.",
+          "title": "OUTPUT ONLY"
         },
         "state": {
           "$ref": "#/definitions/tesState",
+          "title": "OUTPUT ONLY"
+        },
+        "name": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "project": {
+          "type": "string",
+          "description": "Describes the project this task is associated with.\nCommonly used for billing on cloud providers (AWS, Google Cloud, etc).",
+          "title": "OPTIONAL"
+        },
+        "description": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesTaskParameter"
+          },
+          "description": "Input files.\nInputs will be downloaded and mounted into the executor container.",
+          "title": "OPTIONAL"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesTaskParameter"
+          },
+          "description": "Output files.\nOutputs will be uploaded from the executor container to long-term storage.",
+          "title": "OPTIONAL"
+        },
+        "resources": {
+          "$ref": "#/definitions/tesResources",
+          "description": "Request that the task be run with these resources.",
+          "title": "OPTIONAL"
+        },
+        "executors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesExecutor"
+          },
+          "description": "A list of executors to be run, sequentially.",
           "title": "REQUIRED"
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Declared volumes.\nVolumes are shared between executors. Volumes for inputs and outputs are \ninferred and should not be delcared here.",
+          "title": "OPTIONAL"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A key-value map of arbitrary tags.",
+          "title": "OPTIONAL"
         },
         "logs": {
           "type": "array",
@@ -573,19 +594,10 @@
             "$ref": "#/definitions/tesTaskLog"
           },
           "description": "Task logging information.\nNormally, this will contain only one entry, but in the case where\na task fails and is retried, an entry will be appended to this list.",
-          "title": "REQUIRED"
-        },
-        "outputs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesOutputFileLog"
-          },
-          "description": "Information about all output files. Directory outputs are\nflattened into separate items.",
-          "title": "REQUIRED"
+          "title": "OUTPUT ONLY"
         }
       },
-      "description": "Task describes an instance of a task.",
-      "title": "OUTPUT ONLY"
+      "description": "Task describes an instance of a task."
     },
     "tesTaskLog": {
       "type": "object",
@@ -615,6 +627,14 @@
           "type": "string",
           "description": "When the task ended, in RFC 3339 format.",
           "title": "OPTIONAL"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tesOutputFileLog"
+          },
+          "description": "Information about all output files. Directory outputs are\nflattened into separate items.",
+          "title": "REQUIRED"
         }
       },
       "description": "TaskLog describes logging information related to a Task.",
@@ -657,11 +677,12 @@
     "tesTaskView": {
       "type": "string",
       "enum": [
+        "MINIMAL",
         "BASIC",
         "FULL"
       ],
-      "default": "BASIC",
-      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n - FULL: Task message includes all fields."
+      "default": "MINIMAL",
+      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields."
     }
   }
 }
