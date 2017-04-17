@@ -174,14 +174,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/tesCancelTaskRequest"
-            }
           }
         ],
         "tags": [

@@ -503,7 +503,6 @@ service TaskService {
   rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse) {
     option (google.api.http) = {
       post: "/v1/tasks/{id}:cancel"
-      body: "*"
     };
   }
 
