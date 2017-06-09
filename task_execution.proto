@@ -200,7 +200,7 @@ message Resources {
   // OPTIONAL
   //
   // Requested disk size in gigabytes (GB)
-  double size_gb = 4;
+  double disk_size_gb = 4;
 
   // OPTIONAL
   //
