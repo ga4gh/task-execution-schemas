@@ -108,8 +108,7 @@ message TaskParameter {
   //
   // File contents literal. 
   // Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
-  // UTF-8 encoded
-  string contents = 6;
+  bytes contents = 6;
 }
 
 // Ports describes the port mapping between the container and host.
