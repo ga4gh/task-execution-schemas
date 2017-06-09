@@ -47,14 +47,15 @@ message Task {
 
   // REQUIRED
   //
-  // A list of executors to be run, sequentially.
+  // A list of executors to be run, sequentially. Execution stops
+  // on the first error.
   repeated Executor executors = 9;
 
   // OPTIONAL
   //
   // Declared volumes.
   // Volumes are shared between executors. Volumes for inputs and outputs are 
-  // inferred and should not be delcared here.
+  // inferred and should not be declared here.
   repeated string volumes = 10;
 
   // OPTIONAL
@@ -84,7 +85,7 @@ message TaskParameter {
   // OPTIONAL
   string description = 2;
 
-  // REQUIRED
+  // REQUIRED, unless "contents" is set.
   //
   // URL in long term storage, for example:
   // s3://my-object-store/file1
@@ -97,6 +98,7 @@ message TaskParameter {
   // REQUIRED
   //
   // Path of the file inside the container.
+  // Must be an absolute path.
   string path = 4;
 
   // REQUIRED
@@ -109,10 +111,13 @@ message TaskParameter {
   // File contents literal. 
   // Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
   // UTF-8 encoded
+  //
+  // If contents is not empty, "url" must be ignored.
   string contents = 6;
 }
 
-// Ports describes the port mapping between the container and host.
+// Ports describes the port binding between the container and host.
+// For example, a Docker implementation might map this to `docker run -p host:container`.
 message Ports {
 
   // REQUIRED 
@@ -122,12 +127,12 @@ message Ports {
 
   // OPTIONAL 
   //
-  // Port number opened on the host. Must be greater than 1024.
+  // Port number opened on the host.
   // Defaults to 0, which assigns a random port on the host.
   uint32 host = 2;
 }
 
-// Executor describes a command to run, and its environment.
+// Executor describes a command to be executed, and its environment.
 message Executor {
 
   // REQUIRED
@@ -141,7 +146,8 @@ message Executor {
 
   // REQUIRED
   //
-  // The command to be executed.
+  // A sequence of program arguments to execute, where the first argument
+  // is the program to execute (i.e. argv).
   repeated string cmd = 2;
 
   // OPTIONAL
@@ -153,24 +159,28 @@ message Executor {
   // OPTIONAL
   //
   // Path inside the container to a file which will be piped
-  // to the command's stdin.
+  // to the executor's stdin. Must be an absolute path.
   string stdin = 6;
 
   // OPTIONAL
   //
-  // Path inside the container to a file where the command's
-  // stdout will be written to.
+  // Path inside the container to a file where the executor's
+  // stdout will be written to. Must be an absolute path.
   string stdout = 4;
 
   // OPTIONAL
   //
-  // Path inside the container to a file where the command's
-  // stderr will be written to.
+  // Path inside the container to a file where the executor's
+  // stderr will be written to. Must be an absolute path.
   string stderr = 5;
 
   // OPTIONAL
   //
-  // Port to expose from within the container, blank if none.
+  // A list of port bindings between the container and host.
+  // For example, a Docker implementation might map this to `docker run -p host:container`.
+  //
+  // Port bindings are included in ExecutorLogs, which allows TES clients
+  // to discover port bindings and communicate with running tasks/executors.
   repeated Ports ports = 7;
 
   // OPTIONAL
@@ -276,12 +286,15 @@ message ExecutorLog {
 
   // OPTIONAL
   //
-  // IP address of host.
+  // IP address of the host.
   string host_ip = 7;
 
   // OPTIONAL
   //
-  // Ports mapped between the container and host.
+  // Ports bound between the Executor's container and host.
+  //
+  // TES clients can use these logs to discover port bindings
+  // and communicate with running tasks/executors.
   repeated Ports ports = 8;
 }
 
@@ -299,7 +312,7 @@ message OutputFileLog {
 
   // REQUIRED
   //
-  // Path of the file inside the container.
+  // Path of the file inside the container. Must be an absolute path.
   string path = 2;
 
   // REQUIRED
@@ -413,7 +426,7 @@ message ListTasksResponse {
 
   // REQUIRED
   //
-  // List of lightweight task descriptions.
+  // List of tasks.
   repeated Task tasks = 1;
 
   // OPTIONAL
