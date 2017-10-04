@@ -279,6 +279,11 @@ message TaskLog {
   // Information about all output files. Directory outputs are
   // flattened into separate items.
   repeated OutputFileLog outputs = 5;
+  
+  // OPTIONAL
+  //
+  // Optional system logs.
+  repeated string syslogs = 6;
 }
 
 // OUTPUT ONLY
