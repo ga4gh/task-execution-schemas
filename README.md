@@ -38,12 +38,14 @@ an MD5 checksum on an input file and uploads the output:
         "path" : "/container/output",
       }
     ],
-    "resources" : {
-      "cpu_cores": 1,
-      "ram_gb":    1.0,
-      "size_gb":   100.0,
-      "preemptible": false,
-    },
+    "resources" : [
+      {
+        "cpu_cores": 1,
+        "ram_gb":    1.0,
+        "size_gb":   100.0,
+        "preemptible": False,
+      }
+    ],
     "executors" : [
       {
         "image_name" : "ubuntu",
