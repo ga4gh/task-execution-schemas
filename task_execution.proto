@@ -142,13 +142,13 @@ message Executor {
   // quay.io/aptible/ubuntu
   // gcr.io/my-org/my-image
   // etc...
-  string image_name = 1;
+  string image = 1;
 
   // REQUIRED
   //
   // A sequence of program arguments to execute, where the first argument
   // is the program to execute (i.e. argv).
-  repeated string cmd = 2;
+  repeated string command = 2;
 
   // OPTIONAL
   //
@@ -186,7 +186,7 @@ message Executor {
   // OPTIONAL
   //
   // Enviromental variables to set within the container.
-  map<string,string> environ = 8;
+  map<string,string> env = 8;
 }
 
 // Resources describes the resources requested by a task.
