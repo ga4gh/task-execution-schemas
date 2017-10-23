@@ -20,12 +20,6 @@ message Task {
   string name = 3;
 
   // OPTIONAL
-  //
-  // Describes the project this task is associated with.
-  // Commonly used for billing on cloud providers (AWS, Google Cloud, etc).
-  string project = 4;
-
-  // OPTIONAL
   string description = 5;
 
   // OPTIONAL
@@ -364,11 +358,6 @@ message GetTaskRequest {
 
 // ListTasksRequest describes a request to the ListTasks service endpoint.
 message ListTasksRequest {
-
-  // OPTIONAL
-  //
-  // Filter the task list to include tasks in this project.
-  string project = 1;
 
   // OPTIONAL
   //
