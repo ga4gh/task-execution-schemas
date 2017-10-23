@@ -32,13 +32,13 @@ message Task {
   //
   // Input files.
   // Inputs will be downloaded and mounted into the executor container.
-  repeated TaskParameter inputs = 6;
+  repeated Input inputs = 6;
 
   // OPTIONAL
   //
   // Output files.
   // Outputs will be uploaded from the executor container to long-term storage.
-  repeated TaskParameter outputs = 7;
+  repeated Output outputs = 7;
 
   // OPTIONAL
   //
@@ -76,8 +76,8 @@ enum FileType {
   DIRECTORY = 1;
 }
 
-// TaskParameter describes input and output files for a Task.
-message TaskParameter {
+// Input describes Task input files.
+message Input {
 
   // OPTIONAL
   string name = 1;
@@ -114,6 +114,37 @@ message TaskParameter {
   //
   // If content is not empty, "url" must be ignored.
   string content = 6;
+}
+
+// Output describes Task output files.
+message Output {
+
+  // OPTIONAL
+  string name = 1;
+
+  // OPTIONAL
+  string description = 2;
+
+  // REQUIRED
+  //
+  // URL in long term storage, for example:
+  // s3://my-object-store/file1
+  // gs://my-bucket/file2
+  // file:///path/to/my/file
+  // /path/to/my/file
+  // etc...
+  string url = 3;
+
+  // REQUIRED
+  //
+  // Path of the file inside the container.
+  // Must be an absolute path.
+  string path = 4;
+
+  // REQUIRED
+  //
+  // Type of the file, FILE or DIRECTORY
+  FileType type = 5;
 }
 
 // Ports describes the port binding between the container and host.
@@ -412,7 +443,7 @@ enum TaskView {
   // Task message will include all fields EXCEPT:
   //   Task.ExecutorLog.stdout
   //   Task.ExecutorLog.stderr
-  //   TaskParameter.content in Task.Inputs
+  //   Input.content
   BASIC = 1;
 
   // Task message includes all fields.
