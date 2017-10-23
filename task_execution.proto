@@ -282,8 +282,16 @@ message TaskLog {
   
   // OPTIONAL
   //
-  // Optional system logs.
-  repeated string syslogs = 6;
+  // System logs are any logs the system decides are relevant,
+  // which are not tied directly to an Executor process.
+  // Content is implementation specific: format, size, etc.
+  //
+  // System logs may be collected here to provide convenient access.
+  //
+  // For example, the system may include the name of the host
+  // where the task is executing, an error message that caused
+  // a SYSTEM_ERROR state (e.g. disk is full), etc.
+  repeated string system_logs = 6;
 }
 
 // OUTPUT ONLY
