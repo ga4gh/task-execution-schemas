@@ -69,6 +69,12 @@ message Task {
   // Normally, this will contain only one entry, but in the case where
   // a task fails and is retried, an entry will be appended to this list.
   repeated TaskLog logs = 12;
+
+  // OUTPUT ONLY, REQUIRED
+  //
+  // Date + time the task was created, in RFC 3339 format.
+  // This is set by the system, not the client.
+  string creation_time = 13;
 }
 
 enum FileType {
