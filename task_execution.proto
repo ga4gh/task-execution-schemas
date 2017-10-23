@@ -329,9 +329,6 @@ enum State {
   QUEUED = 1;
   INITIALIZING = 2;
   RUNNING = 3;
-  // An implementation *may* have the ability to pause a task,
-  // but this is not required.
-  PAUSED = 4;
   COMPLETE = 5;
   ERROR = 6;
   SYSTEM_ERROR = 7;
