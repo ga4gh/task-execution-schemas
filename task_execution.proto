@@ -367,17 +367,6 @@ message ListTasksRequest {
 
   // OPTIONAL
   //
-  // Filter the task list to include tasks in this project.
-  string project = 1;
-
-  // OPTIONAL
-  //
-  // Filter the list to include tasks where the name matches this prefix.
-  // If unspecified, no task name filtering is done.
-  string name_prefix	= 2;
-
-  // OPTIONAL
-  //
   // Number of tasks to return in one page.
   // Must be less than 2048. Defaults to 256.
   uint32 page_size = 3;
@@ -394,6 +383,36 @@ message ListTasksRequest {
   // Affects the fields included in the returned Task messages.
   // See TaskView below.
   TaskView view = 5;
+
+  // Filter allows minimal filtering of ListTasks results,
+  // using a simple query string. Tasks may be filtered by state,
+  // tags, and create time. Multiple filters may be included in one
+  // query, in which case they are combined using the AND operator.
+  // In order to keep the design and implementation of these filters
+  // simple, there is no support for OR and NOT operators. Matches are
+  // exact, i.e. partial or wildcard matching is not supported. More advanced
+  // use cases may be supported by using a more sophisticated, external system.
+  //
+  // Examples:
+  //   Filter by state:
+  //     - state:complete
+  //     - state:COMPLETE
+  //     - state:complete state:running
+  //   Filter by tag:
+  //     - project:ga4gh-driver-1
+  //     - project:"ga4gh driver 1"
+  //     - project:"ga4gh driver 1" sample:"sample ABC"
+  //   Filter by create time:
+  //     - created>=2008-09-08T22:47:31 created<2008-09-08T24:00:00
+  //     - created>2008-09-08 created<=2008-09-08
+  //   Filter by multiple:
+  //     - state:complete project:"ga4gh driver 1" created
+  //
+  // Query term:value is separated by a ":". Multiple terms are separated
+  // by whitespace. Values may be enclosed in "double quotes". State values
+  // are case-insensitive. Tag values are case sensitive. Date/time values
+  // are RFC3339 formatted. "created" supports ranges via "<", ">", "<=", ">=".
+  string filter = 6;
 }
 
 // TaskView affects the fields returned by the ListTasks endpoint.
