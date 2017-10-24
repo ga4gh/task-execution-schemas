@@ -267,16 +267,28 @@ message ExecutorLog {
 
   // OPTIONAL
   //
-  // Stdout tail.
-  // This is not guaranteed to be the entire log.
-  // Implementations determine the maximum size.
+  // Stdout content.
+  //
+  // This is meant for convenience. No guarantees are made about the content.
+  // Implementations may chose different approaches: only the head, only the tail,
+  // a URL reference only, etc.
+  //
+  // In order to capture the full stdout users should set Executor.stdout
+  // to a container file path, and use Task.outputs to upload that file
+  // to permanent storage.
   string stdout = 4;
 
   // OPTIONAL
   //
-  // Stderr tail.
-  // This is not guaranteed to be the entire log.
-  // Implementations determine the maximum size.
+  // Stderr content.
+  //
+  // This is meant for convenience. No guarantees are made about the content.
+  // Implementations may chose different approaches: only the head, only the tail,
+  // a URL reference only, etc.
+  //
+  // In order to capture the full stderr users should set Executor.stderr
+  // to a container file path, and use Task.outputs to upload that file
+  // to permanent storage.
   string stderr = 5;
 
   // REQUIRED
