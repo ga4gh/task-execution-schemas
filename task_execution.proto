@@ -53,9 +53,17 @@ message Task {
 
   // OPTIONAL
   //
-  // Declared volumes.
-  // Volumes are shared between executors. Volumes for inputs and outputs are 
-  // inferred and should not be declared here.
+  // Volumes are directories which may be used to share data between
+  // Executors. Volumes are initialized as empty directories by the
+  // system when the task starts and are mounted at the same path
+  // in each Executor.
+  //
+  // For example, given a volume defined at "/vol/A",
+  // executor 1 may write a file to "/vol/A/exec1.out.txt", then
+  // executor 2 may read from that file.
+  //
+  // (Essentially, this translates to a `docker run -v` flag where
+  // the container path is the same for each executor).
   repeated string volumes = 10;
 
   // OPTIONAL
