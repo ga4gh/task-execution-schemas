@@ -1,0 +1,27 @@
+language: go
+
+go:
+  - master
+
+sudo: false
+
+cache:
+  directories:
+    - /tmp/proto3.4.1
+
+script:
+  - make install-tools
+  - make
+
+before_script:
+  - bash tools/install-protobuf.sh 3.4.1
+  - export PATH=/tmp/proto3.4.1/bin:$PATH
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "joWDBlIvVnTFFRJp1tVTQe5HERg1uBpw2K256jhiKZD2QWHAaeSadhuhSqTOEIoBfJTid102sF1WnwKQH7g7446ZdQXoUGEk5TL0JJv0wemQ102HFUk+hwDYEFkoS6Y700J5PJufrUOyetcEN7eyUuXuJGrsJQ/TFpUCnUYpSB+lAWUid0pdHqQk7Qv11zNvESgfQrEq9nQZ5ZhwG5JyJsUTUAHDVnBwDz0fvr4i2eJCRAUDJkbsmLfIpSZxiPHrehh0voAMB7Ysqf1rIZF9Pf0u9CF8zW3CgVCZxp7u1lPx8NesROnGvjj+3ebkxWZswGGun/dveN/7cw8ow20E0JsirHE9DgBF4JK3DrEWv/WjZtmYs31qeuIJa73RD8hJG9sXfjmw2creqEZlaRTzuMfP6YeD0K+Xan3wubWU8YUsNOECDJ/TQZAQjMB1OIhwJWRGEfarapmSdgOEvuNcm/ZVkUS0rMIj5i86PfiIQEIVRzwyWw9Zavs4IpnrqhYk7trMwqNjCaD77kuWPsHzMf4cGoMXa+QdcM43ROmZcjrmJL4j1tUP2e5XTT5/tMZojFmmNZdR26X8EtQdowACjViheHRen+YpmdiC5NpGAU8JVJ6ayitvZ4mTBpN8kCSGgSdLXrBLTKh7Lc6M7Tdw8RqXf3kBuPiVZbHOPWQ4qnU="
+  file:  task_execution.swagger.json
+  skip_cleanup: true
+  on:
+    tags: true
