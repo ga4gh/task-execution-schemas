@@ -107,7 +107,7 @@ The return value will be a minimal description of the task state.
 To get more information, you can change the task view using the `view` URL query parameter.  
 
 The `basic` view will include all task fields except a few which might be
-large strings (stdout/err logging, input parameter contents).
+large strings (stdout/err/system logging, input parameter contents).
 
 ```HTTP
 GET /v1/tasks/task-1234?view=BASIC
@@ -115,7 +115,7 @@ GET /v1/tasks/task-1234?view=BASIC
 { "id": "task-1234", "state": "RUNNING", "name": "MD5 example", etc... }
 ```
 
-The `full` view includes stdout/err logs and full input parameters:
+The `full` view includes stdout/err/system logs and full input parameters:
 
 ```HTTP
 GET /v1/tasks/task-1234?view=FULL

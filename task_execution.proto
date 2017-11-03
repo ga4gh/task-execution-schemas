@@ -291,6 +291,8 @@ message TaskLog {
   // For example, the system may include the name of the host
   // where the task is executing, an error message that caused
   // a SYSTEM_ERROR state (e.g. disk is full), etc.
+  //
+  // System logs are only included in the FULL task view.
   repeated string system_logs = 6;
 }
 
@@ -469,6 +471,7 @@ enum TaskView {
   //   Task.ExecutorLog.stdout
   //   Task.ExecutorLog.stderr
   //   Input.content
+  //   TaskLog.system_logs
   BASIC = 1;
 
   // Task message includes all fields.
