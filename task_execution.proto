@@ -258,11 +258,6 @@ message ExecutorLog {
   //
   // Exit code.
   int32 exit_code = 6;
-
-  // OPTIONAL
-  //
-  // IP address of the host.
-  string host_ip = 7;
 }
 
 // OUTPUT ONLY
