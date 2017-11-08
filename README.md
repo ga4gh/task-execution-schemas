@@ -21,7 +21,7 @@ an MD5 checksum on an input file and uploads the output:
     "description": "Task which runs md5sum on the input file.",
     "project":     "tes-example-project-id",
     "tags": {
-      "custom-tag": "tag-value",
+      "custom-tag": "tag-value"
     },
     "inputs": [
       {
@@ -29,20 +29,20 @@ an MD5 checksum on an input file and uploads the output:
         "description": "md5sum input file",
         "url":  "/path/to/input_file",
         "path": "/container/input",
-        "type": "FILE",
+        "type": "FILE"
       }
     ],
     "outputs" : [
       {
         "url" :  "/path/to/output_file",
-        "path" : "/container/output",
+        "path" : "/container/output"
       }
     ],
     "resources" : {
       "cpu_cores": 1,
       "ram_gb":    1.0,
       "size_gb":   100.0,
-      "preemptible": false,
+      "preemptible": false
     },
     "executors" : [
       {
@@ -50,7 +50,7 @@ an MD5 checksum on an input file and uploads the output:
         "cmd" : ["md5sum", "/container/input"],
         "stdout" : "/container/output",
         "stderr" : "/container/stderr",
-        "workdir": "/tmp",
+        "workdir": "/tmp"
       }
     ]
 }
@@ -62,20 +62,20 @@ A minimal version of the same task, including only the required fields looks lik
     "inputs": [
       {
         "url":  "/path/to/input_file",
-        "path": "/container/input",
+        "path": "/container/input"
       }
     ],
     "outputs" : [
       {
         "url" :  "/path/to/output_file",
-        "path" : "/container/output",
+        "path" : "/container/output"
       }
     ],
     "executors" : [
       {
         "image_name" : "ubuntu",
         "cmd" : ["md5sum", "/container/input"],
-        "stdout" : "/container/output",
+        "stdout" : "/container/output"
       }
     ]
 }
