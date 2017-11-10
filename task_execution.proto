@@ -85,7 +85,7 @@ message TaskParameter {
   // OPTIONAL
   string description = 2;
 
-  // REQUIRED, unless "contents" is set.
+  // REQUIRED, unless "content" is set.
   //
   // URL in long term storage, for example:
   // s3://my-object-store/file1
@@ -108,12 +108,12 @@ message TaskParameter {
 
   // OPTIONAL
   //
-  // File contents literal. 
+  // File content literal. 
   // Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
   // UTF-8 encoded
   //
-  // If contents is not empty, "url" must be ignored.
-  string contents = 6;
+  // If content is not empty, "url" must be ignored.
+  string content = 6;
 }
 
 // Ports describes the port binding between the container and host.
@@ -412,7 +412,7 @@ enum TaskView {
   // Task message will include all fields EXCEPT:
   //   Task.ExecutorLog.stdout
   //   Task.ExecutorLog.stderr
-  //   TaskParameter.Contents in Task.Inputs
+  //   TaskParameter.content in Task.Inputs
   BASIC = 1;
 
   // Task message includes all fields.
