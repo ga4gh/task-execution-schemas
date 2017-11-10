@@ -41,7 +41,7 @@ an MD5 checksum on an input file and uploads the output:
     "resources" : {
       "cpu_cores": 1,
       "ram_gb":    1.0,
-      "size_gb":   100.0,
+      "disk_gb":   100.0,
       "preemptible": false
     },
     "executors" : [
