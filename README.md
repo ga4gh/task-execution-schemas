@@ -46,8 +46,8 @@ an MD5 checksum on an input file and uploads the output:
     },
     "executors" : [
       {
-        "image_name" : "ubuntu",
-        "cmd" : ["md5sum", "/container/input"],
+        "image" : "ubuntu",
+        "command" : ["md5sum", "/container/input"],
         "stdout" : "/container/output",
         "stderr" : "/container/stderr",
         "workdir": "/tmp"
@@ -73,8 +73,8 @@ A minimal version of the same task, including only the required fields looks lik
     ],
     "executors" : [
       {
-        "image_name" : "ubuntu",
-        "cmd" : ["md5sum", "/container/input"],
+        "image" : "ubuntu",
+        "command" : ["md5sum", "/container/input"],
         "stdout" : "/container/output"
       }
     ]
