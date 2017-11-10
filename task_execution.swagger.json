@@ -29,13 +29,6 @@
         },
         "parameters": [
           {
-            "name": "project",
-            "description": "OPTIONAL. Filter the task list to include tasks in this project.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "name_prefix",
             "description": "OPTIONAL. Filter the list to include tasks where the name matches this prefix.\nIf unspecified, no task name filtering is done.",
             "in": "query",
@@ -59,7 +52,7 @@
           },
           {
             "name": "view",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  Input.content\n  TaskLog.system_logs\n - FULL: Task message includes all fields.",
             "in": "query",
             "required": false,
             "type": "string",
@@ -139,7 +132,7 @@
           },
           {
             "name": "view",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  Input.content\n  TaskLog.system_logs\n - FULL: Task message includes all fields.",
             "in": "query",
             "required": false,
             "type": "string",
@@ -183,17 +176,6 @@
     }
   },
   "definitions": {
-    "tesCancelTaskRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Task identifier.",
-          "title": "REQUIRED"
-        }
-      },
-      "description": "CancelTaskRequest describes a request to the CancelTask endpoint."
-    },
     "tesCancelTaskResponse": {
       "type": "object",
       "description": "CancelTaskResponse describes a response from the CancelTask endpoint.",
@@ -214,17 +196,17 @@
     "tesExecutor": {
       "type": "object",
       "properties": {
-        "image_name": {
+        "image": {
           "type": "string",
           "description": "Name of the container image, for example:\nubuntu\nquay.io/aptible/ubuntu\ngcr.io/my-org/my-image\netc...",
           "title": "REQUIRED"
         },
-        "cmd": {
+        "command": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The command to be executed.",
+          "description": "A sequence of program arguments to execute, where the first argument\nis the program to execute (i.e. argv).",
           "title": "REQUIRED"
         },
         "workdir": {
@@ -234,28 +216,20 @@
         },
         "stdin": {
           "type": "string",
-          "description": "Path inside the container to a file which will be piped\nto the command's stdin.",
+          "description": "Path inside the container to a file which will be piped\nto the executor's stdin. Must be an absolute path.",
           "title": "OPTIONAL"
         },
         "stdout": {
           "type": "string",
-          "description": "Path inside the container to a file where the command's\nstdout will be written to.",
+          "description": "Path inside the container to a file where the executor's\nstdout will be written to. Must be an absolute path.",
           "title": "OPTIONAL"
         },
         "stderr": {
           "type": "string",
-          "description": "Path inside the container to a file where the command's\nstderr will be written to.",
+          "description": "Path inside the container to a file where the executor's\nstderr will be written to. Must be an absolute path.",
           "title": "OPTIONAL"
         },
-        "ports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesPorts"
-          },
-          "description": "Port to expose from within the container, blank if none.",
-          "title": "OPTIONAL"
-        },
-        "environ": {
+        "env": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -264,7 +238,7 @@
           "title": "OPTIONAL"
         }
       },
-      "description": "Executor describes a command to run, and its environment."
+      "description": "Executor describes a command to be executed, and its environment."
     },
     "tesExecutorLog": {
       "type": "object",
@@ -281,12 +255,12 @@
         },
         "stdout": {
           "type": "string",
-          "description": "Stdout tail.\nThis is not guaranteed to be the entire log.\nImplementations determine the maximum size.",
+          "description": "Stdout content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stdout users should set Executor.stdout\nto a container file path, and use Task.outputs to upload that file\nto permanent storage.",
           "title": "OPTIONAL"
         },
         "stderr": {
           "type": "string",
-          "description": "Stderr tail.\nThis is not guaranteed to be the entire log.\nImplementations determine the maximum size.",
+          "description": "Stderr content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stderr users should set Executor.stderr\nto a container file path, and use Task.outputs to upload that file\nto permanent storage.",
           "title": "OPTIONAL"
         },
         "exit_code": {
@@ -294,19 +268,6 @@
           "format": "int32",
           "description": "Exit code.",
           "title": "REQUIRED"
-        },
-        "host_ip": {
-          "type": "string",
-          "description": "IP address of host.",
-          "title": "OPTIONAL"
-        },
-        "ports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/tesPorts"
-          },
-          "description": "Ports mapped between the container and host.",
-          "title": "OPTIONAL"
         }
       },
       "description": "ExecutorLog describes logging information related to an Executor.",
@@ -320,53 +281,38 @@
       ],
       "default": "FILE"
     },
-    "tesGetTaskRequest": {
+    "tesInput": {
       "type": "object",
       "properties": {
-        "id": {
+        "name": {
           "type": "string",
-          "description": "Task identifier.",
+          "title": "OPTIONAL"
+        },
+        "description": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "url": {
+          "type": "string",
+          "description": "REQUIRED, unless \"content\" is set.\n\nURL in long term storage, for example:\ns3://my-object-store/file1\ngs://my-bucket/file2\nfile:///path/to/my/file\n/path/to/my/file\netc..."
+        },
+        "path": {
+          "type": "string",
+          "description": "Path of the file inside the container.\nMust be an absolute path.",
           "title": "REQUIRED"
         },
-        "view": {
-          "$ref": "#/definitions/tesTaskView",
-          "description": "Affects the fields included in the returned Task messages.\nSee TaskView below.",
+        "type": {
+          "$ref": "#/definitions/tesFileType",
+          "description": "Type of the file, FILE or DIRECTORY",
+          "title": "REQUIRED"
+        },
+        "content": {
+          "type": "string",
+          "description": "File content literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored.",
           "title": "OPTIONAL"
         }
       },
-      "description": "GetTaskRequest describes a request to the GetTask endpoint."
-    },
-    "tesListTasksRequest": {
-      "type": "object",
-      "properties": {
-        "project": {
-          "type": "string",
-          "description": "Filter the task list to include tasks in this project.",
-          "title": "OPTIONAL"
-        },
-        "name_prefix": {
-          "type": "string",
-          "description": "Filter the list to include tasks where the name matches this prefix.\nIf unspecified, no task name filtering is done.",
-          "title": "OPTIONAL"
-        },
-        "page_size": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
-          "title": "OPTIONAL"
-        },
-        "page_token": {
-          "type": "string",
-          "description": "Page token is used to retrieve the next page of results.\nIf unspecified, returns the first page of results.\nSee ListTasksResponse.next_page_token",
-          "title": "OPTIONAL"
-        },
-        "view": {
-          "$ref": "#/definitions/tesTaskView",
-          "description": "Affects the fields included in the returned Task messages.\nSee TaskView below.",
-          "title": "OPTIONAL"
-        }
-      },
-      "description": "ListTasksRequest describes a request to the ListTasks service endpoint."
+      "description": "Input describes Task input files."
     },
     "tesListTasksResponse": {
       "type": "object",
@@ -376,7 +322,7 @@
           "items": {
             "$ref": "#/definitions/tesTask"
           },
-          "description": "List of lightweight task descriptions.",
+          "description": "List of tasks.",
           "title": "REQUIRED"
         },
         "next_page_token": {
@@ -388,6 +334,35 @@
       "description": "ListTasksResponse describes a response from the ListTasks endpoint.",
       "title": "OUTPUT ONLY"
     },
+    "tesOutput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "description": {
+          "type": "string",
+          "title": "OPTIONAL"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL in long term storage, for example:\ns3://my-object-store/file1\ngs://my-bucket/file2\nfile:///path/to/my/file\n/path/to/my/file\netc...",
+          "title": "REQUIRED"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path of the file inside the container.\nMust be an absolute path.",
+          "title": "REQUIRED"
+        },
+        "type": {
+          "$ref": "#/definitions/tesFileType",
+          "description": "Type of the file, FILE or DIRECTORY",
+          "title": "REQUIRED"
+        }
+      },
+      "description": "Output describes Task output files."
+    },
     "tesOutputFileLog": {
       "type": "object",
       "properties": {
@@ -398,7 +373,7 @@
         },
         "path": {
           "type": "string",
-          "description": "Path of the file inside the container.",
+          "description": "Path of the file inside the container. Must be an absolute path.",
           "title": "REQUIRED"
         },
         "size_bytes": {
@@ -410,24 +385,6 @@
       },
       "description": "OutputFileLog describes a single output file. This describes\nfile details after the task has completed successfully,\nfor logging purposes.",
       "title": "OUTPUT ONLY"
-    },
-    "tesPorts": {
-      "type": "object",
-      "properties": {
-        "container": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Port number opened inside the container.",
-          "title": "REQUIRED"
-        },
-        "host": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Port number opened on the host. Must be greater than 1024.\nDefaults to 0, which assigns a random port on the host.",
-          "title": "OPTIONAL"
-        }
-      },
-      "description": "Ports describes the port mapping between the container and host."
     },
     "tesResources": {
       "type": "object",
@@ -450,7 +407,7 @@
           "description": "Requested RAM required in gigabytes (GB)",
           "title": "OPTIONAL"
         },
-        "size_gb": {
+        "disk_gb": {
           "type": "number",
           "format": "double",
           "description": "Requested disk size in gigabytes (GB)",
@@ -489,10 +446,6 @@
       "description": "ServiceInfo describes information about the service,\nsuch as storage details, resource availability,\nand other documentation.",
       "title": "OUTPUT ONLY"
     },
-    "tesServiceInfoRequest": {
-      "type": "object",
-      "description": "ServiceInfoRequest describes a request to the ServiceInfo endpoint."
-    },
     "tesState": {
       "type": "string",
       "enum": [
@@ -502,12 +455,12 @@
         "RUNNING",
         "PAUSED",
         "COMPLETE",
-        "ERROR",
+        "EXECUTOR_ERROR",
         "SYSTEM_ERROR",
         "CANCELED"
       ],
       "default": "UNKNOWN",
-      "description": "Task states.\n\n - PAUSED: An implementation *may* have the ability to pause a task,\nbut this is not required.",
+      "description": "Task states.\n\n - UNKNOWN: The state of the task is unknown.\n\nThis provides a safe default for messages where this field is missing,\nfor example, so that a missing field does not accidentally imply that\nthe state is QUEUED.\n - QUEUED: The task is queued.\n - INITIALIZING: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - RUNNING: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - PAUSED: The task is paused.\n\nAn implementation may have the ability to pause a task, but this is not required.\n - COMPLETE: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - EXECUTOR_ERROR: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - SYSTEM_ERROR: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - CANCELED: The task was canceled by the user.",
       "title": "OUTPUT ONLY"
     },
     "tesTask": {
@@ -526,11 +479,6 @@
           "type": "string",
           "title": "OPTIONAL"
         },
-        "project": {
-          "type": "string",
-          "description": "Describes the project this task is associated with.\nCommonly used for billing on cloud providers (AWS, Google Cloud, etc).",
-          "title": "OPTIONAL"
-        },
         "description": {
           "type": "string",
           "title": "OPTIONAL"
@@ -538,7 +486,7 @@
         "inputs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/tesTaskParameter"
+            "$ref": "#/definitions/tesInput"
           },
           "description": "Input files.\nInputs will be downloaded and mounted into the executor container.",
           "title": "OPTIONAL"
@@ -546,7 +494,7 @@
         "outputs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/tesTaskParameter"
+            "$ref": "#/definitions/tesOutput"
           },
           "description": "Output files.\nOutputs will be uploaded from the executor container to long-term storage.",
           "title": "OPTIONAL"
@@ -561,7 +509,7 @@
           "items": {
             "$ref": "#/definitions/tesExecutor"
           },
-          "description": "A list of executors to be run, sequentially.",
+          "description": "A list of executors to be run, sequentially. Execution stops\non the first error.",
           "title": "REQUIRED"
         },
         "volumes": {
@@ -569,7 +517,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Declared volumes.\nVolumes are shared between executors. Volumes for inputs and outputs are \ninferred and should not be delcared here.",
+          "description": "Volumes are directories which may be used to share data between\nExecutors. Volumes are initialized as empty directories by the\nsystem when the task starts and are mounted at the same path\nin each Executor.\n\nFor example, given a volume defined at \"/vol/A\",\nexecutor 1 may write a file to \"/vol/A/exec1.out.txt\", then\nexecutor 2 may read from that file.\n\n(Essentially, this translates to a `docker run -v` flag where\nthe container path is the same for each executor).",
           "title": "OPTIONAL"
         },
         "tags": {
@@ -587,6 +535,11 @@
           },
           "description": "Task logging information.\nNormally, this will contain only one entry, but in the case where\na task fails and is retried, an entry will be appended to this list.",
           "title": "OUTPUT ONLY"
+        },
+        "creation_time": {
+          "type": "string",
+          "description": "Date + time the task was created, in RFC 3339 format.\nThis is set by the system, not the client.",
+          "title": "OUTPUT ONLY, REQUIRED"
         }
       },
       "description": "Task describes an instance of a task."
@@ -627,54 +580,18 @@
           },
           "description": "Information about all output files. Directory outputs are\nflattened into separate items.",
           "title": "REQUIRED"
+        },
+        "system_logs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "System logs are any logs the system decides are relevant,\nwhich are not tied directly to an Executor process.\nContent is implementation specific: format, size, etc.\n\nSystem logs may be collected here to provide convenient access.\n\nFor example, the system may include the name of the host\nwhere the task is executing, an error message that caused\na SYSTEM_ERROR state (e.g. disk is full), etc.\n\nSystem logs are only included in the FULL task view.",
+          "title": "OPTIONAL"
         }
       },
       "description": "TaskLog describes logging information related to a Task.",
       "title": "OUTPUT ONLY"
-    },
-    "tesTaskParameter": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "OPTIONAL"
-        },
-        "description": {
-          "type": "string",
-          "title": "OPTIONAL"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL in long term storage, for example:\ns3://my-object-store/file1\ngs://my-bucket/file2\nfile:///path/to/my/file\n/path/to/my/file\netc...",
-          "title": "REQUIRED"
-        },
-        "path": {
-          "type": "string",
-          "description": "Path of the file inside the container.",
-          "title": "REQUIRED"
-        },
-        "type": {
-          "$ref": "#/definitions/tesFileType",
-          "description": "Type of the file, FILE or DIRECTORY",
-          "title": "REQUIRED"
-        },
-        "contents": {
-          "type": "string",
-          "description": "File contents literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded",
-          "title": "OPTIONAL"
-        }
-      },
-      "description": "TaskParameter describes input and output files for a Task."
-    },
-    "tesTaskView": {
-      "type": "string",
-      "enum": [
-        "MINIMAL",
-        "BASIC",
-        "FULL"
-      ],
-      "default": "MINIMAL",
-      "description": "TaskView affects the fields returned by the ListTasks endpoint.\n\nSome of the fields in task can be large strings (e.g. logs),\nwhich can be a burden on the network. In the default BASIC view,\nthese heavyweight fields are not included, however, a client may\nrequest the FULL version to include these fields.\n\n - MINIMAL: Task message will include ONLY the fields:\n  Task.Id\n  Task.State\n - BASIC: Task message will include all fields EXCEPT:\n  Task.ExecutorLog.stdout\n  Task.ExecutorLog.stderr\n  TaskParameter.Contents in Task.Inputs\n - FULL: Task message includes all fields."
     }
   }
 }
