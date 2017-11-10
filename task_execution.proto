@@ -149,22 +149,6 @@ message Output {
   FileType type = 5;
 }
 
-// Ports describes the port binding between the container and host.
-// For example, a Docker implementation might map this to `docker run -p host:container`.
-message Ports {
-
-  // REQUIRED 
-  //
-  // Port number opened inside the container.
-  uint32 container = 1;
-
-  // OPTIONAL 
-  //
-  // Port number opened on the host.
-  // Defaults to 0, which assigns a random port on the host.
-  uint32 host = 2;
-}
-
 // Executor describes a command to be executed, and its environment.
 message Executor {
 
@@ -206,15 +190,6 @@ message Executor {
   // Path inside the container to a file where the executor's
   // stderr will be written to. Must be an absolute path.
   string stderr = 5;
-
-  // OPTIONAL
-  //
-  // A list of port bindings between the container and host.
-  // For example, a Docker implementation might map this to `docker run -p host:container`.
-  //
-  // Port bindings are included in ExecutorLogs, which allows TES clients
-  // to discover port bindings and communicate with running tasks/executors.
-  repeated Ports ports = 7;
 
   // OPTIONAL
   //
@@ -328,19 +303,6 @@ message ExecutorLog {
   //
   // Exit code.
   int32 exit_code = 6;
-
-  // OPTIONAL
-  //
-  // IP address of the host.
-  string host_ip = 7;
-
-  // OPTIONAL
-  //
-  // Ports bound between the Executor's container and host.
-  //
-  // TES clients can use these logs to discover port bindings
-  // and communicate with running tasks/executors.
-  repeated Ports ports = 8;
 }
 
 // OUTPUT ONLY
