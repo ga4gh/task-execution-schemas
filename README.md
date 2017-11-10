@@ -19,7 +19,6 @@ an MD5 checksum on an input file and uploads the output:
 {
     "name":        "MD5 example",
     "description": "Task which runs md5sum on the input file.",
-    "project":     "tes-example-project-id",
     "tags": {
       "custom-tag": "tag-value"
     },
