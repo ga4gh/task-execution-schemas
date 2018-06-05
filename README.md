@@ -38,9 +38,9 @@ an MD5 checksum on an input file and uploads the output:
       }
     ],
     "resources" : {
-      "cpu_cores": 1,
-      "ram_gb":    1.0,
-      "disk_gb":   100.0,
+      "cpuCores": 1,
+      "ramGb":    1.0,
+      "diskGb":   100.0,
       "preemptible": false
     },
     "executors" : [
