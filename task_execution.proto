@@ -201,6 +201,12 @@ message Executor {
   //
   // Enviromental variables to set within the container.
   map<string,string> env = 8;
+
+  // OPTIONAL
+  //
+  // Override the container entrypoint.
+  // https://docs.docker.com/engine/reference/run/#entrypoint-default-command-to-execute-at-runtime
+  string entrypoint = 9;
 }
 
 // Resources describes the resources requested by a task.
