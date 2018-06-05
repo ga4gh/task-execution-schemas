@@ -536,14 +536,14 @@ service TaskService {
   // other documentation.
   rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo) {
     option (google.api.http) = {
-      get: "/v1/tasks/service-info"
+      get: "/ga4gh/tes/v1/service-info"
     };
   }
 
   // Create a new task.
   rpc CreateTask(Task) returns (CreateTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/tasks"
+      post: "/ga4gh/tes/v1/tasks"
       body: "*"
     };
   }
@@ -552,7 +552,7 @@ service TaskService {
   // TaskView is requested as such: "v1/tasks?view=BASIC"
   rpc ListTasks(ListTasksRequest) returns (ListTasksResponse) {
     option (google.api.http) = {
-      get: "/v1/tasks"
+      get: "/ga4gh/tes/v1/tasks"
     };
   }
 
@@ -560,14 +560,14 @@ service TaskService {
   // TaskView is requested as such: "v1/tasks/{id}?view=FULL"
   rpc GetTask(GetTaskRequest) returns (Task) {
       option (google.api.http) = {
-        get: "/v1/tasks/{id}"
+        get: "/ga4gh/tes/v1/tasks/{id}"
       };
   }
 
   // Cancel a task.
   rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/tasks/{id}:cancel"
+      post: "/ga4gh/tes/v1/tasks/{id}:cancel"
     };
   }
 
