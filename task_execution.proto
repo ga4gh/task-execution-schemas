@@ -372,11 +372,6 @@ enum State {
   // has been started.
   RUNNING = 3;
 
-  // The task is paused.
-  //
-  // An implementation may have the ability to pause a task, but this is not required.
-  PAUSED = 4;
-
   // The task has completed running. Executors have exited without error
   // and output files have been successfully uploaded.
   COMPLETE = 5;
