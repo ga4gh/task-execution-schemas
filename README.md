@@ -6,7 +6,7 @@ and API for describing batch execution tasks. A task defines a set of input file
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
 
-The schema and APIs is defined [here](./task_execution.proto) in [protocol buffers](https://developers.google.com/protocol-buffers/). Clients may use JSON and REST to communicate
+The schema and APIs is defined [here](./task_execution.swagger.json) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
 with a service implementing the TES API.
 
 
@@ -103,7 +103,7 @@ GET /v1/tasks/task-1234
 
 The return value will be a minimal description of the task state.
 
-To get more information, you can change the task view using the `view` URL query parameter.  
+To get more information, you can change the task view using the `view` URL query parameter.
 
 The `basic` view will include all task fields except a few which might be
 large strings (stdout/err/system logging, input parameter contents).

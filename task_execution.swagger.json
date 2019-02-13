@@ -1,11 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "task_execution.proto",
-    "version": "version not set"
+    "title": "GA4GH Task Execution Service",
+    "version": "0.0.1"
   },
   "schemes": [
-    "http",
     "https"
   ],
   "consumes": [
