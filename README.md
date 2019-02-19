@@ -1,7 +1,24 @@
-GA4GH Task Execution Schema (TES)
-=================================
+<img src="https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
-The Task Execution Schema (TES) project is an effort to define a standardized schema
+Task Execution Service (TES) API
+======================================
+<sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
+<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json" alt="Swagger Validator" height="20em" width="72em"></A>
+
+The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
+
+Cloud Work Stream
+-----------------
+
+The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments.
+Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.
+
+We work with platform development partners and industry leaders to develop standards that will facilitate interoperability.
+
+What is TES?
+============
+
+The Task Execution Service (TES) API is an effort to define a standardized schema
 and API for describing batch execution tasks. A task defines a set of input files,
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
