@@ -3,7 +3,7 @@
 Task Execution Service (TES) API
 ======================================
 <sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
-<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json" alt="Swagger Validator" height="20em" width="72em"></A>
+<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml" alt="Swagger Validator" height="20em" width="72em"></A>
 
 The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
