@@ -3,7 +3,7 @@
 Task Execution Service (TES) API
 ======================================
 <sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
-<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json" alt="Swagger Validator" height="20em" width="72em"></A>
+<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/task_execution.swagger.json" alt="Swagger Validator" height="20em" width="72em"></A>
 
 The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
@@ -23,7 +23,7 @@ and API for describing batch execution tasks. A task defines a set of input file
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
 
-The schema and APIs is defined [here](./task_execution.swagger.json) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
+The schema and APIs is defined [here](./openapi/task_execution.swagger.yaml) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
 with a service implementing the TES API.
 
 
