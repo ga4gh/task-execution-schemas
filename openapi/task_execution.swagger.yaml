@@ -536,7 +536,6 @@ definitions:
     description: Task describes an instance of a task.
     required:
     - executors
-    - creation_time
   tesTaskLog:
     type: object
     properties:
