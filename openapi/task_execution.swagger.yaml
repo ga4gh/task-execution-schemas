@@ -1,14 +1,14 @@
-basePath: '/ga4gh/tes/v1'
 swagger: '2.0'
 info:
   title: Task Execution Service
-  version: version not set
+  version: '0.4.0'
 schemes:
   - http
 consumes:
   - application/json
 produces:
   - application/json
+basePath: '/ga4gh/tes/v1'
 paths:
   /tasks:
     get:
@@ -159,16 +159,17 @@ definitions:
   tesCancelTaskResponse:
     type: object
     description: CancelTaskResponse describes a response from the CancelTask endpoint.
-    title: OUTPUT ONLY
+    readOnly: true
   tesCreateTaskResponse:
     type: object
     properties:
       id:
         type: string
         description: Task identifier assigned by the server.
-        title: REQUIRED
     description: CreateTaskResponse describes a response from the CreateTask endpoint.
-    title: OUTPUT ONLY
+    readOnly: true
+    required: 
+    - id
   tesExecutor:
     type: object
     properties:
@@ -180,7 +181,6 @@ definitions:
           quay.io/aptible/ubuntu
           gcr.io/my-org/my-image
           etc...
-        title: REQUIRED
       command:
         type: array
         items:
@@ -188,49 +188,44 @@ definitions:
         description: |-
           A sequence of program arguments to execute, where the first argument
           is the program to execute (i.e. argv).
-        title: REQUIRED
       workdir:
         type: string
         description: |-
           The working directory that the command will be executed in.
           Defaults to the directory set by the container image.
-        title: OPTIONAL
       stdin:
         type: string
         description: |-
           Path inside the container to a file which will be piped
           to the executor's stdin. Must be an absolute path.
-        title: OPTIONAL
       stdout:
         type: string
         description: |-
           Path inside the container to a file where the executor's
           stdout will be written to. Must be an absolute path.
-        title: OPTIONAL
       stderr:
         type: string
         description: |-
           Path inside the container to a file where the executor's
           stderr will be written to. Must be an absolute path.
-        title: OPTIONAL
       env:
         type: object
         additionalProperties:
           type: string
         description: Enviromental variables to set within the container.
-        title: OPTIONAL
     description: 'Executor describes a command to be executed, and its environment.'
+    required:
+    - image
+    - command
   tesExecutorLog:
     type: object
     properties:
       start_time:
         type: string
         description: 'Time the executor started, in RFC 3339 format.'
-        title: OPTIONAL
       end_time:
         type: string
         description: 'Time the executor ended, in RFC 3339 format.'
-        title: OPTIONAL
       stdout:
         type: string
         description: |-
@@ -243,7 +238,6 @@ definitions:
           In order to capture the full stdout users should set Executor.stdout
           to a container file path, and use Task.outputs to upload that file
           to permanent storage.
-        title: OPTIONAL
       stderr:
         type: string
         description: |-
@@ -256,14 +250,14 @@ definitions:
           In order to capture the full stderr users should set Executor.stderr
           to a container file path, and use Task.outputs to upload that file
           to permanent storage.
-        title: OPTIONAL
       exit_code:
         type: integer
         format: int32
         description: Exit code.
-        title: REQUIRED
     description: ExecutorLog describes logging information related to an Executor.
-    title: OUTPUT ONLY
+    required: 
+    - exit_code
+    readOnly: true
   tesFileType:
     type: string
     enum:
@@ -275,10 +269,8 @@ definitions:
     properties:
       name:
         type: string
-        title: OPTIONAL
       description:
         type: string
-        title: OPTIONAL
       url:
         type: string
         description: |-
@@ -295,11 +287,9 @@ definitions:
         description: |-
           Path of the file inside the container.
           Must be an absolute path.
-        title: REQUIRED
       type:
         $ref: '#/definitions/tesFileType'
         description: 'Type of the file, FILE or DIRECTORY'
-        title: REQUIRED
       content:
         type: string
         description: |-
@@ -308,8 +298,10 @@ definitions:
           UTF-8 encoded
 
           If content is not empty, "url" must be ignored.
-        title: OPTIONAL
     description: Input describes Task input files.
+    required: 
+    - type
+    - path
   tesListTasksResponse:
     type: object
     properties:
@@ -318,24 +310,22 @@ definitions:
         items:
           $ref: '#/definitions/tesTask'
         description: List of tasks.
-        title: REQUIRED
       next_page_token:
         type: string
         description: |-
           Token used to return the next page of results.
           See TaskListRequest.next_page_token
-        title: OPTIONAL
     description: ListTasksResponse describes a response from the ListTasks endpoint.
-    title: OUTPUT ONLY
+    required: 
+    - tasks
+    readOnly: true
   tesOutput:
     type: object
     properties:
       name:
         type: string
-        title: OPTIONAL
       description:
         type: string
-        title: OPTIONAL
       url:
         type: string
         description: |-
@@ -345,39 +335,41 @@ definitions:
           file:///path/to/my/file
           /path/to/my/file
           etc...
-        title: REQUIRED
       path:
         type: string
         description: |-
           Path of the file inside the container.
           Must be an absolute path.
-        title: REQUIRED
       type:
         $ref: '#/definitions/tesFileType'
         description: 'Type of the file, FILE or DIRECTORY'
-        title: REQUIRED
     description: Output describes Task output files.
+    required:
+    - url
+    - path
+    - type
   tesOutputFileLog:
     type: object
     properties:
       url:
         type: string
         description: 'URL of the file in storage, e.g. s3://bucket/file.txt'
-        title: REQUIRED
       path:
         type: string
         description: Path of the file inside the container. Must be an absolute path.
-        title: REQUIRED
       size_bytes:
         type: string
         format: int64
         description: Size of the file in bytes.
-        title: REQUIRED
     description: |-
       OutputFileLog describes a single output file. This describes
       file details after the task has completed successfully,
       for logging purposes.
-    title: OUTPUT ONLY
+    readOnly: true
+    required:
+    - url
+    - path
+    - size_bytes
   tesResources:
     type: object
     properties:
@@ -385,28 +377,23 @@ definitions:
         type: integer
         format: int64
         description: Requested number of CPUs
-        title: OPTIONAL
       preemptible:
         type: boolean
         format: boolean
         description: Is the task allowed to run on preemptible compute instances (e.g. AWS Spot)?
-        title: OPTIONAL
       ram_gb:
         type: number
         format: double
         description: Requested RAM required in gigabytes (GB)
-        title: OPTIONAL
       disk_gb:
         type: number
         format: double
         description: Requested disk size in gigabytes (GB)
-        title: OPTIONAL
       zones:
         type: array
         items:
           type: string
         description: Request that the task be run in these compute zones.
-        title: OPTIONAL
     description: Resources describes the resources requested by a task.
   tesServiceInfo:
     type: object
@@ -433,7 +420,7 @@ definitions:
       ServiceInfo describes information about the service,
       such as storage details, resource availability,
       and other documentation.
-    title: OUTPUT ONLY
+    readOnly: true
   tesState:
     type: string
     enum:
@@ -471,23 +458,21 @@ definitions:
       for example an upload failed due to network issues, the worker's ran out
       of disk space, etc.
        - CANCELED: The task was canceled by the user.
-    title: OUTPUT ONLY
+    readOnly: true
   tesTask:
     type: object
     properties:
       id:
         type: string
         description: Task identifier assigned by the server.
-        title: OUTPUT ONLY
+        readOnly: true
       state:
         $ref: '#/definitions/tesState'
-        title: OUTPUT ONLY
+        readOnly: true
       name:
         type: string
-        title: OPTIONAL
       description:
         type: string
-        title: OPTIONAL
       inputs:
         type: array
         items:
@@ -495,7 +480,6 @@ definitions:
         description: |-
           Input files.
           Inputs will be downloaded and mounted into the executor container.
-        title: OPTIONAL
       outputs:
         type: array
         items:
@@ -503,11 +487,9 @@ definitions:
         description: |-
           Output files.
           Outputs will be uploaded from the executor container to long-term storage.
-        title: OPTIONAL
       resources:
         $ref: '#/definitions/tesResources'
         description: Request that the task be run with these resources.
-        title: OPTIONAL
       executors:
         type: array
         items:
@@ -515,7 +497,6 @@ definitions:
         description: |-
           A list of executors to be run, sequentially. Execution stops
           on the first error.
-        title: REQUIRED
       volumes:
         type: array
         items:
@@ -532,13 +513,11 @@ definitions:
 
           (Essentially, this translates to a `docker run -v` flag where
           the container path is the same for each executor).
-        title: OPTIONAL
       tags:
         type: object
         additionalProperties:
           type: string
         description: A key-value map of arbitrary tags.
-        title: OPTIONAL
       logs:
         type: array
         items:
@@ -547,14 +526,16 @@ definitions:
           Task logging information.
           Normally, this will contain only one entry, but in the case where
           a task fails and is retried, an entry will be appended to this list.
-        title: OUTPUT ONLY
+        readOnly: true
       creation_time:
         type: string
         description: |-
           Date + time the task was created, in RFC 3339 format.
           This is set by the system, not the client.
-        title: 'OUTPUT ONLY, REQUIRED'
+        readOnly: true
     description: Task describes an instance of a task.
+    required:
+    - executors
   tesTaskLog:
     type: object
     properties:
@@ -563,21 +544,17 @@ definitions:
         items:
           $ref: '#/definitions/tesExecutorLog'
         description: Logs for each executor
-        title: REQUIRED
       metadata:
         type: object
         additionalProperties:
           type: string
         description: Arbitrary logging metadata included by the implementation.
-        title: OPTIONAL
       start_time:
         type: string
         description: 'When the task started, in RFC 3339 format.'
-        title: OPTIONAL
       end_time:
         type: string
         description: 'When the task ended, in RFC 3339 format.'
-        title: OPTIONAL
       outputs:
         type: array
         items:
@@ -585,7 +562,6 @@ definitions:
         description: |-
           Information about all output files. Directory outputs are
           flattened into separate items.
-        title: REQUIRED
       system_logs:
         type: array
         items:
@@ -602,6 +578,8 @@ definitions:
           a SYSTEM_ERROR state (e.g. disk is full), etc.
 
           System logs are only included in the FULL task view.
-        title: OPTIONAL
     description: TaskLog describes logging information related to a Task.
-    title: OUTPUT ONLY
+    required:
+    - logs
+    - outputs
+    readOnly: true
