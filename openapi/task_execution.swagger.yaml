@@ -22,13 +22,6 @@ paths:
           schema:
             $ref: '#/definitions/tesListTasksResponse'
       parameters:
-        - name: name_prefix
-          description: |-
-            OPTIONAL. Filter the list to include tasks where the name matches this prefix.
-            If unspecified, no task name filtering is done.
-          in: query
-          required: false
-          type: string
         - name: page_size
           description: |-
             OPTIONAL. Number of tasks to return in one page.
@@ -67,6 +60,32 @@ paths:
             - BASIC
             - FULL
           default: MINIMAL
+        - name: state
+          description: |-
+            OPTIONAL. Filter tasks by state. If unspecified, 
+            no task state filtering is done.
+          in: query
+          required: false
+          $ref: '#/definitions/tesState'
+        - name: tags
+          description: |-
+            OPTIONAL. Filter tasks by tag. If unspecified, 
+            no task tag filtering is done. Both the tag's 
+            key and value must be exact matches for a task to be returned. 
+            Filter                            Tags                          Match?
+            ----------------------------------------------------------------------
+            {"foo": "bar"}                    {"foo": "bar"}                Yes
+            {"foo": ""}                       {"foo": ""}                   Yes
+            {"foo": "bar", "baz": "bat"}      {"foo": "bar", "baz": "bat"}  Yes
+            {"foo": "bar"}                    {"foo": "bar", "baz": "bat"}  Yes
+            {"foo": "bar", "baz": "bat"}      {"foo": "bar"}                No
+            {"foo": ""}                       {"foo": "bar"}                No
+          in: body
+          required: false
+          type: object
+          additionalProperties:
+            type: string
+          
       tags:
         - TaskService
     post:
