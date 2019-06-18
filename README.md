@@ -23,7 +23,7 @@ and API for describing batch execution tasks. A task defines a set of input file
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
 
-The schema and APIs is defined [here](./openapi/task_execution.swagger.yaml) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
+The schema and APIs is defined [here](./task_execution.swagger.json) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
 with a service implementing the TES API.
 
 
