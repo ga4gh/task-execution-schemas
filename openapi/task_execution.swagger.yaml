@@ -1,0 +1,585 @@
+swagger: '2.0'
+info:
+  title: Task Execution Service
+  version: '0.4.0'
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: '/ga4gh/tes/v1'
+paths:
+  /tasks:
+    get:
+      summary: |-
+        List tasks.
+        TaskView is requested as such: "v1/tasks?view=BASIC"
+      operationId: ListTasks
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/tesListTasksResponse'
+      parameters:
+        - name: name_prefix
+          description: |-
+            OPTIONAL. Filter the list to include tasks where the name matches this prefix.
+            If unspecified, no task name filtering is done.
+          in: query
+          required: false
+          type: string
+        - name: page_size
+          description: |-
+            OPTIONAL. Number of tasks to return in one page.
+            Must be less than 2048. Defaults to 256.
+          in: query
+          required: false
+          type: integer
+          format: int64
+        - name: page_token
+          description: |-
+            OPTIONAL. Page token is used to retrieve the next page of results.
+            If unspecified, returns the first page of results.
+            See ListTasksResponse.next_page_token
+          in: query
+          required: false
+          type: string
+        - name: view
+          description: |-
+            OPTIONAL. Affects the fields included in the returned Task messages.
+            See TaskView below.
+
+             - MINIMAL: Task message will include ONLY the fields:
+              Task.Id
+              Task.State
+             - BASIC: Task message will include all fields EXCEPT:
+              Task.ExecutorLog.stdout
+              Task.ExecutorLog.stderr
+              Input.content
+              TaskLog.system_logs
+             - FULL: Task message includes all fields.
+          in: query
+          required: false
+          type: string
+          enum:
+            - MINIMAL
+            - BASIC
+            - FULL
+          default: MINIMAL
+      tags:
+        - TaskService
+    post:
+      summary: Create a new task.
+      operationId: CreateTask
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/tesCreateTaskResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/tesTask'
+      tags:
+        - TaskService
+  /tasks/service-info:
+    get:
+      summary: |-
+        GetServiceInfo provides information about the service,
+        such as storage details, resource availability, and 
+        other documentation.
+      operationId: GetServiceInfo
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/tesServiceInfo'
+      tags:
+        - TaskService
+  '/tasks/{id}':
+    get:
+      summary: |-
+        Get a task.
+        TaskView is requested as such: "v1/tasks/{id}?view=FULL"
+      operationId: GetTask
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/tesTask'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: view
+          description: |-
+            OPTIONAL. Affects the fields included in the returned Task messages.
+            See TaskView below.
+
+             - MINIMAL: Task message will include ONLY the fields:
+              Task.Id
+              Task.State
+             - BASIC: Task message will include all fields EXCEPT:
+              Task.ExecutorLog.stdout
+              Task.ExecutorLog.stderr
+              Input.content
+              TaskLog.system_logs
+             - FULL: Task message includes all fields.
+          in: query
+          required: false
+          type: string
+          enum:
+            - MINIMAL
+            - BASIC
+            - FULL
+          default: MINIMAL
+      tags:
+        - TaskService
+  '/tasks/{id}:cancel':
+    post:
+      summary: Cancel a task.
+      operationId: CancelTask
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/tesCancelTaskResponse'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      tags:
+        - TaskService
+definitions:
+  tesCancelTaskResponse:
+    type: object
+    description: CancelTaskResponse describes a response from the CancelTask endpoint.
+    readOnly: true
+  tesCreateTaskResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Task identifier assigned by the server.
+    description: CreateTaskResponse describes a response from the CreateTask endpoint.
+    readOnly: true
+    required: 
+    - id
+  tesExecutor:
+    type: object
+    properties:
+      image:
+        type: string
+        description: |-
+          Name of the container image, for example:
+          ubuntu
+          quay.io/aptible/ubuntu
+          gcr.io/my-org/my-image
+          etc...
+      command:
+        type: array
+        items:
+          type: string
+        description: |-
+          A sequence of program arguments to execute, where the first argument
+          is the program to execute (i.e. argv).
+      workdir:
+        type: string
+        description: |-
+          The working directory that the command will be executed in.
+          Defaults to the directory set by the container image.
+      stdin:
+        type: string
+        description: |-
+          Path inside the container to a file which will be piped
+          to the executor's stdin. Must be an absolute path.
+      stdout:
+        type: string
+        description: |-
+          Path inside the container to a file where the executor's
+          stdout will be written to. Must be an absolute path.
+      stderr:
+        type: string
+        description: |-
+          Path inside the container to a file where the executor's
+          stderr will be written to. Must be an absolute path.
+      env:
+        type: object
+        additionalProperties:
+          type: string
+        description: Enviromental variables to set within the container.
+    description: 'Executor describes a command to be executed, and its environment.'
+    required:
+    - image
+    - command
+  tesExecutorLog:
+    type: object
+    properties:
+      start_time:
+        type: string
+        description: 'Time the executor started, in RFC 3339 format.'
+      end_time:
+        type: string
+        description: 'Time the executor ended, in RFC 3339 format.'
+      stdout:
+        type: string
+        description: |-
+          Stdout content.
+
+          This is meant for convenience. No guarantees are made about the content.
+          Implementations may chose different approaches: only the head, only the tail,
+          a URL reference only, etc.
+
+          In order to capture the full stdout users should set Executor.stdout
+          to a container file path, and use Task.outputs to upload that file
+          to permanent storage.
+      stderr:
+        type: string
+        description: |-
+          Stderr content.
+
+          This is meant for convenience. No guarantees are made about the content.
+          Implementations may chose different approaches: only the head, only the tail,
+          a URL reference only, etc.
+
+          In order to capture the full stderr users should set Executor.stderr
+          to a container file path, and use Task.outputs to upload that file
+          to permanent storage.
+      exit_code:
+        type: integer
+        format: int32
+        description: Exit code.
+    description: ExecutorLog describes logging information related to an Executor.
+    required: 
+    - exit_code
+    readOnly: true
+  tesFileType:
+    type: string
+    enum:
+      - FILE
+      - DIRECTORY
+    default: FILE
+  tesInput:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      url:
+        type: string
+        description: |-
+          REQUIRED, unless "content" is set.
+
+          URL in long term storage, for example:
+          s3://my-object-store/file1
+          gs://my-bucket/file2
+          file:///path/to/my/file
+          /path/to/my/file
+          etc...
+      path:
+        type: string
+        description: |-
+          Path of the file inside the container.
+          Must be an absolute path.
+      type:
+        $ref: '#/definitions/tesFileType'
+        description: 'Type of the file, FILE or DIRECTORY'
+      content:
+        type: string
+        description: |-
+          File content literal. 
+          Implementations should support a minimum of 128 KiB in this field and may define its own maximum.
+          UTF-8 encoded
+
+          If content is not empty, "url" must be ignored.
+    description: Input describes Task input files.
+    required: 
+    - type
+    - path
+  tesListTasksResponse:
+    type: object
+    properties:
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/tesTask'
+        description: List of tasks.
+      next_page_token:
+        type: string
+        description: |-
+          Token used to return the next page of results.
+          See TaskListRequest.next_page_token
+    description: ListTasksResponse describes a response from the ListTasks endpoint.
+    required: 
+    - tasks
+    readOnly: true
+  tesOutput:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      url:
+        type: string
+        description: |-
+          URL in long term storage, for example:
+          s3://my-object-store/file1
+          gs://my-bucket/file2
+          file:///path/to/my/file
+          /path/to/my/file
+          etc...
+      path:
+        type: string
+        description: |-
+          Path of the file inside the container.
+          Must be an absolute path.
+      type:
+        $ref: '#/definitions/tesFileType'
+        description: 'Type of the file, FILE or DIRECTORY'
+    description: Output describes Task output files.
+    required:
+    - url
+    - path
+    - type
+  tesOutputFileLog:
+    type: object
+    properties:
+      url:
+        type: string
+        description: 'URL of the file in storage, e.g. s3://bucket/file.txt'
+      path:
+        type: string
+        description: Path of the file inside the container. Must be an absolute path.
+      size_bytes:
+        type: string
+        format: int64
+        description: Size of the file in bytes.
+    description: |-
+      OutputFileLog describes a single output file. This describes
+      file details after the task has completed successfully,
+      for logging purposes.
+    readOnly: true
+    required:
+    - url
+    - path
+    - size_bytes
+  tesResources:
+    type: object
+    properties:
+      cpu_cores:
+        type: integer
+        format: int64
+        description: Requested number of CPUs
+      preemptible:
+        type: boolean
+        format: boolean
+        description: Is the task allowed to run on preemptible compute instances (e.g. AWS Spot)?
+      ram_gb:
+        type: number
+        format: double
+        description: Requested RAM required in gigabytes (GB)
+      disk_gb:
+        type: number
+        format: double
+        description: Requested disk size in gigabytes (GB)
+      zones:
+        type: array
+        items:
+          type: string
+        description: Request that the task be run in these compute zones.
+    description: Resources describes the resources requested by a task.
+  tesServiceInfo:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 'Returns the name of the service, e.g. "ohsu-compbio-funnel".'
+      doc:
+        type: string
+        description: 'Returns a documentation string, e.g. "Hey, we''re OHSU Comp. Bio!".'
+      storage:
+        type: array
+        items:
+          type: string
+        description: |-
+          Lists some, but not necessarily all, storage locations supported by the service.
+
+          Must be in a valid URL format.
+          e.g. 
+          file:///path/to/local/funnel-storage
+          s3://ohsu-compbio-funnel/storage
+          etc.
+    description: |-
+      ServiceInfo describes information about the service,
+      such as storage details, resource availability,
+      and other documentation.
+    readOnly: true
+  tesState:
+    type: string
+    enum:
+      - UNKNOWN
+      - QUEUED
+      - INITIALIZING
+      - RUNNING
+      - PAUSED
+      - COMPLETE
+      - EXECUTOR_ERROR
+      - SYSTEM_ERROR
+      - CANCELED
+    default: UNKNOWN
+    description: |-
+      Task states.
+
+       - UNKNOWN: The state of the task is unknown.
+
+      This provides a safe default for messages where this field is missing,
+      for example, so that a missing field does not accidentally imply that
+      the state is QUEUED.
+       - QUEUED: The task is queued.
+       - INITIALIZING: The task has been assigned to a worker and is currently preparing to run.
+      For example, the worker may be turning on, downloading input files, etc.
+       - RUNNING: The task is running. Input files are downloaded and the first Executor
+      has been started.
+       - PAUSED: The task is paused.
+
+      An implementation may have the ability to pause a task, but this is not required.
+       - COMPLETE: The task has completed running. Executors have exited without error
+      and output files have been successfully uploaded.
+       - EXECUTOR_ERROR: The task encountered an error in one of the Executor processes. Generally,
+      this means that an Executor exited with a non-zero exit code.
+       - SYSTEM_ERROR: The task was stopped due to a system error, but not from an Executor,
+      for example an upload failed due to network issues, the worker's ran out
+      of disk space, etc.
+       - CANCELED: The task was canceled by the user.
+    readOnly: true
+  tesTask:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Task identifier assigned by the server.
+        readOnly: true
+      state:
+        $ref: '#/definitions/tesState'
+        readOnly: true
+      name:
+        type: string
+      description:
+        type: string
+      inputs:
+        type: array
+        items:
+          $ref: '#/definitions/tesInput'
+        description: |-
+          Input files.
+          Inputs will be downloaded and mounted into the executor container.
+      outputs:
+        type: array
+        items:
+          $ref: '#/definitions/tesOutput'
+        description: |-
+          Output files.
+          Outputs will be uploaded from the executor container to long-term storage.
+      resources:
+        $ref: '#/definitions/tesResources'
+        description: Request that the task be run with these resources.
+      executors:
+        type: array
+        items:
+          $ref: '#/definitions/tesExecutor'
+        description: |-
+          A list of executors to be run, sequentially. Execution stops
+          on the first error.
+      volumes:
+        type: array
+        items:
+          type: string
+        description: |-
+          Volumes are directories which may be used to share data between
+          Executors. Volumes are initialized as empty directories by the
+          system when the task starts and are mounted at the same path
+          in each Executor.
+
+          For example, given a volume defined at "/vol/A",
+          executor 1 may write a file to "/vol/A/exec1.out.txt", then
+          executor 2 may read from that file.
+
+          (Essentially, this translates to a `docker run -v` flag where
+          the container path is the same for each executor).
+      tags:
+        type: object
+        additionalProperties:
+          type: string
+        description: A key-value map of arbitrary tags.
+      logs:
+        type: array
+        items:
+          $ref: '#/definitions/tesTaskLog'
+        description: |-
+          Task logging information.
+          Normally, this will contain only one entry, but in the case where
+          a task fails and is retried, an entry will be appended to this list.
+        readOnly: true
+      creation_time:
+        type: string
+        description: |-
+          Date + time the task was created, in RFC 3339 format.
+          This is set by the system, not the client.
+        readOnly: true
+    description: Task describes an instance of a task.
+    required:
+    - executors
+  tesTaskLog:
+    type: object
+    properties:
+      logs:
+        type: array
+        items:
+          $ref: '#/definitions/tesExecutorLog'
+        description: Logs for each executor
+      metadata:
+        type: object
+        additionalProperties:
+          type: string
+        description: Arbitrary logging metadata included by the implementation.
+      start_time:
+        type: string
+        description: 'When the task started, in RFC 3339 format.'
+      end_time:
+        type: string
+        description: 'When the task ended, in RFC 3339 format.'
+      outputs:
+        type: array
+        items:
+          $ref: '#/definitions/tesOutputFileLog'
+        description: |-
+          Information about all output files. Directory outputs are
+          flattened into separate items.
+      system_logs:
+        type: array
+        items:
+          type: string
+        description: |-
+          System logs are any logs the system decides are relevant,
+          which are not tied directly to an Executor process.
+          Content is implementation specific: format, size, etc.
+
+          System logs may be collected here to provide convenient access.
+
+          For example, the system may include the name of the host
+          where the task is executing, an error message that caused
+          a SYSTEM_ERROR state (e.g. disk is full), etc.
+
+          System logs are only included in the FULL task view.
+    description: TaskLog describes logging information related to a Task.
+    required:
+    - logs
+    - outputs
+    readOnly: true
