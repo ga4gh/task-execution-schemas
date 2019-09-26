@@ -394,6 +394,11 @@ definitions:
         items:
           type: string
         description: Request that the task be run in these compute zones.
+      additional_properties:
+        type: object
+        additionalProperties:
+          type: string
+        description: Key/value pairs for additional resource properties (e.g. a specific VM SKU)
     description: Resources describes the resources requested by a task.
   tesServiceInfo:
     type: object
