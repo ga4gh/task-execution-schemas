@@ -23,6 +23,16 @@ and API for describing batch execution tasks. A task defines a set of input file
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
 
+TES Complaiant Implementations
+==============================
+- [Funnel](https://ohsu-comp-bio.github.io/funnel/)
+- [TESK](https://github.com/EMBL-EBI-TSI/TESK)
+- [tes-azure]()https://github.com/microsoft/tes-azure
+
+
+TES Service Examples
+==============================
+
 The schema and APIs is defined [here](./openapi/task_execution.swagger.yaml) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
 with a service implementing the TES API.
 
