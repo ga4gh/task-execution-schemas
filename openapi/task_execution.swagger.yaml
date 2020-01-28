@@ -10,6 +10,9 @@ produces:
   - application/json
 basePath: '/ga4gh/tes/v1'
 paths:
+  /service-info:
+    # Links to the latest version of service-info. Use a tag once service-info is released instead.
+    $ref: 'https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/develop/service-info.yaml#/paths/~1service-info'
   /tasks:
     get:
       summary: |-
