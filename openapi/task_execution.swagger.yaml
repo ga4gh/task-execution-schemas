@@ -88,20 +88,6 @@ paths:
             $ref: '#/definitions/tesTask'
       tags:
         - TaskService
-  /tasks/service-info:
-    get:
-      summary: |-
-        GetServiceInfo provides information about the service,
-        such as storage details, resource availability, and 
-        other documentation.
-      operationId: GetServiceInfo
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/tesServiceInfo'
-      tags:
-        - TaskService
   '/tasks/{id}':
     get:
       summary: |-
@@ -398,32 +384,6 @@ definitions:
           type: string
         description: Request that the task be run in these compute zones.
     description: Resources describes the resources requested by a task.
-  tesServiceInfo:
-    type: object
-    properties:
-      name:
-        type: string
-        description: 'Returns the name of the service, e.g. "ohsu-compbio-funnel".'
-      doc:
-        type: string
-        description: 'Returns a documentation string, e.g. "Hey, we''re OHSU Comp. Bio!".'
-      storage:
-        type: array
-        items:
-          type: string
-        description: |-
-          Lists some, but not necessarily all, storage locations supported by the service.
-
-          Must be in a valid URL format.
-          e.g. 
-          file:///path/to/local/funnel-storage
-          s3://ohsu-compbio-funnel/storage
-          etc.
-    description: |-
-      ServiceInfo describes information about the service,
-      such as storage details, resource availability,
-      and other documentation.
-    readOnly: true
   tesState:
     type: string
     enum:
