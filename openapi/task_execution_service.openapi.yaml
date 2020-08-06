@@ -5,6 +5,20 @@ info:
 servers:
 - url: /ga4gh/tes/v1
 paths:
+  /service-info:
+    get:
+      tags:
+      - TaskService
+      summary: "GetServiceInfo provides information about the service,\nsuch as storage\
+         \ details, resource availability, and \nother documentation."
+      operationId: GetServiceInfo
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tesServiceInfo'
   /tasks:
     get:
       tags:
@@ -85,20 +99,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
       x-codegen-request-body-name: body
-  /tasks/service-info:
-    get:
-      tags:
-      - TaskService
-      summary: "GetServiceInfo provides information about the service,\nsuch as storage\
-        \ details, resource availability, and \nother documentation."
-      operationId: GetServiceInfo
-      responses:
-        200:
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/tesServiceInfo'
   /tasks/{id}:
     get:
       tags:
@@ -395,26 +395,17 @@ components:
             type: string
       description: Resources describes the resources requested by a task.
     tesServiceInfo:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Returns the name of the service, e.g. "ohsu-compbio-funnel".
-        doc:
-          type: string
-          description: Returns a documentation string, e.g. "Hey, we're OHSU Comp.
-            Bio!".
-        storage:
-          type: array
-          description: "Lists some, but not necessarily all, storage locations supported\
-            \ by the service.\n\nMust be in a valid URL format.\ne.g. \nfile:///path/to/local/funnel-storage\n\
-            s3://ohsu-compbio-funnel/storage\netc."
-          items:
-            type: string
-      description: |-
-        ServiceInfo describes information about the service,
-        such as storage details, resource availability,
-        and other documentation.
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service'
+      - type: object
+        properties:
+          storage:
+            type: array
+            description: "Lists some, but not necessarily all, storage locations supported\
+              \ by the service.\n\nMust be in a valid URL format.\ne.g. \nfile:///path/to/local/funnel-storage\n\
+              s3://ohsu-compbio-funnel/storage\netc."
+            items:
+              type: string
     tesState:
       type: string
       description: |-
