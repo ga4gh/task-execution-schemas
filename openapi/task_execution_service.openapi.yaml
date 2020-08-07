@@ -2,6 +2,9 @@ openapi: 3.0.1
 info:
   title: Task Execution Service
   version: 0.5.0
+  description: >
+    ## Executive Summary
+    The Task Execution Service (TES) API is an effort to define a standardized schema and API for describing batch execution tasks. A task defines a set of input files, a set of (Docker) containers and commands to run, a set of output files, and some other logging and metadata.
 servers:
 - url: /ga4gh/tes/v1
 paths:
