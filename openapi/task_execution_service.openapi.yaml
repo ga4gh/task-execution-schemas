@@ -4,6 +4,7 @@ info:
   version: 0.5.0
   description: >
     ## Executive Summary
+
     The Task Execution Service (TES) API is an effort to define a standardized schema and API for describing batch execution tasks. A task defines a set of input files, a set of (Docker) containers and commands to run, a set of output files, and some other logging and metadata.
 servers:
 - url: /ga4gh/tes/v1
@@ -12,8 +13,8 @@ paths:
     get:
       tags:
       - TaskService
-      summary: "GetServiceInfo provides information about the service,\nsuch as storage\
-         \ details, resource availability, and \nother documentation."
+      summary: "GetServiceInfo"
+      description:   "Provides information about the service, such as storage details, resource availability, and other documentation."
       operationId: GetServiceInfo
       responses:
         200:
