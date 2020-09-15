@@ -7,7 +7,7 @@ jobs:
     before_script:
     - npm install -g @redocly/openapi-cli \
       && npm install -g redoc-cli
-    - npm install -g @ga4gh/gh-openapi-docs
+    - npm install -g gh-openapi-docs
     script:
     - gh-openapi-docs
     deploy:
