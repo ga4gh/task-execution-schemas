@@ -3,7 +3,7 @@
 Task Execution Service (TES) API
 ======================================
 <sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
-<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution.swagger.yaml" alt="Swagger Validator" height="20em" width="72em"></A>
+<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml" alt="Open API Validator" height="20em" width="72em"></A>
 
 The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
@@ -23,22 +23,30 @@ and API for describing batch execution tasks. A task defines a set of input file
 a set of (Docker) containers and commands to run, a set of output files,
 and some other logging and metadata.
 
-TES Complaiant Implementations
-==============================
+API Definition
+--------------
+
+See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/)
+and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml). You can also explore the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).
+
+> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., 'ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs').
+
+TES Compliant Implementations
+------------------------------
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
 - [tes-azure](https://github.com/microsoft/tes-azure)
 
 
 TES Service Examples
-==============================
+------------------------------
 
-The schema and APIs is defined [here](./openapi/task_execution.swagger.yaml) in [Open Api Specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (e.g [Swagger](https://swagger.io/specification/v2/)). Clients may use JSON and REST to communicate
+The schema and APIs is defined [here](openapi/task_execution_service.openapi.yaml) in [Open Api Specification 3.0.1](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md). Clients may use JSON and REST to communicate
 with a service implementing the TES API.
 
 
-Create a task
----------------------------------
+### Create a task
+
 
 Here's an example of a complete task message, defining a task which calculates
 an MD5 checksum on an input file and uploads the output:
@@ -117,8 +125,8 @@ POST /v1/tasks
 The return value is a task ID.
 
 
-Get a task
---------------------------------
+### Get a task
+
 
 To get a task by ID:
 
@@ -150,8 +158,8 @@ GET /v1/tasks/task-1234?view=FULL
   "logs": [{ "stdout": "stdout content..." }], etc... }
 ```
 
-List tasks
-------------------------------------
+### List tasks
+
 
 To list tasks:
 
@@ -167,8 +175,8 @@ GET /v1/tasks?view=BASIC
 ```
 
 
-Cancel a task
--------------------------------------
+### Cancel a task
+
 
 To cancel a task, send an HTTP POST to the cancel endpoint:
 ```HTTP
