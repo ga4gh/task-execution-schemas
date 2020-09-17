@@ -132,7 +132,9 @@ paths:
       tags:
       - TaskService
       summary: CreateTask
-      description: Create a new task.
+      description: |-
+        Create a new task. The user provides a Task document, which the server
+        uses as a basis and adds additional fields.
       operationId: CreateTask
       requestBody:
         content:
@@ -414,7 +416,7 @@ components:
           description: |-
             List of tasks. These tasks will be based on the original submitted
             task document, but with other fields, such as the job state and
-            logging info, added/changed as the job progress. 
+            logging info, added/changed as the job progress.
           items:
             $ref: '#/components/schemas/tesTask'
         next_page_token:
@@ -487,8 +489,10 @@ components:
           example: 4
         preemptible:
           type: boolean
-          description: Is the task allowed to run on preemptible compute instances
-            (e.g. AWS Spot)?
+          description: |-
+            Define if the task allowed to run on preemptible compute instances
+            for example AWS Spot. This option may have no effect when utilized
+            on some backends that don't have the concept of preemptible jobs.
           format: boolean
           example: false
         ram_gb:
@@ -503,7 +507,11 @@ components:
           example: 40
         zones:
           type: array
-          description: Request that the task be run in these compute zones.
+          description: |-
+            Request that the task be run in these compute zones. How this string
+            is utilized will be dependent on the backend system. For example, a
+            system based on a cluster queueing system may use this string to define
+            priorty queue to which the job is assigned. 
           items:
             type: string
           example: us-west-1
@@ -525,8 +533,9 @@ components:
                - s3://ohsu-compbio-funnel/storage
     tesState:
       type: string
+      readOnly: True
       description: |-
-        Task states.
+        Task states as defined by the server.
 
          - `UNKNOWN`: The state of the task is unknown. The cause for this status
           message may be dependent on the underlying system. The `UNKNOWN` states
@@ -575,13 +584,17 @@ components:
           $ref: '#/components/schemas/tesState'
         name:
           type: string
+          description: User provided task name.
         description:
           type: string
+          description: |-
+            Optional user provided description of task for documentation purposes.
         inputs:
           type: array
           description: |-
-            Input files.
-            Inputs will be downloaded and mounted into the executor container.
+            Input files that will be used by the task. Inputs will be downloaded
+            and mounted into the executor container as defined by the task request
+            document.
           items:
             $ref: '#/components/schemas/tesInput'
           example:
@@ -614,8 +627,8 @@ components:
             system when the task starts and are mounted at the same path
             in each Executor.
 
-            For example, given a volume defined at "/vol/A",
-            executor 1 may write a file to "/vol/A/exec1.out.txt", then
+            For example, given a volume defined at `/vol/A`,
+            executor 1 may write a file to `/vol/A/exec1.out.txt`, then
             executor 2 may read from that file.
 
             (Essentially, this translates to a `docker run -v` flag where
