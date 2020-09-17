@@ -2,6 +2,12 @@ openapi: 3.0.1
 info:
   title: Task Execution Service
   version: 0.5.0
+  x-logo:
+    url: 'https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg'
+  description: >
+    ## Executive Summary
+
+    The Task Execution Service (TES) API is an effort to define a standardized schema and API for describing batch execution tasks. A task defines a set of input files, a set of (Docker) containers and commands to run, a set of output files, and some other logging and metadata.
 servers:
 - url: /ga4gh/tes/v1
 paths:
@@ -9,8 +15,8 @@ paths:
     get:
       tags:
       - TaskService
-      summary: "GetServiceInfo provides information about the service,\nsuch as storage\
-         \ details, resource availability, and \nother documentation."
+      summary: GetServiceInfo
+      description:   "Provides information about the service, such as storage details, resource availability, and other documentation."
       operationId: GetServiceInfo
       responses:
         200:
@@ -23,7 +29,8 @@ paths:
     get:
       tags:
       - TaskService
-      summary: |-
+      summary: ListTasks
+      description: |-
         List tasks.
         TaskView is requested as such: "v1/tasks?view=BASIC"
       operationId: ListTasks
@@ -83,7 +90,8 @@ paths:
     post:
       tags:
       - TaskService
-      summary: Create a new task.
+      summary: CreateTask
+      description: Create a new task.
       operationId: CreateTask
       requestBody:
         content:
@@ -103,7 +111,8 @@ paths:
     get:
       tags:
       - TaskService
-      summary: |-
+      summary: GetTask
+      description: |-
         Get a task.
         TaskView is requested as such: "v1/tasks/{id}?view=FULL"
       operationId: GetTask
@@ -146,7 +155,8 @@ paths:
     post:
       tags:
       - TaskService
-      summary: Cancel a task.
+      summary: CancelTask
+      description: Cancel a task.
       operationId: CancelTask
       parameters:
       - name: id
