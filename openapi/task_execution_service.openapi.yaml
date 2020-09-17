@@ -2,6 +2,8 @@ openapi: 3.0.1
 info:
   title: Task Execution Service
   version: 0.5.0
+  x-logo:
+    url: 'https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg'
   description: >
     ## Executive Summary
 
@@ -16,6 +18,30 @@ info:
     such as Grid Engine, SLURMM or cloud style compute systems such as AWS Batch
     or Kubernetes.
 
+    ## Introduction
+
+    This document describes the TES API and provides details on the specific
+    endpoints, request formats, and response. It is intended to provide key
+    information for developers of TES-compatible services as well as clients
+    that will call these TES services. Use cases include:
+
+      - Deploying existing workflow engine on new infrastructure. Workflow engines
+      such as CWL-Tes and Cromwell have extentions for using TES. This will allow
+      a system engineer to deploy them onto a new infrastructure using a job scheduling
+      system not previously supported by the engine.
+
+      - Developing a custom workflow management system. This API provides a common
+      interface to asynchronous batch processing capabilities. A developer can write
+      new tools against this interface and expect them to work using a variety of
+      backend solutions that all support the same specification.
+
+
+    ## Standards
+
+    The TES API specification is written in OpenAPI and embodies a RESTful service
+    philosophy. It uses JSON in requests and responses and standard
+    HTTP/HTTPS for information transport.
+
 servers:
 - url: /ga4gh/tes/v1
 paths:
@@ -23,8 +49,7 @@ paths:
     get:
       tags:
       - TaskService
-      summary: "GetServiceInfo provides information about the service,\nsuch as storage\
-         \ details, resource availability, and \nother documentation."
+      summary: GetServiceInfo
       description: |-
         Provides information about the service, this structure is based on the
         standardized GA4GH service info structure. In addition, this endpoint
@@ -42,9 +67,11 @@ paths:
     get:
       tags:
       - TaskService
-      summary: |-
-        List tasks.
-        TaskView is requested as such: "v1/tasks?view=BASIC"
+      summary: ListTasks
+      description: |-
+        List tasks tracked by the TES server. This includes queued, active and completed tasks.
+        How long completed tasks are stored by the system may be dependent on the underlying
+        implementation.
       operationId: ListTasks
       parameters:
       - name: name_prefix
@@ -104,7 +131,8 @@ paths:
     post:
       tags:
       - TaskService
-      summary: Create a new task.
+      summary: CreateTask
+      description: Create a new task.
       operationId: CreateTask
       requestBody:
         content:
@@ -124,9 +152,9 @@ paths:
     get:
       tags:
       - TaskService
-      summary: |-
-        Get a task.
-        TaskView is requested as such: "v1/tasks/{id}?view=FULL"
+      summary: GetTask
+      description: |-
+        Get a single task, based on providing the exact job ID string.
       operationId: GetTask
       parameters:
       - name: id
@@ -140,15 +168,15 @@ paths:
           OPTIONAL. Affects the fields included in the returned Task messages.
           See TaskView below.
 
-           - MINIMAL: Task message will include ONLY the fields:
-            Task.Id
-            Task.State
-           - BASIC: Task message will include all fields EXCEPT:
-            Task.ExecutorLog.stdout
-            Task.ExecutorLog.stderr
-            Input.content
-            TaskLog.system_logs
-           - FULL: Task message includes all fields.
+           - `MINIMAL`: Task message will include ONLY the fields:
+            - Task.Id
+            - Task.State
+           - `BASIC`: Task message will include all fields EXCEPT:
+            - `Task.ExecutorLog.stdout`
+            - `Task.ExecutorLog.stderr`
+            - `Input.content`
+            - `TaskLog.system_logs`
+           - `FULL`: Task message includes all fields.
         schema:
           type: string
           default: MINIMAL
@@ -167,7 +195,8 @@ paths:
     post:
       tags:
       - TaskService
-      summary: Cancel a task.
+      summary: CancelTask
+      description: Cancel a task based on providing an exact task ID.
       operationId: CancelTask
       parameters:
       - name: id
@@ -382,7 +411,10 @@ components:
       properties:
         tasks:
           type: array
-          description: List of tasks.
+          description: |-
+            List of tasks. These tasks will be based on the original submitted
+            task document, but with other fields, such as the job state and
+            logging info, added/changed as the job progress. 
           items:
             $ref: '#/components/schemas/tesTask'
         next_page_token:
