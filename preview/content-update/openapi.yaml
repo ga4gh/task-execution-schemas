@@ -90,17 +90,21 @@ paths:
         - name: page_size
           in: query
           description: |-
-            OPTIONAL. Number of tasks to return in one page.
+            Optional number of tasks to return in one page.
             Must be less than 2048. Defaults to 256.
           schema:
             type: integer
             format: int64
         - name: page_token
           in: query
-          description: |-
+          description: >-
             OPTIONAL. Page token is used to retrieve the next page of results.
-            If unspecified, returns the first page of results.
-            See ListTasksResponse.next_page_token
+
+            If unspecified, returns the first page of results. The value can be
+            found
+
+            in the `next_page_token` field of the last returned result of
+            ListTasks
           schema:
             type: string
         - name: view
@@ -167,6 +171,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: ID of task to retrieve.
           schema:
             type: string
         - name: view
@@ -208,6 +213,7 @@ paths:
       parameters:
         - name: id
           in: path
+          description: ID of task to be canceled.
           required: true
           schema:
             type: string
@@ -462,9 +468,11 @@ components:
             $ref: '#/components/schemas/tesTask'
         next_page_token:
           type: string
-          description: |-
-            Token used to return the next page of results.
-            See TaskListRequest.next_page_token
+          description: >-
+            Token used to return the next page of results. This value can be
+            used
+
+            in the `page_token` field of the next ListTasks request.
       description: ListTasksResponse describes a response from the ListTasks endpoint.
     tesOutput:
       required:
@@ -475,17 +483,20 @@ components:
       properties:
         name:
           type: string
+          description: User provided name of output file
         description:
           type: string
+          description: >-
+            Optional users provided description field, can be used for
+            documentation.
         url:
           type: string
-          description: |-
-            URL in long term storage, for example:
-            s3://my-object-store/file1
-            gs://my-bucket/file2
-            file:///path/to/my/file
-            /path/to/my/file
-            etc...
+          description: >-
+            URL for the file to be copied to after the task is complete. For
+            Example
+             - `s3://my-object-store/file1`
+             - `gs://my-bucket/file2`
+             - `file:///path/to/my/file`
         path:
           type: string
           description: |-
@@ -555,7 +566,7 @@ components:
             system based on a cluster queueing system may use this string to
             define
 
-            priorty queue to which the job is assigned. 
+            priorty queue to which the job is assigned.
           items:
             type: string
           example: us-west-1
@@ -665,9 +676,22 @@ components:
           $ref: '#/components/schemas/tesResources'
         executors:
           type: array
-          description: |-
-            A list of executors to be run, sequentially. Execution stops
-            on the first error.
+          description: >-
+            An array of executors to be run. Each of the executors will run one
+
+            at a time sequentially. Each executor is a different command line
+            that
+
+            will be run, and each can utilize a different docker image. But each
+            of
+
+            the executors will see the same mapped inputs and volumes that are
+            declared
+
+            in the parent CreateTask message.
+
+
+            Execution stops on the first error.
           items:
             $ref: '#/components/schemas/tesExecutor'
         volumes:
