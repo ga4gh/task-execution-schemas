@@ -33,6 +33,12 @@ and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml).
 
 TES Compliant Implementations
 ------------------------------
+### Client
+- [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
+- [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
+- [Nextflow](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes)
+
+### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
 - [tes-azure](https://github.com/microsoft/tes-azure)
