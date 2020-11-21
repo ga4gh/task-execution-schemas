@@ -507,6 +507,13 @@ components:
           description: Requested disk size in gigabytes (GB)
           format: double
           example: 40
+        max_time:
+          type: number
+          description: |-
+            Requested maximum wall time for job in hours. May be used by queuing engine 
+            to adjust priorty of job.
+          format: double
+          example: 40
         zones:
           type: array
           description: |-
