@@ -199,17 +199,17 @@ components:
       description: |-
         OPTIONAL. Affects the fields included in the returned Task messages.
 
-       `MINIMAL`: Task message will include ONLY the fields:
+        `MINIMAL`: Task message will include ONLY the fields:
         - `tesTask.Id`
         - `tesTask.State`
 
-       `BASIC`: Task message will include all fields EXCEPT:
+        `BASIC`: Task message will include all fields EXCEPT:
         - `tesTask.ExecutorLog.stdout`
         - `tesTask.ExecutorLog.stderr`
         - `tesInput.content`
         - `tesTaskLog.system_logs`
 
-       `FULL`: Task message includes all fields.
+        `FULL`: Task message includes all fields.
       schema:
         type: string
         default: MINIMAL
