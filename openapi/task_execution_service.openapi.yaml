@@ -3,7 +3,7 @@ info:
   title: Task Execution Service
   version: 0.5.0
   x-logo:
-    url: 'https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg'
+    url: 'https://www.ga4gh.org/wp-content/themes/GA4GH/dist/assets/gfx/GA-logo-horizontal-tag-RGB.svg'
   description: >
     ## Executive Summary
 
