@@ -1,4 +1,4 @@
-<img src="https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
+<img src="https://www.ga4gh.org/wp-content/themes/GA4GH/dist/assets/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
 Task Execution Service (TES) API
 ======================================
