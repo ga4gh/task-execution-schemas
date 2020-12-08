@@ -6,7 +6,7 @@
     "x-logo": {
       "url": "https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg"
     },
-    "description": "## Executive Summary\nThe Task Execution Service (TES) API is a standardized schema and API for describing and executing batch execution tasks. A task defines a set of input files, a set of (Docker) containers and commands to run, a set of output files and some other logging and metadata.\n\nTES servers accept task documents and execute them asynchronously on avalible compute. A TES server could be supported by a traditional HPC queuing system, such as Grid Engine, SLURMM or cloud style compute systems such as AWS Batch or Kubernetes.\n## Introduction\nThis document describes the TES API and provides details on the specific endpoints, request formats, and response. It is intended to provide key information for developers of TES-compatible services as well as clients that will call these TES services. Use cases include:\n\n  - Deploying existing workflow engine on new infrastructure. Workflow engines\n  such as CWL-Tes and Cromwell have extentions for using TES. This will allow\n  a system engineer to deploy them onto a new infrastructure using a job scheduling\n  system not previously supported by the engine.\n\n  - Developing a custom workflow management system. This API provides a common\n  interface to asynchronous batch processing capabilities. A developer can write\n  new tools against this interface and expect them to work using a variety of\n  backend solutions that all support the same specification.\n\n\n## Standards\nThe TES API specification is written in OpenAPI and embodies a RESTful service philosophy. It uses JSON in requests and responses and standard HTTP/HTTPS for information transport.\n"
+    "description": "## Executive Summary\nThe Task Execution Service (TES) API is a standardized schema and API for describing and executing batch execution tasks. A task defines a set of input files, a set of containers and commands to run, a set of output files and some other logging and metadata.\n\nTES servers accept task documents and execute them asynchronously on available compute resources. A TES server could be built on top of a traditional HPC queuing system, such as Grid Engine, Slurm or cloud style compute systems such as AWS Batch or Kubernetes.\n## Introduction\nThis document describes the TES API and provides details on the specific endpoints, request formats, and responses. It is intended to provide key information for developers of TES-compatible services as well as clients that will call these TES services. Use cases include:\n\n  - Deploying existing workflow engines on new infrastructure. Workflow engines\n  such as CWL-Tes and Cromwell have extentions for using TES. This will allow\n  a system engineer to deploy them onto a new infrastructure using a job scheduling\n  system not previously supported by the engine.\n\n  - Developing a custom workflow management system. This API provides a common\n  interface to asynchronous batch processing capabilities. A developer can write\n  new tools against this interface and expect them to work using a variety of\n  backend solutions that all support the same specification.\n\n\n## Standards\nThe TES API specification is written in OpenAPI and embodies a RESTful service philosophy. It uses JSON in requests and responses and standard HTTP/HTTPS for information transport. HTTPS should be used rather than plain HTTP except for testing or internal-only purposes.\n### Authentication and Authorization\nIs is envisaged that most TES API instances will require users to authenticate to use the endpoints. However, the decision if authentication is required should be taken by TES API implementers.\n\nIf authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.\n\nChecking that a user is authorized to submit TES requests is a responsibility of TES implementations.\n### CORS\nIf TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS). Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.\n"
   },
   "servers": [
     {
@@ -73,7 +73,7 @@
           {
             "name": "view",
             "in": "query",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n `MINIMAL`: Task message will include ONLY the fields:\n   - `Task.Id`\n   - `Task.State`\n\n `BASIC`: Task message will include all fields EXCEPT:\n   - `Task.ExecutorLog.stdout`\n   - `Task.ExecutorLog.stderr`\n   - `Input.content`\n   - `TaskLog.system_logs`\n\n `FULL`: Task message includes all fields.",
+            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n `MINIMAL`: Task message will include ONLY the fields:\n   - `tesTask.Id`\n   - `tesTask.State`\n\n `BASIC`: Task message will include all fields EXCEPT:\n   - `tesTask.ExecutorLog.stdout`\n   - `tesTask.ExecutorLog.stderr`\n   - `tesInput.content`\n   - `tesTaskLog.system_logs`\n\n `FULL`: Task message includes all fields.",
             "schema": {
               "type": "string",
               "default": "MINIMAL",
@@ -136,7 +136,7 @@
           "TaskService"
         ],
         "summary": "GetTask",
-        "description": "Get a single task, based on providing the exact job ID string.",
+        "description": "Get a single task, based on providing the exact task ID string.",
         "operationId": "GetTask",
         "parameters": [
           {
@@ -228,7 +228,7 @@
             "description": "Task identifier assigned by the server."
           }
         },
-        "description": "CreateTaskResponse describes a response from the CreateTask endpoint. It\nwill include the jobID that can be used to look up the status of the job."
+        "description": "CreateTaskResponse describes a response from the CreateTask endpoint. It\nwill include the task ID that can be used to look up the status of the job."
       },
       "tesExecutor": {
         "required": [
@@ -240,7 +240,7 @@
           "image": {
             "type": "string",
             "example": "ubuntu:20.04",
-            "description": "Name of the container image. The string will be passed as the image\nargument to the docker run command, and so image names can follow\nnaming convention. Examples:\n   - `ubuntu`\n   - `quay.io/aptible/ubuntu`\n   - `gcr.io/my-org/my-image`\n   - `myregistryhost:5000/fedora/httpd:version1.0`"
+            "description": "Name of the container image. The string will be passed as the image\nargument to the containerization run command. Examples:\n   - `ubuntu`\n   - `quay.io/aptible/ubuntu`\n   - `gcr.io/my-org/my-image`\n   - `myregistryhost:5000/fedora/httpd:version1.0`"
           },
           "command": {
             "type": "array",
@@ -255,12 +255,12 @@
           },
           "workdir": {
             "type": "string",
-            "description": "The working directory that the command will be executed in.\nIf not defined, the system will defaults to the directory set by\nthe container image.",
+            "description": "The working directory that the command will be executed in.\nIf not defined, the system will default to the directory set by\nthe container image.",
             "example": "/data/"
           },
           "stdin": {
             "type": "string",
-            "description": "Path inside the container to a file which will be piped\nto the executor's stdin. This must be an absolute path. This mechanism\ncould be used in conjunction with the input declaration to process\na data file using tool that expects STDIN.\n\nFor example, to get the MD5 sum of a file by reading it into the STDIN\n```\n{\n  \"command\" : [\"/bin/md5\"],\n  \"stdin\" : \"/data/file1\"\n}\n```",
+            "description": "Path inside the container to a file which will be piped\nto the executor's stdin. This must be an absolute path. This mechanism\ncould be used in conjunction with the input declaration to process\na data file using a tool that expects STDIN.\n\nFor example, to get the MD5 sum of a file by reading it into the STDIN\n```\n{\n  \"command\" : [\"/bin/md5\"],\n  \"stdin\" : \"/data/file1\"\n}\n```",
             "example": "/data/file1"
           },
           "stdout": {
@@ -305,11 +305,11 @@
           },
           "stdout": {
             "type": "string",
-            "description": "Stdout content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stdout users should set Executor.stdout\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
+            "description": "Stdout content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stdout client should set Executor.stdout\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
           },
           "stderr": {
             "type": "string",
-            "description": "Stderr content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stderr users should set Executor.stderr\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
+            "description": "Stderr content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stderr client should set Executor.stderr\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
           },
           "exit_code": {
             "type": "integer",
@@ -355,7 +355,7 @@
           },
           "content": {
             "type": "string",
-            "description": "File content literal. \nImplementations should support a minimum of 128 KiB in this field and may define its own maximum.\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored."
+            "description": "File content literal.\n\nImplementations should support a minimum of 128 KiB in this field\nand may define their own maximum.\n\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored."
           }
         },
         "description": "Input describes Task input files."
@@ -368,7 +368,7 @@
         "properties": {
           "tasks": {
             "type": "array",
-            "description": "List of tasks. These tasks will be based on the original submitted\ntask document, but with other fields, such as the job state and\nlogging info, added/changed as the job progress.",
+            "description": "List of tasks. These tasks will be based on the original submitted\ntask document, but with other fields, such as the job state and\nlogging info, added/changed as the job progresses.",
             "items": {
               "$ref": "#/components/schemas/tesTask"
             }
@@ -390,7 +390,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "User provided name of output file"
+            "description": "User-provided name of output file"
           },
           "description": {
             "type": "string",
@@ -398,7 +398,7 @@
           },
           "url": {
             "type": "string",
-            "description": "URL for the file to be copied to after the task is complete. For Example\n - `s3://my-object-store/file1`\n - `gs://my-bucket/file2`\n - `file:///path/to/my/file`"
+            "description": "URL for the file to be copied by the TES server after the task is complete.\nFor Example:\n - `s3://my-object-store/file1`\n - `gs://my-bucket/file2`\n - `file:///path/to/my/file`"
           },
           "path": {
             "type": "string",
@@ -448,7 +448,7 @@
           },
           "preemptible": {
             "type": "boolean",
-            "description": "Define if the task allowed to run on preemptible compute instances\nfor example AWS Spot. This option may have no effect when utilized\non some backends that don't have the concept of preemptible jobs.",
+            "description": "Define if the task is allowed to run on preemptible compute instances,\nfor example, AWS Spot. This option may have no effect when utilized\non some backends that don't have the concept of preemptible jobs.",
             "format": "boolean",
             "example": false
           },
@@ -501,7 +501,7 @@
       "tesState": {
         "type": "string",
         "readOnly": true,
-        "description": "Task states as defined by the server.\n\n - `UNKNOWN`: The state of the task is unknown. The cause for this status\n  message may be dependent on the underlying system. The `UNKNOWN` states\n  provides a safe default for messages where this field is missing so\n  that a missing field does not accidentally imply that\n  the state is QUEUED.\n - `QUEUED`: The task is queued and awaiting resources to begin computing.\n - `INITIALIZING`: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - `RUNNING`: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - `PAUSED`: The task is paused. The reasons for this would be tied to\n  the specific system running the job. An implementation may have the ability\n  to pause a task, but this is not required.\n - `COMPLETE`: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - `EXECUTOR_ERROR`: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - `CANCELED`: The task was canceled by the user.",
+        "description": "Task state as defined by the server.\n\n - `UNKNOWN`: The state of the task is unknown. The cause for this status\n  message may be dependent on the underlying system. The `UNKNOWN` states\n  provides a safe default for messages where this field is missing so\n  that a missing field does not accidentally imply that\n  the state is QUEUED.\n - `QUEUED`: The task is queued and awaiting resources to begin computing.\n - `INITIALIZING`: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - `RUNNING`: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - `PAUSED`: The task is paused. The reasons for this would be tied to\n  the specific system running the job. An implementation may have the ability\n  to pause a task, but this is not required.\n - `COMPLETE`: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - `EXECUTOR_ERROR`: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - `CANCELED`: The task was canceled by the user.",
         "default": "UNKNOWN",
         "example": "COMPLETE",
         "enum": [
@@ -533,11 +533,11 @@
           },
           "name": {
             "type": "string",
-            "description": "User provided task name."
+            "description": "User-provided task name."
           },
           "description": {
             "type": "string",
-            "description": "Optional user provided description of task for documentation purposes."
+            "description": "Optional user-provided description of task for documentation purposes."
           },
           "inputs": {
             "type": "array",
@@ -571,7 +571,7 @@
           },
           "executors": {
             "type": "array",
-            "description": "An array of executors to be run. Each of the executors will run one\nat a time sequentially. Each executor is a different command line that\nwill be run, and each can utilize a different docker image. But each of\nthe executors will see the same mapped inputs and volumes that are declared\nin the parent CreateTask message.\n\nExecution stops on the first error.",
+            "description": "An array of executors to be run. Each of the executors will run one\nat a time sequentially. Each executor is a different command that\nwill be run, and each can utilize a different docker image. But each of\nthe executors will see the same mapped inputs and volumes that are declared\nin the parent CreateTask message.\n\nExecution stops on the first error.",
             "items": {
               "$ref": "#/components/schemas/tesExecutor"
             }
