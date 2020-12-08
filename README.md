@@ -188,3 +188,11 @@ To cancel a task, send an HTTP POST to the cancel endpoint:
 ```HTTP
 POST /v1/tasks/task-1234:cancel
 ```
+
+How to Contribute Changes
+-------------------------
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
+
