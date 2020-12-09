@@ -189,10 +189,18 @@ To cancel a task, send an HTTP POST to the cancel endpoint:
 POST /v1/tasks/task-1234:cancel
 ```
 
+Possible Future Enhancements
+----------------------------
+
+* Integrate with GA4GH DRS to resolve input data source (possibly support for DRS URIs as permissible values of input URLs). 
+* Integrate with GA4GH TRS to resolve container images (possibly support for TRS URIs as permissible values of executor image names).
+
+
 How to Contribute Changes
 -------------------------
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
+
 

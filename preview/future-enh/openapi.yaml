@@ -10,23 +10,23 @@ info:
 
     The Task Execution Service (TES) API is a standardized schema and API for
     describing and executing batch execution tasks. A task defines a set of
-    input files, a set of (Docker) containers and commands to run, a set of
-    output files and some other logging and metadata.
+    input files, a set of containers and commands to run, a set of output files
+    and some other logging and metadata.
 
 
     TES servers accept task documents and execute them asynchronously on
-    avalible compute. A TES server could be supported by a traditional HPC
-    queuing system, such as Grid Engine, SLURMM or cloud style compute systems
-    such as AWS Batch or Kubernetes.
+    available compute resources. A TES server could be built on top of a
+    traditional HPC queuing system, such as Grid Engine, Slurm or cloud style
+    compute systems such as AWS Batch or Kubernetes.
 
     ## Introduction
 
     This document describes the TES API and provides details on the specific
-    endpoints, request formats, and response. It is intended to provide key
+    endpoints, request formats, and responses. It is intended to provide key
     information for developers of TES-compatible services as well as clients
     that will call these TES services. Use cases include:
 
-      - Deploying existing workflow engine on new infrastructure. Workflow engines
+      - Deploying existing workflow engines on new infrastructure. Workflow engines
       such as CWL-Tes and Cromwell have extentions for using TES. This will allow
       a system engineer to deploy them onto a new infrastructure using a job scheduling
       system not previously supported by the engine.
@@ -41,7 +41,30 @@ info:
 
     The TES API specification is written in OpenAPI and embodies a RESTful
     service philosophy. It uses JSON in requests and responses and standard
-    HTTP/HTTPS for information transport.
+    HTTP/HTTPS for information transport. HTTPS should be used rather than plain
+    HTTP except for testing or internal-only purposes.
+
+    ### Authentication and Authorization
+
+    Is is envisaged that most TES API instances will require users to
+    authenticate to use the endpoints. However, the decision if authentication
+    is required should be taken by TES API implementers.
+
+
+    If authentication is required, we recommend that TES implementations use an
+    OAuth2  bearer token, although they can choose other mechanisms if
+    appropriate.
+
+
+    Checking that a user is authorized to submit TES requests is a
+    responsibility of TES implementations.
+
+    ### CORS
+
+    If TES API implementation is to be used by another website or domain it must
+    implement Cross Origin Resource Sharing (CORS). Please refer to
+    https://w3id.org/ga4gh/product-approval-support/cors for more information
+    about GA4GH’s recommendations and how to implement CORS.
 servers:
   - url: /ga4gh/tes/v1
 paths:
@@ -114,14 +137,14 @@ paths:
             See TaskView below.
 
              `MINIMAL`: Task message will include ONLY the fields:
-               - `Task.Id`
-               - `Task.State`
+               - `tesTask.Id`
+               - `tesTask.State`
 
              `BASIC`: Task message will include all fields EXCEPT:
-               - `Task.ExecutorLog.stdout`
-               - `Task.ExecutorLog.stderr`
-               - `Input.content`
-               - `TaskLog.system_logs`
+               - `tesTask.ExecutorLog.stdout`
+               - `tesTask.ExecutorLog.stderr`
+               - `tesInput.content`
+               - `tesTaskLog.system_logs`
 
              `FULL`: Task message includes all fields.
           schema:
@@ -165,7 +188,7 @@ paths:
       tags:
         - TaskService
       summary: GetTask
-      description: 'Get a single task, based on providing the exact job ID string.'
+      description: 'Get a single task, based on providing the exact task ID string.'
       operationId: GetTask
       parameters:
         - name: id
@@ -240,7 +263,7 @@ components:
       description: >-
         CreateTaskResponse describes a response from the CreateTask endpoint. It
 
-        will include the jobID that can be used to look up the status of the
+        will include the task ID that can be used to look up the status of the
         job.
     tesExecutor:
       required:
@@ -253,8 +276,7 @@ components:
           example: 'ubuntu:20.04'
           description: |-
             Name of the container image. The string will be passed as the image
-            argument to the docker run command, and so image names can follow
-            naming convention. Examples:
+            argument to the containerization run command. Examples:
                - `ubuntu`
                - `quay.io/aptible/ubuntu`
                - `gcr.io/my-org/my-image`
@@ -278,7 +300,7 @@ components:
           type: string
           description: |-
             The working directory that the command will be executed in.
-            If not defined, the system will defaults to the directory set by
+            If not defined, the system will default to the directory set by
             the container image.
           example: /data/
         stdin:
@@ -291,7 +313,7 @@ components:
 
             could be used in conjunction with the input declaration to process
 
-            a data file using tool that expects STDIN.
+            a data file using a tool that expects STDIN.
 
 
             For example, to get the MD5 sum of a file by reading it into the
@@ -375,7 +397,8 @@ components:
             a URL reference only, etc.
 
 
-            In order to capture the full stdout users should set Executor.stdout
+            In order to capture the full stdout client should set
+            Executor.stdout
 
             to a container file path, and use Task.outputs to upload that file
 
@@ -395,7 +418,8 @@ components:
             a URL reference only, etc.
 
 
-            In order to capture the full stderr users should set Executor.stderr
+            In order to capture the full stderr client should set
+            Executor.stderr
 
             to a container file path, and use Task.outputs to upload that file
 
@@ -442,14 +466,13 @@ components:
           $ref: '#/components/schemas/tesFileType'
         content:
           type: string
-          description: >-
-            File content literal. 
+          description: |-
+            File content literal.
 
             Implementations should support a minimum of 128 KiB in this field
-            and may define its own maximum.
+            and may define their own maximum.
 
             UTF-8 encoded
-
 
             If content is not empty, "url" must be ignored.
       description: Input describes Task input files.
@@ -463,7 +486,7 @@ components:
           description: |-
             List of tasks. These tasks will be based on the original submitted
             task document, but with other fields, such as the job state and
-            logging info, added/changed as the job progress.
+            logging info, added/changed as the job progresses.
           items:
             $ref: '#/components/schemas/tesTask'
         next_page_token:
@@ -483,7 +506,7 @@ components:
       properties:
         name:
           type: string
-          description: User provided name of output file
+          description: User-provided name of output file
         description:
           type: string
           description: >-
@@ -492,8 +515,10 @@ components:
         url:
           type: string
           description: >-
-            URL for the file to be copied to after the task is complete. For
-            Example
+            URL for the file to be copied by the TES server after the task is
+            complete.
+
+            For Example:
              - `s3://my-object-store/file1`
              - `gs://my-bucket/file2`
              - `file:///path/to/my/file`
@@ -540,9 +565,12 @@ components:
           example: 4
         preemptible:
           type: boolean
-          description: |-
-            Define if the task allowed to run on preemptible compute instances
-            for example AWS Spot. This option may have no effect when utilized
+          description: >-
+            Define if the task is allowed to run on preemptible compute
+            instances,
+
+            for example, AWS Spot. This option may have no effect when utilized
+
             on some backends that don't have the concept of preemptible jobs.
           format: boolean
           example: false
@@ -590,7 +618,7 @@ components:
       type: string
       readOnly: true
       description: |-
-        Task states as defined by the server.
+        Task state as defined by the server.
 
          - `UNKNOWN`: The state of the task is unknown. The cause for this status
           message may be dependent on the underlying system. The `UNKNOWN` states
@@ -639,11 +667,11 @@ components:
           $ref: '#/components/schemas/tesState'
         name:
           type: string
-          description: User provided task name.
+          description: User-provided task name.
         description:
           type: string
           description: >-
-            Optional user provided description of task for documentation
+            Optional user-provided description of task for documentation
             purposes.
         inputs:
           type: array
@@ -679,8 +707,7 @@ components:
           description: >-
             An array of executors to be run. Each of the executors will run one
 
-            at a time sequentially. Each executor is a different command line
-            that
+            at a time sequentially. Each executor is a different command that
 
             will be run, and each can utilize a different docker image. But each
             of
