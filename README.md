@@ -1,4 +1,4 @@
-<img src="https://www.ga4gh.org/wp-content/themes/GA4GH/dist/assets/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
+<img src="https://w3id.org/ga4gh/ga4gh-logo.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
 Task Execution Service (TES) API
 ======================================
@@ -202,5 +202,3 @@ How to Contribute Changes
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
-
-
