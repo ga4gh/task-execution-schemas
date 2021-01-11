@@ -34,7 +34,7 @@ and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml).
 TES Compliant Implementations
 ------------------------------
 
-A stand-alone security review has been performed *on the* API. Nevertheless, *any implementation that is linked to from the documentation accompanying the API is done so* without any security guarantees. If you integrate this code into your application it is AT YOUR OWN RISK AND RESPONSIBILITY to arrange for an audit to ensure compliance with any applicable regulatory and security requirements, especially where personal data may be at issue.
+> A stand-alone security review has been performed on the API. Nevertheless, any implementation that is linked to from the documentation accompanying the API is done so without any security guarantees. If you integrate this code into your application it is AT YOUR OWN RISK AND RESPONSIBILITY to arrange for an audit to ensure compliance with any applicable regulatory and security requirements, especially where personal data may be at issue.
 
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
