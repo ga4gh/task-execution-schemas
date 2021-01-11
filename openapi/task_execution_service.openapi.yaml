@@ -116,30 +116,8 @@ paths:
           in the `next_page_token` field of the last returned result of ListTasks
         schema:
           type: string
-      - name: view
-        in: query
-        description: |-
-          OPTIONAL. Affects the fields included in the returned Task messages.
-          See TaskView below.
+      - $ref: '#/components/parameters/view'
 
-           `MINIMAL`: Task message will include ONLY the fields:
-             - `tesTask.Id`
-             - `tesTask.State`
-
-           `BASIC`: Task message will include all fields EXCEPT:
-             - `tesTask.ExecutorLog.stdout`
-             - `tesTask.ExecutorLog.stderr`
-             - `tesInput.content`
-             - `tesTaskLog.system_logs`
-
-           `FULL`: Task message includes all fields.
-        schema:
-          type: string
-          default: MINIMAL
-          enum:
-          - MINIMAL
-          - BASIC
-          - FULL
       responses:
         200:
           description: ""
@@ -184,28 +162,7 @@ paths:
         description: ID of task to retrieve.
         schema:
           type: string
-      - name: view
-        in: query
-        description: |-
-          OPTIONAL. Affects the fields included in the returned Task messages.
-          See TaskView below.
-
-           - `MINIMAL`: Task message will include ONLY the fields:
-            - Task.Id
-            - Task.State
-           - `BASIC`: Task message will include all fields EXCEPT:
-            - `Task.ExecutorLog.stdout`
-            - `Task.ExecutorLog.stderr`
-            - `Input.content`
-            - `TaskLog.system_logs`
-           - `FULL`: Task message includes all fields.
-        schema:
-          type: string
-          default: MINIMAL
-          enum:
-          - MINIMAL
-          - BASIC
-          - FULL
+      - $ref: '#/components/parameters/view'
       responses:
         200:
           description: ""
@@ -235,6 +192,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
 components:
+  parameters:
+    view:
+      name: view
+      in: query
+      description: |-
+        OPTIONAL. Affects the fields included in the returned Task messages.
+
+        `MINIMAL`: Task message will include ONLY the fields:
+        - `tesTask.Id`
+        - `tesTask.State`
+
+        `BASIC`: Task message will include all fields EXCEPT:
+        - `tesTask.ExecutorLog.stdout`
+        - `tesTask.ExecutorLog.stderr`
+        - `tesInput.content`
+        - `tesTaskLog.system_logs`
+
+        `FULL`: Task message includes all fields.
+      schema:
+        type: string
+        default: MINIMAL
+        enum:
+        - MINIMAL
+        - BASIC
+        - FULL
+
   schemas:
     tesCancelTaskResponse:
       type: object
