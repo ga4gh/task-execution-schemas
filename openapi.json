@@ -71,18 +71,7 @@
             }
           },
           {
-            "name": "view",
-            "in": "query",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n `MINIMAL`: Task message will include ONLY the fields:\n   - `tesTask.Id`\n   - `tesTask.State`\n\n `BASIC`: Task message will include all fields EXCEPT:\n   - `tesTask.ExecutorLog.stdout`\n   - `tesTask.ExecutorLog.stderr`\n   - `tesInput.content`\n   - `tesTaskLog.system_logs`\n\n `FULL`: Task message includes all fields.",
-            "schema": {
-              "type": "string",
-              "default": "MINIMAL",
-              "enum": [
-                "MINIMAL",
-                "BASIC",
-                "FULL"
-              ]
-            }
+            "$ref": "#/components/parameters/view"
           }
         ],
         "responses": {
@@ -149,18 +138,7 @@
             }
           },
           {
-            "name": "view",
-            "in": "query",
-            "description": "OPTIONAL. Affects the fields included in the returned Task messages.\nSee TaskView below.\n\n - `MINIMAL`: Task message will include ONLY the fields:\n  - Task.Id\n  - Task.State\n - `BASIC`: Task message will include all fields EXCEPT:\n  - `Task.ExecutorLog.stdout`\n  - `Task.ExecutorLog.stderr`\n  - `Input.content`\n  - `TaskLog.system_logs`\n - `FULL`: Task message includes all fields.",
-            "schema": {
-              "type": "string",
-              "default": "MINIMAL",
-              "enum": [
-                "MINIMAL",
-                "BASIC",
-                "FULL"
-              ]
-            }
+            "$ref": "#/components/parameters/view"
           }
         ],
         "responses": {
@@ -212,6 +190,22 @@
     }
   },
   "components": {
+    "parameters": {
+      "view": {
+        "name": "view",
+        "in": "query",
+        "description": "OPTIONAL. Affects the fields included in the returned Task messages.\n\n`MINIMAL`: Task message will include ONLY the fields:\n- `tesTask.Id`\n- `tesTask.State`\n\n`BASIC`: Task message will include all fields EXCEPT:\n- `tesTask.ExecutorLog.stdout`\n- `tesTask.ExecutorLog.stderr`\n- `tesInput.content`\n- `tesTaskLog.system_logs`\n\n`FULL`: Task message includes all fields.",
+        "schema": {
+          "type": "string",
+          "default": "MINIMAL",
+          "enum": [
+            "MINIMAL",
+            "BASIC",
+            "FULL"
+          ]
+        }
+      }
+    },
     "schemas": {
       "tesCancelTaskResponse": {
         "type": "object",

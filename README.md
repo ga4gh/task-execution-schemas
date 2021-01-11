@@ -33,6 +33,9 @@ and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml).
 
 TES Compliant Implementations
 ------------------------------
+
+> A stand-alone security review has been performed on the API. Nevertheless, any implementation that is linked to from the documentation accompanying the API is done so without any security guarantees. If you integrate this code into your application it is AT YOUR OWN RISK AND RESPONSIBILITY to arrange for an audit to ensure compliance with any applicable regulatory and security requirements, especially where personal data may be at issue.
+
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
 - [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
@@ -192,7 +195,7 @@ POST /v1/tasks/task-1234:cancel
 Possible Future Enhancements
 ----------------------------
 
-* Integrate with GA4GH DRS to resolve input data source (possibly support for DRS URIs as permissible values of input URLs). 
+* Integrate with GA4GH DRS to resolve input data source (possibly support for DRS URIs as permissible values of input URLs).
 * Integrate with GA4GH TRS to resolve container images (possibly support for TRS URIs as permissible values of executor image names).
 
 
@@ -202,5 +205,3 @@ How to Contribute Changes
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
-
-
