@@ -580,6 +580,18 @@ components:
             type: string
           example: us-west-1
       description: Resources describes the resources requested by a task.
+    tesServiceType:
+      allOf:
+        - $ref: '#/components/schemas/ServiceType'
+        - type: object
+          required:
+            - artifact
+          properties:
+            artifact:
+              type: string
+              enum:
+                - tes
+              example: tes
     tesServiceInfo:
       allOf:
         - $ref: '#/components/schemas/Service'
@@ -595,6 +607,8 @@ components:
               example:
                 - 'file:///path/to/local/funnel-storage'
                 - 's3://ohsu-compbio-funnel/storage'
+            type:
+              $ref: '#/components/schemas/tesServiceType'
     tesState:
       type: string
       readOnly: true
