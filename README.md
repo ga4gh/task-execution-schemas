@@ -40,6 +40,7 @@ TES Compliant Implementations
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
 - [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
 - [Nextflow](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes)
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes)
 
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
