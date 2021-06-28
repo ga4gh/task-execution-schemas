@@ -525,6 +525,21 @@ components:
           items:
             type: string
           example: us-west-1
+        additional_properties:
+            type: object
+            additionalProperties:
+                type: string
+            description: |-
+                Key/value pairs for additional resource properties (e.g. a specific VM SKU).  Example:
+                ```
+                {
+                  "additional_properties" : {
+                    "VmSize" : "Standard_D64_v3"
+                  }
+                }
+                ```
+            example:
+                "VmSize" : "Standard_D64_v3"
       description: Resources describes the resources requested by a task.
     tesServiceType:
       allOf:
