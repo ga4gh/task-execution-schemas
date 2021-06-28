@@ -530,7 +530,12 @@ components:
             additionalProperties:
                 type: string
             description: |-
-                Key/value pairs for additional resource properties (e.g. a specific VM SKU).  Example:
+                Key/value pairs for additional resource properties.
+                ServiceInfo shall return a list of keys that a backend supports.
+                Keys are case insensitive.
+                Backends shall log warnings if a key is passed that is unsupported.
+                Backends shall not store or return unsupported keys if included in a task. 
+                Example:
                 ```
                 {
                   "additional_properties" : {
