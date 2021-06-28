@@ -525,6 +525,26 @@ components:
           items:
             type: string
           example: us-west-1
+        additional_properties:
+            type: object
+            additionalProperties:
+                type: string
+            description: |-
+                Key/value pairs for additional resource properties.
+                ServiceInfo shall return a list of keys that a backend supports.
+                Keys are case insensitive.
+                Backends shall log warnings if a key is passed that is unsupported.
+                Backends shall not store or return unsupported keys if included in a task. 
+                Example:
+                ```
+                {
+                  "additional_properties" : {
+                    "VmSize" : "Standard_D64_v3"
+                  }
+                }
+                ```
+            example:
+                "VmSize" : "Standard_D64_v3"
       description: Resources describes the resources requested by a task.
     tesServiceType:
       allOf:
