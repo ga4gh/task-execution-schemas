@@ -230,6 +230,10 @@ components:
         id:
           type: string
           description: Task identifier assigned by the server.
+        unsupported:
+          type: array
+          description: Unsupported user-supplied key(s) specified in tesResources.additional_properties
+          example: ["clusterName", "clusterRegion"]
       description: |-
         CreateTaskResponse describes a response from the CreateTask endpoint. It
         will include the task ID that can be used to look up the status of the job.
@@ -572,6 +576,14 @@ components:
             example:
                - file:///path/to/local/funnel-storage
                - s3://ohsu-compbio-funnel/storage
+          tesResources_additional_properties:
+            type: array
+            description: |-
+              List all tesResources.additional_properties keys supported 
+              by the service tesResources
+            items:
+              type: string
+            example: ["VmSize"]
           type:
             $ref: '#/components/schemas/tesServiceType'
     tesState:
