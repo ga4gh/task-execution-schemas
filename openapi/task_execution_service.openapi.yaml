@@ -579,8 +579,8 @@ components:
           tesResources_additional_properties:
             type: array
             description: |-
-              List all tesResources.additional_properties keys supported 
-              by the service tesResources
+              Lists all tesResources.additional_properties keys supported 
+              by the service
             items:
               type: string
             example: ["VmSize"]
