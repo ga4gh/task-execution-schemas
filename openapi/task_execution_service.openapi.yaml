@@ -525,20 +525,22 @@ components:
           items:
             type: string
           example: us-west-1
-        additional_properties:
+        backend_parameters:
             type: object
             additionalProperties:
                 type: string
             description: |-
-                Key/value pairs for additional resource properties.
+                Key/value pairs for backend configuration.
                 ServiceInfo shall return a list of keys that a backend supports.
                 Keys are case insensitive.
-                Backends shall log warnings if a key is passed that is unsupported.
-                Backends shall not store or return unsupported keys if included in a task. 
+                Backends shall log system warnings if a key is passed that is unsupported.
+                Backends shall not store or return unsupported keys if included in a task.
+                Backends should attempt to run a task even if key/values are unsupported.
+                Intended uses include VM size selection, coprocessor configuration, etc.
                 Example:
                 ```
                 {
-                  "additional_properties" : {
+                  "backend_parameters" : {
                     "VmSize" : "Standard_D64_v3"
                   }
                 }
@@ -572,6 +574,14 @@ components:
             example:
                - file:///path/to/local/funnel-storage
                - s3://ohsu-compbio-funnel/storage
+          tesResources_backend_parameters:
+            type: array
+            description: |-
+              Lists all tesResources.backend_parameters keys supported 
+              by the service
+            items:
+              type: string
+            example: ["VmSize"]
           type:
             $ref: '#/components/schemas/tesServiceType'
     tesState:
