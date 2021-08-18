@@ -534,7 +534,7 @@ components:
                 ServiceInfo shall return a list of keys that a backend supports.
                 Keys are case insensitive.
                 Callers shall pass all runtime or hardware requirement key/values
-                that are not mapped to existing tesResources properties to backend_parameters 
+                that are not mapped to existing tesResources properties to backend_parameters.
                 Backends shall log system warnings if a key is passed that is unsupported.
                 Backends shall not store or return unsupported keys if included in a task.
                 Backends should attempt to run a task even if key/values are unsupported.
