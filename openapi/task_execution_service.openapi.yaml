@@ -414,6 +414,17 @@ components:
             UTF-8 encoded
 
             If content is not empty, "url" must be ignored.
+        streamable:
+          type: boolean
+          description: |-
+            Indicate that a file resource could be accessed using a streaming
+            interface, ie a FUSE mounted s3 object. This flag indicates that
+            using a streaming mount, as opposed to downloading the whole file to
+            the local scratch space, may be faster despite the latency and
+            overhead. This does not mean that the backend will use a streaming
+            interface, as it may not be provided by the vendor, but it the
+            capacity is avalible it can be used without degrading the
+            performance of the underlying program.
       description: Input describes Task input files.
     tesListTasksResponse:
       required:
@@ -554,7 +565,7 @@ components:
         backend_parameters_strict:
             type: boolean
             description: |-
-                If set to true, backends should fail the task if any backend_parameters 
+                If set to true, backends should fail the task if any backend_parameters
                 key/values are unsupported, otherwise, backends should attempt to run the task
             format: boolean
             default: false
@@ -589,7 +600,7 @@ components:
           tesResources_backend_parameters:
             type: array
             description: |-
-              Lists all tesResources.backend_parameters keys supported 
+              Lists all tesResources.backend_parameters keys supported
               by the service
             items:
               type: string
