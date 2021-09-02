@@ -325,6 +325,13 @@ components:
           example:
             "BLASTDB" : "/data/GRC38"
             "HMMERDB" : "/data/hmmer"
+        ignore_error:
+          type: boolean
+          description: |-
+            Default behavior of running an array of executors is that execution
+            stops on the first error. If `ignore_error` is `True`, then the
+            runner will record error exit codes, but will continue on to the next
+            tesExecutor.
       description: Executor describes a command to be executed, and its environment.
     tesExecutorLog:
       required:
