@@ -122,9 +122,10 @@ paths:
           {"foo": ""}                       {"foo": "bar"}                No
         in: query
         required: false
-        type: object
-        additionalProperties:
-          type: string
+        schema:
+          type: object
+          additionalProperties:
+            type: string
       - name: page_size
         in: query
         description: |-
