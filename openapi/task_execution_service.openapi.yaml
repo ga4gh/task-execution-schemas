@@ -106,7 +106,8 @@ paths:
           no task state filtering is done.
         in: query
         required: false
-        $ref: '#/components/schemas/tesState'
+        schema:
+          $ref: '#/components/schemas/tesState'
       - name: tags
         description: |-
           OPTIONAL. Filter tasks by tag. If unspecified,
