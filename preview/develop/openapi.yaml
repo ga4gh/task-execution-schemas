@@ -578,6 +578,63 @@ components:
           items:
             type: string
           example: us-west-1
+        backend_parameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Key/value pairs for backend configuration.
+
+            ServiceInfo shall return a list of keys that a backend supports.
+
+            Keys are case insensitive.
+
+            It is expected that clients pass all runtime or hardware requirement
+            key/values
+
+            that are not mapped to existing tesResources properties to
+            backend_parameters.
+
+            Backends shall log system warnings if a key is passed that is
+            unsupported.
+
+            Backends shall not store or return unsupported keys if included in a
+            task.
+
+            If backend_parameters_strict equals true,
+
+            backends should fail the task if any key/values are unsupported,
+            otherwise,
+
+            backends should attempt to run the task
+
+            Intended uses include VM size selection, coprocessor configuration,
+            etc.
+
+            Example:
+
+            ```
+
+            {
+              "backend_parameters" : {
+                "VmSize" : "Standard_D64_v3"
+              }
+            }
+
+            ```
+          example:
+            VmSize: Standard_D64_v3
+        backend_parameters_strict:
+          type: boolean
+          description: >-
+            If set to true, backends should fail the task if any
+            backend_parameters 
+
+            key/values are unsupported, otherwise, backends should attempt to
+            run the task
+          format: boolean
+          default: false
+          example: false
       description: Resources describes the resources requested by a task.
     tesServiceType:
       allOf:
@@ -606,6 +663,15 @@ components:
               example:
                 - file:///path/to/local/funnel-storage
                 - s3://ohsu-compbio-funnel/storage
+            tesResources_backend_parameters:
+              type: array
+              description: |-
+                Lists all tesResources.backend_parameters keys supported 
+                by the service
+              items:
+                type: string
+              example:
+                - VmSize
             type:
               $ref: '#/components/schemas/tesServiceType'
     tesState:
