@@ -1,4 +1,4 @@
-<img src="https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
+<img src="https://w3id.org/ga4gh/ga4gh-logo.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
 Task Execution Service (TES) API
 ======================================
@@ -46,6 +46,16 @@ TES Compliant Implementations
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
 - [tes-azure](https://github.com/microsoft/tes-azure)
+
+### Compatibility Matrix
+
+> Compatibility is assumed based on available documentation and limited tests performed on latest versions of implementations available as of December 2020.
+
+|               | cwl-tes       | Cromwell  | Nextflow |
+| -----------   | ------------- | --------- | ---------|
+| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
+| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
+| **tes-azure** | Not tested | [Potentially compatible](https://github.com/microsoft/tes-azure/blob/master/docs/USAGE.md#cromwell) | Not tested |
 
 
 TES Service Examples
