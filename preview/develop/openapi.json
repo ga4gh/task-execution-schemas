@@ -290,12 +290,12 @@
           "start_time": {
             "type": "string",
             "description": "Time the executor started, in RFC 3339 format.",
-            "example": "2020-10-02T15:00:00.000Z"
+            "example": "2020-10-02T10:00:00-05:00"
           },
           "end_time": {
             "type": "string",
             "description": "Time the executor ended, in RFC 3339 format.",
-            "example": "2020-10-02T16:00:00.000Z"
+            "example": "2020-10-02T11:00:00-05:00"
           },
           "stdout": {
             "type": "string",
@@ -627,7 +627,7 @@
           "creation_time": {
             "type": "string",
             "description": "Date + time the task was created, in RFC 3339 format.\nThis is set by the system, not the client.",
-            "example": "2020-10-02T15:00:00.000Z",
+            "example": "2020-10-02T10:00:00-05:00",
             "readOnly": true
           }
         },
@@ -661,12 +661,12 @@
           "start_time": {
             "type": "string",
             "description": "When the task started, in RFC 3339 format.",
-            "example": "2020-10-02T15:00:00.000Z"
+            "example": "2020-10-02T10:00:00-05:00"
           },
           "end_time": {
             "type": "string",
             "description": "When the task ended, in RFC 3339 format.",
-            "example": "2020-10-02T16:00:00.000Z"
+            "example": "2020-10-02T11:00:00-05:00"
           },
           "outputs": {
             "type": "array",

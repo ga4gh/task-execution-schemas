@@ -160,12 +160,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
       x-codegen-request-body-name: body
-  '/tasks/{id}':
+  /tasks/{id}:
     get:
       tags:
         - TaskService
       summary: GetTask
-      description: 'Get a single task, based on providing the exact task ID string.'
+      description: Get a single task, based on providing the exact task ID string.
       operationId: GetTask
       parameters:
         - name: id
@@ -182,7 +182,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesTask'
-  '/tasks/{id}:cancel':
+  /tasks/{id}:cancel:
     post:
       tags:
         - TaskService
@@ -254,7 +254,7 @@ components:
       properties:
         image:
           type: string
-          example: 'ubuntu:20.04'
+          example: ubuntu:20.04
           description: |-
             Name of the container image. The string will be passed as the image
             argument to the containerization run command. Examples:
@@ -349,7 +349,7 @@ components:
           example:
             BLASTDB: /data/GRC38
             HMMERDB: /data/hmmer
-      description: 'Executor describes a command to be executed, and its environment.'
+      description: Executor describes a command to be executed, and its environment.
     tesExecutorLog:
       required:
         - exit_code
@@ -357,12 +357,12 @@ components:
       properties:
         start_time:
           type: string
-          description: 'Time the executor started, in RFC 3339 format.'
-          example: 2020-10-02T15:00:00.000Z
+          description: Time the executor started, in RFC 3339 format.
+          example: '2020-10-02T10:00:00-05:00'
         end_time:
           type: string
-          description: 'Time the executor ended, in RFC 3339 format.'
-          example: 2020-10-02T16:00:00.000Z
+          description: Time the executor ended, in RFC 3339 format.
+          example: '2020-10-02T11:00:00-05:00'
         stdout:
           type: string
           description: >-
@@ -436,7 +436,7 @@ components:
              - gs://my-bucket/file2
              - file:///path/to/my/file
              - /path/to/my/file
-          example: 's3://my-object-store/file1'
+          example: s3://my-object-store/file1
         path:
           type: string
           description: |-
@@ -520,7 +520,7 @@ components:
       properties:
         url:
           type: string
-          description: 'URL of the file in storage, e.g. s3://bucket/file.txt'
+          description: URL of the file in storage, e.g. s3://bucket/file.txt
         path:
           type: string
           description: Path of the file inside the container. Must be an absolute path.
@@ -605,8 +605,8 @@ components:
               items:
                 type: string
               example:
-                - 'file:///path/to/local/funnel-storage'
-                - 's3://ohsu-compbio-funnel/storage'
+                - file:///path/to/local/funnel-storage
+                - s3://ohsu-compbio-funnel/storage
             type:
               $ref: '#/components/schemas/tesServiceType'
     tesState:
@@ -680,7 +680,7 @@ components:
           items:
             $ref: '#/components/schemas/tesInput'
           example:
-            - url: 's3://my-object-store/file1'
+            - url: s3://my-object-store/file1
               path: /data/file1
         outputs:
           type: array
@@ -693,7 +693,7 @@ components:
             $ref: '#/components/schemas/tesOutput'
           example:
             - path: /data/outfile
-              url: 's3://my-object-store/outfile-1'
+              url: s3://my-object-store/outfile-1
               type: FILE
         resources:
           $ref: '#/components/schemas/tesResources'
@@ -771,7 +771,7 @@ components:
           description: |-
             Date + time the task was created, in RFC 3339 format.
             This is set by the system, not the client.
-          example: 2020-10-02T15:00:00.000Z
+          example: '2020-10-02T10:00:00-05:00'
           readOnly: true
       description: Task describes an instance of a task.
     tesTaskLog:
@@ -795,12 +795,12 @@ components:
             slurmm_id: 123456
         start_time:
           type: string
-          description: 'When the task started, in RFC 3339 format.'
-          example: 2020-10-02T15:00:00.000Z
+          description: When the task started, in RFC 3339 format.
+          example: '2020-10-02T10:00:00-05:00'
         end_time:
           type: string
-          description: 'When the task ended, in RFC 3339 format.'
-          example: 2020-10-02T16:00:00.000Z
+          description: When the task ended, in RFC 3339 format.
+          example: '2020-10-02T11:00:00-05:00'
         outputs:
           type: array
           description: |-
@@ -900,14 +900,14 @@ components:
               type: string
               format: uri
               description: URL of the website of the organization (RFC 3986 format)
-              example: 'https://example.com'
+              example: https://example.com
         contactUrl:
           type: string
           format: uri
           description: >-
             URL of the contact for the provider of this service, e.g. a link to
             a contact form (RFC 3986 format), or an email (RFC 2368 format).
-          example: 'mailto:support@example.com'
+          example: mailto:support@example.com
         documentationUrl:
           type: string
           format: uri
@@ -915,7 +915,7 @@ components:
             URL of the documentation of this service (RFC 3986 format). This
             should help someone learn how to use your service, including any
             specifics required to access data, e.g. authentication.
-          example: 'https://docs.myservice.example.com'
+          example: https://docs.myservice.example.com
         createdAt:
           type: string
           format: date-time
