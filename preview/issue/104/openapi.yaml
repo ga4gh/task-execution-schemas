@@ -117,13 +117,28 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/tesState'
-        - name: tags
+        - name: tag_key
           description: >-
-            OPTIONAL. Filter tasks by tag. If unspecified,
+            OPTIONAL. Provide key tag to filter. The field tag_key is an array
 
-            no task tag filtering is done. Both the tag's
+            of key values, and will be zipped with an optional tag_value array.
 
-            key and value must be exact matches for a task to be returned.
+            So the query:
+              ?tag_key=foo1&tag_value=bar1&tag_key=foo2&tag_value=bar2
+            Should be constructed into the structure { "foo1" : "bar1", "foo2" :
+            "bar2"}
+
+              ?tag_key=foo1
+            Should be constructed into the structuer {"foo1" : ""}
+
+
+            If the tag_value is empty, it will be treated as matching any
+            possible value.
+
+            If a tag value is provided, both the tag's key and value must be
+            exact
+
+            matches for a task to be returned.
 
             Filter                            Tags                         
             Match?
@@ -144,8 +159,16 @@ paths:
           in: query
           required: false
           schema:
-            type: object
-            additionalProperties:
+            type: array
+            items:
+              type: string
+        - name: tag_value
+          description: OPTIONAL. The companion value field for tag_key
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
               type: string
         - name: page_size
           in: query
