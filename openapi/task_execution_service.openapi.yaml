@@ -146,6 +146,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
+      callbacks:
+        statusChange:
+          '{$request.body#/callback_url}':
+            post:
+              description: |-
+                The API will send notifications to the callback URL, if provided,
+                when the task status changes.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/tesCallbackStatus'
+              responses:
+                204:
+                  description: |-
+                    Listener should return this HTTP status code if
+                    the payload was received successfully.
       x-codegen-request-body-name: body
   /tasks/{id}:
     get:
@@ -654,6 +671,14 @@ components:
           type: string
           description: |-
             Optional user-provided description of task for documentation purposes.
+        callback_url:
+          type: string
+          format: uri
+          description: |-
+            Optional user-provided callback URL. Note that the URL can be
+            provided while creating a new task, but it MUST NOT be displayed when
+            a task or a list of tasks is returned by the TES server.
+          example: https://myserver.com/send/callback/here
         inputs:
           type: array
           description: |-
@@ -741,6 +766,19 @@ components:
           example: 2020-10-02T10:00:00-05:00
           readOnly: true
       description: Task describes an instance of a task.
+    tesCallbackStatus:
+      type: object
+      required:
+      - task_id
+      - state
+      properties:
+        task_id:
+          type: string
+          description: Task identifier assigned by the server.
+          example: job-0012345
+        state:
+          $ref: '#/components/schemas/tesState'
+      description: Notification that a task has changed state.     
     tesTaskLog:
       required:
       - logs
