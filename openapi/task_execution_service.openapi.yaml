@@ -623,6 +623,9 @@ components:
         for example an upload failed due to network issues, the worker's ran out
         of disk space, etc.
          - `CANCELED`: The task was canceled by the user.
+         - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to
+        the specific system running the job. Generally, this means that the system reclaimed the compute
+        capacity for reallocation.
       default: UNKNOWN
       example: COMPLETE
       enum:
@@ -635,6 +638,7 @@ components:
       - EXECUTOR_ERROR
       - SYSTEM_ERROR
       - CANCELED
+      - PREEMPTED
     tesTask:
       required:
       - executors
