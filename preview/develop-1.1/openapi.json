@@ -59,7 +59,7 @@
             "description": "Optional number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int32"
             }
           },
           {
@@ -440,7 +440,7 @@
           "cpu_cores": {
             "type": "integer",
             "description": "Requested number of CPUs",
-            "format": "int64",
+            "format": "int32",
             "example": 4
           },
           "preemptible": {
