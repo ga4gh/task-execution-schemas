@@ -623,7 +623,7 @@ components:
         for example an upload failed due to network issues, the worker's ran out
         of disk space, etc.
          - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.
-         - `CANCELLATION_REQUESTED`: The task was canceled by the user,
+         - `CANCELING`: The task was canceled by the user,
         but the downstream resources are still awaiting deletion
       default: UNKNOWN
       example: COMPLETE
@@ -637,7 +637,7 @@ components:
       - EXECUTOR_ERROR
       - SYSTEM_ERROR
       - CANCELED
-      - CANCELLATION_REQUESTED
+      - CANCELING
     tesTask:
       required:
       - executors
