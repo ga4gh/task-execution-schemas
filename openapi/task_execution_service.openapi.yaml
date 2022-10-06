@@ -624,7 +624,7 @@ components:
         of disk space, etc.
          - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.
          - `CANCELING`: The task was canceled by the user,
-        but the downstream resources are still awaiting deletion
+        but the downstream resources are still awaiting deletion.
       default: UNKNOWN
       example: COMPLETE
       enum:
