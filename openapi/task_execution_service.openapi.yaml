@@ -4,6 +4,9 @@ info:
   version: 1.0.0
   x-logo:
     url: 'https://w3id.org/ga4gh/ga4gh-logo.svg'
+  license:
+    name: Apache 2.0
+    url: 'https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/LICENSE'
   description: >
     ## Executive Summary
 
@@ -107,7 +110,7 @@ paths:
           Must be less than 2048. Defaults to 256.
         schema:
           type: integer
-          format: int64
+          format: int32
       - name: page_token
         in: query
         description: |-
@@ -325,6 +328,13 @@ components:
           example:
             "BLASTDB" : "/data/GRC38"
             "HMMERDB" : "/data/hmmer"
+        ignore_error:
+          type: boolean
+          description: |-
+            Default behavior of running an array of executors is that execution
+            stops on the first error. If `ignore_error` is `True`, then the
+            runner will record error exit codes, but will continue on to the next
+            tesExecutor.
       description: Executor describes a command to be executed, and its environment.
     tesExecutorLog:
       required:
@@ -370,6 +380,10 @@ components:
       description: ExecutorLog describes logging information related to an Executor.
     tesFileType:
       type: string
+      description: |-
+        Define if input/output element is a file or a directory. It is not required
+        that the user provide this value, but it is required that the server fill in the
+        value once the information is avalible at run time.
       default: FILE
       enum:
       - FILE
@@ -377,7 +391,6 @@ components:
     tesInput:
       required:
       - path
-      - type
       type: object
       properties:
         name:
@@ -448,7 +461,6 @@ components:
     tesOutput:
       required:
       - path
-      - type
       - url
       type: object
       properties:
@@ -461,7 +473,9 @@ components:
         url:
           type: string
           description: |-
-            URL for the file to be copied by the TES server after the task is complete.
+            URL at which the TES server makes the output accessible after the task is complete.
+            When tesOutput.path contains wildcards, it must be a directory; see
+            `tesOutput.path_prefix` for details on how output URLs are constructed in this case.
             For Example:
              - `s3://my-object-store/file1`
              - `gs://my-bucket/file2`
@@ -469,8 +483,18 @@ components:
         path:
           type: string
           description: |-
-            Path of the file inside the container.
-            Must be an absolute path.
+            Absolute path of the file inside the container.
+            May contain pattern matching wildcards to select multiple outputs at once, but mind
+            implications for `tesOutput.url` and `tesOutput.path_prefix`.
+            Only wildcards defined in IEEE Std 1003.1-2017 (POSIX), 12.3 are supported; see
+            https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_13
+        path_prefix:
+          type: string
+          description: |-
+            Prefix to be removed from matching outputs if `tesOutput.path` contains wildcards;
+            output URLs are constructed by appending pruned paths to the directory specfied
+            in `tesOutput.url`.
+            Required if `tesOutput.path` contains wildcards, ignored otherwise.
         type:
           $ref: '#/components/schemas/tesFileType'
       description: Output describes Task output files.
@@ -506,7 +530,7 @@ components:
         cpu_cores:
           type: integer
           description: Requested number of CPUs
-          format: int64
+          format: int32
           example: 4
         preemptible:
           type: boolean
@@ -633,7 +657,12 @@ components:
          - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,
         for example an upload failed due to network issues, the worker's ran out
         of disk space, etc.
-         - `CANCELED`: The task was canceled by the user.
+         - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.
+         - `CANCELING`: The task was canceled by the user,
+        but the downstream resources are still awaiting deletion.
+         - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to
+        the specific system running the job. Generally, this means that the system reclaimed the compute
+        capacity for reallocation.
       default: UNKNOWN
       example: COMPLETE
       enum:
@@ -646,6 +675,8 @@ components:
       - EXECUTOR_ERROR
       - SYSTEM_ERROR
       - CANCELED
+      - PREEMPTED
+      - CANCELING
     tesTask:
       required:
       - executors

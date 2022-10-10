@@ -358,6 +358,10 @@
           "content": {
             "type": "string",
             "description": "File content literal.\n\nImplementations should support a minimum of 128 KiB in this field\nand may define their own maximum.\n\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored."
+          },
+          "streamable": {
+            "type": "boolean",
+            "description": "Indicate that a file resource could be accessed using a streaming\ninterface, ie a FUSE mounted s3 object. This flag indicates that\nusing a streaming mount, as opposed to downloading the whole file to\nthe local scratch space, may be faster despite the latency and\noverhead. This does not mean that the backend will use a streaming\ninterface, as it may not be provided by the vendor, but if the\ncapacity is avalible it can be used without degrading the\nperformance of the underlying program."
           }
         },
         "description": "Input describes Task input files."
