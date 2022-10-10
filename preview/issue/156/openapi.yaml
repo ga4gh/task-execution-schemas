@@ -463,7 +463,7 @@ components:
             using a streaming mount, as opposed to downloading the whole file to
             the local scratch space, may be faster despite the latency and
             overhead. This does not mean that the backend will use a streaming
-            interface, as it may not be provided by the vendor, but it the
+            interface, as it may not be provided by the vendor, but if the
             capacity is avalible it can be used without degrading the
             performance of the underlying program.
       description: Input describes Task input files.
