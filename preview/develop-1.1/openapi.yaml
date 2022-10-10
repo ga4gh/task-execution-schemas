@@ -744,7 +744,9 @@ components:
         for example an upload failed due to network issues, the worker's ran out
 
         of disk space, etc.
-         - `CANCELED`: The task was canceled by the user.
+         - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.
+         - `CANCELING`: The task was canceled by the user,
+        but the downstream resources are still awaiting deletion.
          - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to
         the specific system running the job. Generally, this means that the
         system reclaimed the compute
@@ -763,6 +765,7 @@ components:
         - SYSTEM_ERROR
         - CANCELED
         - PREEMPTED
+        - CANCELING
     tesTask:
       required:
         - executors
