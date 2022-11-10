@@ -155,6 +155,8 @@ paths:
 
             {"foo": "bar"}                    {"foo": "bar"}                Yes
 
+            {"foo": "bar"}                    {"foo": "bat"}                No
+
             {"foo": ""}                       {"foo": ""}                   Yes
 
             {"foo": "bar", "baz": "bat"}      {"foo": "bar", "baz": "bat"}  Yes
@@ -163,7 +165,9 @@ paths:
 
             {"foo": "bar", "baz": "bat"}      {"foo": "bar"}                No
 
-            {"foo": ""}                       {"foo": "bar"}                No
+            {"foo": ""}                       {"foo": "bar"}                Yes
+
+            {"foo": ""}                       {}                            No
           in: query
           required: false
           schema:
