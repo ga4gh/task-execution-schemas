@@ -63,7 +63,8 @@ info:
     If TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS).
     Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.
 
-
+security:
+  - bearerAuth: []
 servers:
 - url: /ga4gh/tes/v1
 paths:
@@ -246,6 +247,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters:
     view:
       name: view
