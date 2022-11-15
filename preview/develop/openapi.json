@@ -6,6 +6,10 @@
     "x-logo": {
       "url": "https://w3id.org/ga4gh/ga4gh-logo.svg"
     },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/LICENSE"
+    },
     "description": "## Executive Summary\nThe Task Execution Service (TES) API is a standardized schema and API for describing and executing batch execution tasks. A task defines a set of input files, a set of containers and commands to run, a set of output files and some other logging and metadata.\n\nTES servers accept task documents and execute them asynchronously on available compute resources. A TES server could be built on top of a traditional HPC queuing system, such as Grid Engine, Slurm or cloud style compute systems such as AWS Batch or Kubernetes.\n## Introduction\nThis document describes the TES API and provides details on the specific endpoints, request formats, and responses. It is intended to provide key information for developers of TES-compatible services as well as clients that will call these TES services. Use cases include:\n\n  - Deploying existing workflow engines on new infrastructure. Workflow engines\n  such as CWL-Tes and Cromwell have extentions for using TES. This will allow\n  a system engineer to deploy them onto a new infrastructure using a job scheduling\n  system not previously supported by the engine.\n\n  - Developing a custom workflow management system. This API provides a common\n  interface to asynchronous batch processing capabilities. A developer can write\n  new tools against this interface and expect them to work using a variety of\n  backend solutions that all support the same specification.\n\n\n## Standards\nThe TES API specification is written in OpenAPI and embodies a RESTful service philosophy. It uses JSON in requests and responses and standard HTTP/HTTPS for information transport. HTTPS should be used rather than plain HTTP except for testing or internal-only purposes.\n### Authentication and Authorization\nIs is envisaged that most TES API instances will require users to authenticate to use the endpoints. However, the decision if authentication is required should be taken by TES API implementers.\n\nIf authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.\n\nChecking that a user is authorized to submit TES requests is a responsibility of TES implementations.\n### CORS\nIf TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS). Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.\n"
   },
   "servers": [
@@ -54,12 +58,45 @@
             }
           },
           {
+            "name": "state",
+            "description": "OPTIONAL. Filter tasks by state. If unspecified,\nno task state filtering is done.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/tesState"
+            }
+          },
+          {
+            "name": "tag_key",
+            "description": "OPTIONAL. Provide key tag to filter. The field tag_key is an array\nof key values, and will be zipped with an optional tag_value array.\nSo the query:\n```\n  ?tag_key=foo1&tag_value=bar1&tag_key=foo2&tag_value=bar2\n```\nShould be constructed into the structure { \"foo1\" : \"bar1\", \"foo2\" : \"bar2\"}\n\n```\n  ?tag_key=foo1\n```\nShould be constructed into the structure {\"foo1\" : \"\"}\n\nIf the tag_value is empty, it will be treated as matching any possible value.\nIf a tag value is provided, both the tag's key and value must be exact\nmatches for a task to be returned.\nFilter                            Tags                          Match?\n----------------------------------------------------------------------\n{\"foo\": \"bar\"}                    {\"foo\": \"bar\"}                Yes\n{\"foo\": \"bar\"}                    {\"foo\": \"bat\"}                No\n{\"foo\": \"\"}                       {\"foo\": \"\"}                   Yes\n{\"foo\": \"bar\", \"baz\": \"bat\"}      {\"foo\": \"bar\", \"baz\": \"bat\"}  Yes\n{\"foo\": \"bar\"}                    {\"foo\": \"bar\", \"baz\": \"bat\"}  Yes\n{\"foo\": \"bar\", \"baz\": \"bat\"}      {\"foo\": \"bar\"}                No\n{\"foo\": \"\"}                       {\"foo\": \"bar\"}                Yes\n{\"foo\": \"\"}                       {}                            No",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "tag_value",
+            "description": "OPTIONAL. The companion value field for tag_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "page_size",
             "in": "query",
             "description": "Optional number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int32"
             }
           },
           {
@@ -277,6 +314,10 @@
               "BLASTDB": "/data/GRC38",
               "HMMERDB": "/data/hmmer"
             }
+          },
+          "ignore_error": {
+            "type": "boolean",
+            "description": "Default behavior of running an array of executors is that execution\nstops on the first error. If `ignore_error` is `True`, then the\nrunner will record error exit codes, but will continue on to the next\ntesExecutor."
           }
         },
         "description": "Executor describes a command to be executed, and its environment."
@@ -315,6 +356,7 @@
       },
       "tesFileType": {
         "type": "string",
+        "description": "Define if input/output element is a file or a directory. It is not required\nthat the user provide this value, but it is required that the server fill in the\nvalue once the information is avalible at run time.",
         "default": "FILE",
         "enum": [
           "FILE",
@@ -323,8 +365,7 @@
       },
       "tesInput": {
         "required": [
-          "path",
-          "type"
+          "path"
         ],
         "type": "object",
         "properties": {
@@ -350,6 +391,10 @@
           "content": {
             "type": "string",
             "description": "File content literal.\n\nImplementations should support a minimum of 128 KiB in this field\nand may define their own maximum.\n\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored."
+          },
+          "streamable": {
+            "type": "boolean",
+            "description": "Indicate that a file resource could be accessed using a streaming\ninterface, ie a FUSE mounted s3 object. This flag indicates that\nusing a streaming mount, as opposed to downloading the whole file to\nthe local scratch space, may be faster despite the latency and\noverhead. This does not mean that the backend will use a streaming\ninterface, as it may not be provided by the vendor, but if the\ncapacity is avalible it can be used without degrading the\nperformance of the underlying program."
           }
         },
         "description": "Input describes Task input files."
@@ -377,7 +422,6 @@
       "tesOutput": {
         "required": [
           "path",
-          "type",
           "url"
         ],
         "type": "object",
@@ -392,11 +436,15 @@
           },
           "url": {
             "type": "string",
-            "description": "URL for the file to be copied by the TES server after the task is complete.\nFor Example:\n - `s3://my-object-store/file1`\n - `gs://my-bucket/file2`\n - `file:///path/to/my/file`"
+            "description": "URL at which the TES server makes the output accessible after the task is complete.\nWhen tesOutput.path contains wildcards, it must be a directory; see\n`tesOutput.path_prefix` for details on how output URLs are constructed in this case.\nFor Example:\n - `s3://my-object-store/file1`\n - `gs://my-bucket/file2`\n - `file:///path/to/my/file`"
           },
           "path": {
             "type": "string",
-            "description": "Path of the file inside the container.\nMust be an absolute path."
+            "description": "Absolute path of the file inside the container.\nMay contain pattern matching wildcards to select multiple outputs at once, but mind\nimplications for `tesOutput.url` and `tesOutput.path_prefix`.\nOnly wildcards defined in IEEE Std 1003.1-2017 (POSIX), 12.3 are supported; see\nhttps://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_13"
+          },
+          "path_prefix": {
+            "type": "string",
+            "description": "Prefix to be removed from matching outputs if `tesOutput.path` contains wildcards;\noutput URLs are constructed by appending pruned paths to the directory specfied\nin `tesOutput.url`.\nRequired if `tesOutput.path` contains wildcards, ignored otherwise."
           },
           "type": {
             "$ref": "#/components/schemas/tesFileType"
@@ -437,7 +485,7 @@
           "cpu_cores": {
             "type": "integer",
             "description": "Requested number of CPUs",
-            "format": "int64",
+            "format": "int32",
             "example": 4
           },
           "preemptible": {
@@ -478,7 +526,7 @@
           },
           "backend_parameters_strict": {
             "type": "boolean",
-            "description": "If set to true, backends should fail the task if any backend_parameters \nkey/values are unsupported, otherwise, backends should attempt to run the task",
+            "description": "If set to true, backends should fail the task if any backend_parameters\nkey/values are unsupported, otherwise, backends should attempt to run the task",
             "format": "boolean",
             "default": false,
             "example": false
@@ -529,7 +577,7 @@
               },
               "tesResources_backend_parameters": {
                 "type": "array",
-                "description": "Lists all tesResources.backend_parameters keys supported \nby the service",
+                "description": "Lists all tesResources.backend_parameters keys supported\nby the service",
                 "items": {
                   "type": "string"
                 },
@@ -547,7 +595,7 @@
       "tesState": {
         "type": "string",
         "readOnly": true,
-        "description": "Task state as defined by the server.\n\n - `UNKNOWN`: The state of the task is unknown. The cause for this status\n  message may be dependent on the underlying system. The `UNKNOWN` states\n  provides a safe default for messages where this field is missing so\n  that a missing field does not accidentally imply that\n  the state is QUEUED.\n - `QUEUED`: The task is queued and awaiting resources to begin computing.\n - `INITIALIZING`: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - `RUNNING`: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - `PAUSED`: The task is paused. The reasons for this would be tied to\n  the specific system running the job. An implementation may have the ability\n  to pause a task, but this is not required.\n - `COMPLETE`: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - `EXECUTOR_ERROR`: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - `CANCELED`: The task was canceled by the user.",
+        "description": "Task state as defined by the server.\n\n - `UNKNOWN`: The state of the task is unknown. The cause for this status\n  message may be dependent on the underlying system. The `UNKNOWN` states\n  provides a safe default for messages where this field is missing so\n  that a missing field does not accidentally imply that\n  the state is QUEUED.\n - `QUEUED`: The task is queued and awaiting resources to begin computing.\n - `INITIALIZING`: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - `RUNNING`: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - `PAUSED`: The task is paused. The reasons for this would be tied to\n  the specific system running the job. An implementation may have the ability\n  to pause a task, but this is not required.\n - `COMPLETE`: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - `EXECUTOR_ERROR`: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.\n - `CANCELING`: The task was canceled by the user,\nbut the downstream resources are still awaiting deletion.\n - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to\nthe specific system running the job. Generally, this means that the system reclaimed the compute\ncapacity for reallocation.",
         "default": "UNKNOWN",
         "example": "COMPLETE",
         "enum": [
@@ -559,7 +607,9 @@
           "COMPLETE",
           "EXECUTOR_ERROR",
           "SYSTEM_ERROR",
-          "CANCELED"
+          "CANCELED",
+          "PREEMPTED",
+          "CANCELING"
         ]
       },
       "tesTask": {
