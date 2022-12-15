@@ -45,7 +45,7 @@ TES Compliant Implementations
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
-- [TES Azure](https://github.com/microsoft/CromwellOnAzure)
+- [TES Azure](https://github.com/microsoft/ga4gh-tes)
 
 ### Compatibility Matrix
 
@@ -55,7 +55,7 @@ TES Compliant Implementations
 | -----------   | ------------- | --------- | ---------|
 | **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
 | **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
-| **TES Azure* | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | Not tested |
+| **TES Azure*& | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | Not tested |
 
 
 TES Service Examples
