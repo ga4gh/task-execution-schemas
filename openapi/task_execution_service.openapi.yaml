@@ -66,6 +66,12 @@ info:
 
 servers:
 - url: /ga4gh/tes/v1
+
+security:
+  - {}
+  - BasicAuth: []
+  - BearerAuth: []
+
 paths:
   /service-info:
     get:
@@ -885,3 +891,24 @@ components:
           items:
             type: string
       description: TaskLog describes logging information related to a Task.
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: |
+        A valid authorization token must be passed in the 'Authorization' header,
+        e.g. "Basic ${token_string}"
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description:
+        A valid authorization token must be passed in the 'Authorization' header,
+        e.g. "Bearer ${token_string}"
+    PassportAuth:
+      type: http
+      scheme: bearer
+      x-in: body
+      bearerFormat: JWT
+      description:
+        A valid GA4GH Passport must be passed in the body of an HTTP POST request as a tokens[] array.
