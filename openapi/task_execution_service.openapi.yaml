@@ -525,7 +525,7 @@ components:
           type: string
           description: |-
             URL at which the TES server makes the output accessible after the task is complete.
-            When tesOutput.path contains wildcards, it must be a directory
+            When tesOutput.path contains wildcards, it must be a directory.
             For Example:
              - `s3://my-object-store/file1`
              - `gs://my-bucket/file2`
@@ -535,7 +535,7 @@ components:
           description: |-
             Absolute path of the file inside the container.
             May contain pattern matching wildcards to select multiple outputs at once, but mind
-            implications for `tesOutput.url`
+            implications for `tesOutput.url`.
             Only wildcards defined in IEEE Std 1003.1-2017 (POSIX), 12.3 are supported; see
             https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_13
         type:
