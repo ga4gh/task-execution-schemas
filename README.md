@@ -51,11 +51,11 @@ TES Compliant Implementations
 
 > Compatibility is assumed based on available documentation and limited tests performed on latest versions of implementations available as of December 2020.
 
-|               | cwl-tes       | Cromwell  | Nextflow |
-| -----------   | ------------- | --------- | ---------|
-| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
-| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
-| **TES Azure*& | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | Not tested |
+|               | cwl-tes       | Cromwell  | Nextflow | Snakemake |
+| -----------   | ------------- | --------- | ---------| --------- |
+| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) |
+| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Not tested but should work |
+| **TES Azure*& | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | Not tested | Not tested but should work |
 
 
 TES Service Examples
