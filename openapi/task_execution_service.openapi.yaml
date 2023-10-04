@@ -66,6 +66,8 @@ info:
 
 servers:
 - url: /ga4gh/tes/v1
+security:
+  - bearerAuth: []
 paths:
   /service-info:
     get:
@@ -246,6 +248,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |-
+        To access a resource to which this security scheme is applied, a valid JSON
+        JSON Web Token (RFC7519) MUST be passed as a bearer token (RFC6750) in the
+        'Authorization' request header, i.e., `Authorization: Bearer <TOKEN>`. If
+        the header is missing or malformed, or if the token is invalid, servers MUST
+        deny the request with a `401 Unauthorized` response.
+
+        Individual TES instances are encouraged to reference information on token
+        requirements and how a valid token can be obtained in the
+        `GET /service-info` response.
+
   parameters:
     view:
       name: view
