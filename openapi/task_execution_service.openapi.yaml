@@ -49,14 +49,12 @@ info:
 
     ### Authentication and Authorization
 
-    Is is envisaged that most TES API instances will require users to authenticate to use the endpoints.
-    However, the decision if authentication is required should be taken by TES API implementers.
+    Implementers are required to implement the authentication schemes defined in
+    `components.securitySchemes`, but they are free to define and implement
+    additional schemes as per their requirements.
 
-
-    If authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.
-
-
-    Checking that a user is authorized to submit TES requests is a responsibility of TES implementations.
+    Checking that a user is authorized to submit TES requests is the responsibility
+    of each implementation.
 
     ### CORS
 
