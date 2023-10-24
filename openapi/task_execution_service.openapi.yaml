@@ -743,8 +743,7 @@ components:
         state_description:
           type: string
           description: |-
-            OPTIONAL. Additional information about the state of the task.
-            This may be used to provide more information about the state of the task,
+            OPTIONAL. Additional information about the state of the task,
             i.e. `Pending available quota\: low-priority vCPUs`
         name:
           type: string
