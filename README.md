@@ -39,13 +39,21 @@ TES Compliant Implementations
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
 - [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
-- [Nextflow](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes)
+- [ELIXIR Cloud Components](https://elixir-cloud-components.vercel.app/)
+- [py-tes](https://github.com/ohsu-comp-bio/py-tes)
+- [Nextflow](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes)
 - [Snakemake](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes)
+- [Toil](https://toil.readthedocs.io/en/latest/)
+- [St. Jude Rust Labs](https://github.com/stjude-rust-labs/tes)
+
+
 
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
 - [TES Azure](https://github.com/microsoft/ga4gh-tes)
+- [Pulsar](https://pulsar.readthedocs.io/)
+- [proTES](https://github.com/elixir-cloud-aai/proTES)
 
 ### Compatibility Matrix
 
@@ -55,7 +63,7 @@ TES Compliant Implementations
 | -----------   | ------------- | --------- | ---------|
 | **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
 | **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
-| **TES Azure*& | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | Not tested |
+| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) |
 
 
 TES Service Examples
