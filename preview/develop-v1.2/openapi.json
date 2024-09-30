@@ -1,0 +1,879 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Task Execution Service",
+    "version": "1.1.0",
+    "x-logo": {
+      "url": "https://w3id.org/ga4gh/ga4gh-logo.svg"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/LICENSE"
+    },
+    "description": "## Executive Summary\nThe Task Execution Service (TES) API is a standardized schema and API for describing and executing batch execution tasks. A task defines a set of input files, a set of containers and commands to run, a set of output files and some other logging and metadata.\n\nTES servers accept task documents and execute them asynchronously on available compute resources. A TES server could be built on top of a traditional HPC queuing system, such as Grid Engine, Slurm or cloud style compute systems such as AWS Batch or Kubernetes.\n## Introduction\nThis document describes the TES API and provides details on the specific endpoints, request formats, and responses. It is intended to provide key information for developers of TES-compatible services as well as clients that will call these TES services. Use cases include:\n\n  - Deploying existing workflow engines on new infrastructure. Workflow engines\n  such as CWL-Tes and Cromwell have extentions for using TES. This will allow\n  a system engineer to deploy them onto a new infrastructure using a job scheduling\n  system not previously supported by the engine.\n\n  - Developing a custom workflow management system. This API provides a common\n  interface to asynchronous batch processing capabilities. A developer can write\n  new tools against this interface and expect them to work using a variety of\n  backend solutions that all support the same specification.\n\n\n## Standards\nThe TES API specification is written in OpenAPI and embodies a RESTful service philosophy. It uses JSON in requests and responses and standard HTTP/HTTPS for information transport. HTTPS should be used rather than plain HTTP except for testing or internal-only purposes.\n### Authentication and Authorization\nIs is envisaged that most TES API instances will require users to authenticate to use the endpoints. However, the decision if authentication is required should be taken by TES API implementers.\n\nIf authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.\n\nChecking that a user is authorized to submit TES requests is a responsibility of TES implementations.\n### CORS\nIf TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS). Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.\n"
+  },
+  "servers": [
+    {
+      "url": "/ga4gh/tes/v1"
+    }
+  ],
+  "paths": {
+    "/service-info": {
+      "get": {
+        "tags": [
+          "TaskService"
+        ],
+        "summary": "GetServiceInfo",
+        "description": "Provides information about the service, this structure is based on the\nstandardized GA4GH service info structure. In addition, this endpoint\nwill also provide information about customized storage endpoints offered\nby the TES server.",
+        "operationId": "GetServiceInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tesServiceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": [
+          "TaskService"
+        ],
+        "summary": "ListTasks",
+        "description": "List tasks tracked by the TES server. This includes queued, active and completed tasks.\nHow long completed tasks are stored by the system may be dependent on the underlying\nimplementation.",
+        "operationId": "ListTasks",
+        "parameters": [
+          {
+            "name": "name_prefix",
+            "in": "query",
+            "description": "OPTIONAL. Filter the list to include tasks where the name matches this prefix.\nIf unspecified, no task name filtering is done.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "description": "OPTIONAL. Filter tasks by state. If unspecified,\nno task state filtering is done.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/tesState"
+            }
+          },
+          {
+            "name": "tag_key",
+            "description": "OPTIONAL. Provide key tag to filter. The field tag_key is an array\nof key values, and will be zipped with an optional tag_value array.\nSo the query:\n```\n  ?tag_key=foo1&tag_value=bar1&tag_key=foo2&tag_value=bar2\n```\nShould be constructed into the structure { \"foo1\" : \"bar1\", \"foo2\" : \"bar2\"}\n\n```\n  ?tag_key=foo1\n```\nShould be constructed into the structure {\"foo1\" : \"\"}\n\nIf the tag_value is empty, it will be treated as matching any possible value.\nIf a tag value is provided, both the tag's key and value must be exact\nmatches for a task to be returned.\nFilter                            Tags                          Match?\n----------------------------------------------------------------------\n{\"foo\": \"bar\"}                    {\"foo\": \"bar\"}                Yes\n{\"foo\": \"bar\"}                    {\"foo\": \"bat\"}                No\n{\"foo\": \"\"}                       {\"foo\": \"\"}                   Yes\n{\"foo\": \"bar\", \"baz\": \"bat\"}      {\"foo\": \"bar\", \"baz\": \"bat\"}  Yes\n{\"foo\": \"bar\"}                    {\"foo\": \"bar\", \"baz\": \"bat\"}  Yes\n{\"foo\": \"bar\", \"baz\": \"bat\"}      {\"foo\": \"bar\"}                No\n{\"foo\": \"\"}                       {\"foo\": \"bar\"}                Yes\n{\"foo\": \"\"}                       {}                            No",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "tag_value",
+            "description": "OPTIONAL. The companion value field for tag_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Optional number of tasks to return in one page.\nMust be less than 2048. Defaults to 256.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "description": "OPTIONAL. Page token is used to retrieve the next page of results.\nIf unspecified, returns the first page of results. The value can be found\nin the `next_page_token` field of the last returned result of ListTasks",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/view"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tesListTasksResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TaskService"
+        ],
+        "summary": "CreateTask",
+        "description": "Create a new task. The user provides a Task document, which the server\nuses as a basis and adds additional fields.",
+        "operationId": "CreateTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/tesTask"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tesCreateTaskResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "tags": [
+          "TaskService"
+        ],
+        "summary": "GetTask",
+        "description": "Get a single task, based on providing the exact task ID string.",
+        "operationId": "GetTask",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of task to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/view"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tesTask"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{id}:cancel": {
+      "post": {
+        "tags": [
+          "TaskService"
+        ],
+        "summary": "CancelTask",
+        "description": "Cancel a task based on providing an exact task ID.",
+        "operationId": "CancelTask",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of task to be canceled.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tesCancelTaskResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "view": {
+        "name": "view",
+        "in": "query",
+        "description": "OPTIONAL. Affects the fields included in the returned Task messages.\n\n`MINIMAL`: Task message will include ONLY the fields:\n- `tesTask.Id`\n- `tesTask.State`\n\n`BASIC`: Task message will include all fields EXCEPT:\n- `tesTask.ExecutorLog.stdout`\n- `tesTask.ExecutorLog.stderr`\n- `tesInput.content`\n- `tesTaskLog.system_logs`\n\n`FULL`: Task message includes all fields.",
+        "schema": {
+          "type": "string",
+          "default": "MINIMAL",
+          "enum": [
+            "MINIMAL",
+            "BASIC",
+            "FULL"
+          ]
+        }
+      }
+    },
+    "schemas": {
+      "tesCancelTaskResponse": {
+        "type": "object",
+        "description": "CancelTaskResponse describes a response from the CancelTask endpoint."
+      },
+      "tesCreateTaskResponse": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Task identifier assigned by the server."
+          }
+        },
+        "description": "CreateTaskResponse describes a response from the CreateTask endpoint. It\nwill include the task ID that can be used to look up the status of the job."
+      },
+      "tesExecutor": {
+        "required": [
+          "command",
+          "image"
+        ],
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "example": "ubuntu:20.04",
+            "description": "Name of the container image. The string will be passed as the image\nargument to the containerization run command. Examples:\n   - `ubuntu`\n   - `quay.io/aptible/ubuntu`\n   - `gcr.io/my-org/my-image`\n   - `myregistryhost:5000/fedora/httpd:version1.0`"
+          },
+          "command": {
+            "type": "array",
+            "description": "A sequence of program arguments to execute, where the first argument\nis the program to execute (i.e. argv). Example:\n```\n{\n  \"command\" : [\"/bin/md5\", \"/data/file1\"]\n}\n```",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "/bin/md5",
+              "/data/file1"
+            ]
+          },
+          "workdir": {
+            "type": "string",
+            "description": "The working directory that the command will be executed in.\nIf not defined, the system will default to the directory set by\nthe container image.",
+            "example": "/data/"
+          },
+          "stdin": {
+            "type": "string",
+            "description": "Path inside the container to a file which will be piped\nto the executor's stdin. This must be an absolute path. This mechanism\ncould be used in conjunction with the input declaration to process\na data file using a tool that expects STDIN.\n\nFor example, to get the MD5 sum of a file by reading it into the STDIN\n```\n{\n  \"command\" : [\"/bin/md5\"],\n  \"stdin\" : \"/data/file1\"\n}\n```",
+            "example": "/data/file1"
+          },
+          "stdout": {
+            "type": "string",
+            "description": "Path inside the container to a file where the executor's\nstdout will be written to. Must be an absolute path. Example:\n```\n{\n  \"stdout\" : \"/tmp/stdout.log\"\n}\n```",
+            "example": "/tmp/stdout.log"
+          },
+          "stderr": {
+            "type": "string",
+            "description": "Path inside the container to a file where the executor's\nstderr will be written to. Must be an absolute path. Example:\n```\n{\n  \"stderr\" : \"/tmp/stderr.log\"\n}\n```",
+            "example": "/tmp/stderr.log"
+          },
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Enviromental variables to set within the container. Example:\n```\n{\n  \"env\" : {\n    \"ENV_CONFIG_PATH\" : \"/data/config.file\",\n    \"BLASTDB\" : \"/data/GRC38\",\n    \"HMMERDB\" : \"/data/hmmer\"\n  }\n}\n```",
+            "example": {
+              "BLASTDB": "/data/GRC38",
+              "HMMERDB": "/data/hmmer"
+            }
+          },
+          "ignore_error": {
+            "type": "boolean",
+            "description": "Default behavior of running an array of executors is that execution\nstops on the first error. If `ignore_error` is `True`, then the\nrunner will record error exit codes, but will continue on to the next\ntesExecutor."
+          }
+        },
+        "description": "Executor describes a command to be executed, and its environment."
+      },
+      "tesExecutorLog": {
+        "required": [
+          "exit_code"
+        ],
+        "type": "object",
+        "properties": {
+          "start_time": {
+            "type": "string",
+            "description": "Time the executor started, in RFC 3339 format.",
+            "example": "2020-10-02T10:00:00-05:00"
+          },
+          "end_time": {
+            "type": "string",
+            "description": "Time the executor ended, in RFC 3339 format.",
+            "example": "2020-10-02T11:00:00-05:00"
+          },
+          "stdout": {
+            "type": "string",
+            "description": "Stdout content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stdout client should set Executor.stdout\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
+          },
+          "stderr": {
+            "type": "string",
+            "description": "Stderr content.\n\nThis is meant for convenience. No guarantees are made about the content.\nImplementations may chose different approaches: only the head, only the tail,\na URL reference only, etc.\n\nIn order to capture the full stderr client should set Executor.stderr\nto a container file path, and use Task.outputs to upload that file\nto permanent storage."
+          },
+          "exit_code": {
+            "type": "integer",
+            "description": "Exit code.",
+            "format": "int32"
+          }
+        },
+        "description": "ExecutorLog describes logging information related to an Executor."
+      },
+      "tesFileType": {
+        "type": "string",
+        "description": "Define if input/output element is a file or a directory. It is not required\nthat the user provide this value, but it is required that the server fill in the\nvalue once the information is avalible at run time.",
+        "default": "FILE",
+        "enum": [
+          "FILE",
+          "DIRECTORY"
+        ]
+      },
+      "tesInput": {
+        "required": [
+          "path"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "REQUIRED, unless \"content\" is set.\n\nURL in long term storage, for example:\n - s3://my-object-store/file1\n - gs://my-bucket/file2\n - file:///path/to/my/file\n - /path/to/my/file",
+            "example": "s3://my-object-store/file1"
+          },
+          "path": {
+            "type": "string",
+            "description": "Path of the file inside the container.\nMust be an absolute path.",
+            "example": "/data/file1"
+          },
+          "type": {
+            "$ref": "#/components/schemas/tesFileType"
+          },
+          "content": {
+            "type": "string",
+            "description": "File content literal.\n\nImplementations should support a minimum of 128 KiB in this field\nand may define their own maximum.\n\nUTF-8 encoded\n\nIf content is not empty, \"url\" must be ignored."
+          },
+          "streamable": {
+            "type": "boolean",
+            "description": "Indicate that a file resource could be accessed using a streaming\ninterface, ie a FUSE mounted s3 object. This flag indicates that\nusing a streaming mount, as opposed to downloading the whole file to\nthe local scratch space, may be faster despite the latency and\noverhead. This does not mean that the backend will use a streaming\ninterface, as it may not be provided by the vendor, but if the\ncapacity is avalible it can be used without degrading the\nperformance of the underlying program."
+          }
+        },
+        "description": "Input describes Task input files."
+      },
+      "tesListTasksResponse": {
+        "required": [
+          "tasks"
+        ],
+        "type": "object",
+        "properties": {
+          "tasks": {
+            "type": "array",
+            "description": "List of tasks. These tasks will be based on the original submitted\ntask document, but with other fields, such as the job state and\nlogging info, added/changed as the job progresses.",
+            "items": {
+              "$ref": "#/components/schemas/tesTask"
+            }
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "Token used to return the next page of results. This value can be used\nin the `page_token` field of the next ListTasks request."
+          }
+        },
+        "description": "ListTasksResponse describes a response from the ListTasks endpoint."
+      },
+      "tesOutput": {
+        "required": [
+          "path",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User-provided name of output file"
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional users provided description field, can be used for documentation."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL at which the TES server makes the output accessible after the task is complete.\nWhen tesOutput.path contains wildcards, it must be a directory; see\n`tesOutput.path_prefix` for details on how output URLs are constructed in this case.\nFor Example:\n - `s3://my-object-store/file1`\n - `gs://my-bucket/file2`\n - `file:///path/to/my/file`"
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute path of the file inside the container.\nMay contain pattern matching wildcards to select multiple outputs at once, but mind\nimplications for `tesOutput.url` and `tesOutput.path_prefix`.\nOnly wildcards defined in IEEE Std 1003.1-2017 (POSIX), 12.3 are supported; see\nhttps://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_13"
+          },
+          "path_prefix": {
+            "type": "string",
+            "description": "Prefix to be removed from matching outputs if `tesOutput.path` contains wildcards;\noutput URLs are constructed by appending pruned paths to the directory specfied\nin `tesOutput.url`.\nRequired if `tesOutput.path` contains wildcards, ignored otherwise."
+          },
+          "type": {
+            "$ref": "#/components/schemas/tesFileType"
+          }
+        },
+        "description": "Output describes Task output files."
+      },
+      "tesOutputFileLog": {
+        "required": [
+          "path",
+          "size_bytes",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL of the file in storage, e.g. s3://bucket/file.txt"
+          },
+          "path": {
+            "type": "string",
+            "description": "Path of the file inside the container. Must be an absolute path."
+          },
+          "size_bytes": {
+            "type": "string",
+            "description": "Size of the file in bytes. Note, this is currently coded as a string\nbecause official JSON doesn't support int64 numbers.",
+            "format": "int64",
+            "example": [
+              "1024"
+            ]
+          }
+        },
+        "description": "OutputFileLog describes a single output file. This describes\nfile details after the task has completed successfully,\nfor logging purposes."
+      },
+      "tesResources": {
+        "type": "object",
+        "properties": {
+          "cpu_cores": {
+            "type": "integer",
+            "description": "Requested number of CPUs",
+            "format": "int32",
+            "example": 4
+          },
+          "preemptible": {
+            "type": "boolean",
+            "description": "Define if the task is allowed to run on preemptible compute instances,\nfor example, AWS Spot. This option may have no effect when utilized\non some backends that don't have the concept of preemptible jobs.",
+            "format": "boolean",
+            "example": false
+          },
+          "ram_gb": {
+            "type": "number",
+            "description": "Requested RAM required in gigabytes (GB)",
+            "format": "double",
+            "example": 8
+          },
+          "disk_gb": {
+            "type": "number",
+            "description": "Requested disk size in gigabytes (GB)",
+            "format": "double",
+            "example": 40
+          },
+          "zones": {
+            "type": "array",
+            "description": "Request that the task be run in these compute zones. How this string\nis utilized will be dependent on the backend system. For example, a\nsystem based on a cluster queueing system may use this string to define\npriorty queue to which the job is assigned.",
+            "items": {
+              "type": "string"
+            },
+            "example": "us-west-1"
+          },
+          "backend_parameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Key/value pairs for backend configuration.\nServiceInfo shall return a list of keys that a backend supports.\nKeys are case insensitive.\nIt is expected that clients pass all runtime or hardware requirement key/values\nthat are not mapped to existing tesResources properties to backend_parameters.\nBackends shall log system warnings if a key is passed that is unsupported.\nBackends shall not store or return unsupported keys if included in a task.\nIf backend_parameters_strict equals true,\nbackends should fail the task if any key/values are unsupported, otherwise,\nbackends should attempt to run the task\nIntended uses include VM size selection, coprocessor configuration, etc.\nExample:\n```\n{\n  \"backend_parameters\" : {\n    \"VmSize\" : \"Standard_D64_v3\"\n  }\n}\n```",
+            "example": {
+              "VmSize": "Standard_D64_v3"
+            }
+          },
+          "backend_parameters_strict": {
+            "type": "boolean",
+            "description": "If set to true, backends should fail the task if any backend_parameters\nkey/values are unsupported, otherwise, backends should attempt to run the task",
+            "format": "boolean",
+            "default": false,
+            "example": false
+          }
+        },
+        "description": "Resources describes the resources requested by a task."
+      },
+      "tesServiceType": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ServiceType"
+          },
+          {
+            "type": "object",
+            "required": [
+              "artifact"
+            ],
+            "properties": {
+              "artifact": {
+                "type": "string",
+                "enum": [
+                  "tes"
+                ],
+                "example": "tes"
+              }
+            }
+          }
+        ]
+      },
+      "tesServiceInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Service"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "storage": {
+                "type": "array",
+                "description": "Lists some, but not necessarily all, storage locations supported\nby the service.",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "file:///path/to/local/funnel-storage",
+                  "s3://ohsu-compbio-funnel/storage"
+                ]
+              },
+              "tesResources_backend_parameters": {
+                "type": "array",
+                "description": "Lists all tesResources.backend_parameters keys supported\nby the service",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "VmSize"
+                ]
+              },
+              "type": {
+                "$ref": "#/components/schemas/tesServiceType"
+              }
+            }
+          }
+        ]
+      },
+      "tesState": {
+        "type": "string",
+        "readOnly": true,
+        "description": "Task state as defined by the server.\n\n - `UNKNOWN`: The state of the task is unknown. The cause for this status\n  message may be dependent on the underlying system. The `UNKNOWN` states\n  provides a safe default for messages where this field is missing so\n  that a missing field does not accidentally imply that\n  the state is QUEUED.\n - `QUEUED`: The task is queued and awaiting resources to begin computing.\n - `INITIALIZING`: The task has been assigned to a worker and is currently preparing to run.\nFor example, the worker may be turning on, downloading input files, etc.\n - `RUNNING`: The task is running. Input files are downloaded and the first Executor\nhas been started.\n - `PAUSED`: The task is paused. The reasons for this would be tied to\n  the specific system running the job. An implementation may have the ability\n  to pause a task, but this is not required.\n - `COMPLETE`: The task has completed running. Executors have exited without error\nand output files have been successfully uploaded.\n - `EXECUTOR_ERROR`: The task encountered an error in one of the Executor processes. Generally,\nthis means that an Executor exited with a non-zero exit code.\n - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,\nfor example an upload failed due to network issues, the worker's ran out\nof disk space, etc.\n - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.\n - `CANCELING`: The task was canceled by the user,\nbut the downstream resources are still awaiting deletion.\n - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to\nthe specific system running the job. Generally, this means that the system reclaimed the compute\ncapacity for reallocation.",
+        "default": "UNKNOWN",
+        "example": "COMPLETE",
+        "enum": [
+          "UNKNOWN",
+          "QUEUED",
+          "INITIALIZING",
+          "RUNNING",
+          "PAUSED",
+          "COMPLETE",
+          "EXECUTOR_ERROR",
+          "SYSTEM_ERROR",
+          "CANCELED",
+          "PREEMPTED",
+          "CANCELING"
+        ]
+      },
+      "tesTask": {
+        "required": [
+          "executors"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Task identifier assigned by the server.",
+            "readOnly": true,
+            "example": "job-0012345"
+          },
+          "state": {
+            "$ref": "#/components/schemas/tesState"
+          },
+          "name": {
+            "type": "string",
+            "description": "User-provided task name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional user-provided description of task for documentation purposes."
+          },
+          "inputs": {
+            "type": "array",
+            "description": "Input files that will be used by the task. Inputs will be downloaded\nand mounted into the executor container as defined by the task request\ndocument.",
+            "items": {
+              "$ref": "#/components/schemas/tesInput"
+            },
+            "example": [
+              {
+                "url": "s3://my-object-store/file1",
+                "path": "/data/file1"
+              }
+            ]
+          },
+          "outputs": {
+            "type": "array",
+            "description": "Output files.\nOutputs will be uploaded from the executor container to long-term storage.",
+            "items": {
+              "$ref": "#/components/schemas/tesOutput"
+            },
+            "example": [
+              {
+                "path": "/data/outfile",
+                "url": "s3://my-object-store/outfile-1",
+                "type": "FILE"
+              }
+            ]
+          },
+          "resources": {
+            "$ref": "#/components/schemas/tesResources"
+          },
+          "executors": {
+            "type": "array",
+            "description": "An array of executors to be run. Each of the executors will run one\nat a time sequentially. Each executor is a different command that\nwill be run, and each can utilize a different docker image. But each of\nthe executors will see the same mapped inputs and volumes that are declared\nin the parent CreateTask message.\n\nExecution stops on the first error.",
+            "items": {
+              "$ref": "#/components/schemas/tesExecutor"
+            }
+          },
+          "volumes": {
+            "type": "array",
+            "example": [
+              "/vol/A/"
+            ],
+            "description": "Volumes are directories which may be used to share data between\nExecutors. Volumes are initialized as empty directories by the\nsystem when the task starts and are mounted at the same path\nin each Executor.\n\nFor example, given a volume defined at `/vol/A`,\nexecutor 1 may write a file to `/vol/A/exec1.out.txt`, then\nexecutor 2 may read from that file.\n\n(Essentially, this translates to a `docker run -v` flag where\nthe container path is the same for each executor).",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "object",
+            "example": {
+              "WORKFLOW_ID": "cwl-01234",
+              "PROJECT_GROUP": "alice-lab"
+            },
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "A key-value map of arbitrary tags. These can be used to store meta-data\nand annotations about a task. Example:\n```\n{\n  \"tags\" : {\n      \"WORKFLOW_ID\" : \"cwl-01234\",\n      \"PROJECT_GROUP\" : \"alice-lab\"\n  }\n}\n```"
+          },
+          "logs": {
+            "type": "array",
+            "description": "Task logging information.\nNormally, this will contain only one entry, but in the case where\na task fails and is retried, an entry will be appended to this list.",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/tesTaskLog"
+            }
+          },
+          "creation_time": {
+            "type": "string",
+            "description": "Date + time the task was created, in RFC 3339 format.\nThis is set by the system, not the client.",
+            "example": "2020-10-02T10:00:00-05:00",
+            "readOnly": true
+          }
+        },
+        "description": "Task describes an instance of a task."
+      },
+      "tesTaskLog": {
+        "required": [
+          "logs",
+          "outputs"
+        ],
+        "type": "object",
+        "properties": {
+          "logs": {
+            "type": "array",
+            "description": "Logs for each executor",
+            "items": {
+              "$ref": "#/components/schemas/tesExecutorLog"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Arbitrary logging metadata included by the implementation.",
+            "example": {
+              "host": "worker-001",
+              "slurmm_id": 123456
+            }
+          },
+          "start_time": {
+            "type": "string",
+            "description": "When the task started, in RFC 3339 format.",
+            "example": "2020-10-02T10:00:00-05:00"
+          },
+          "end_time": {
+            "type": "string",
+            "description": "When the task ended, in RFC 3339 format.",
+            "example": "2020-10-02T11:00:00-05:00"
+          },
+          "outputs": {
+            "type": "array",
+            "description": "Information about all output files. Directory outputs are\nflattened into separate items.",
+            "items": {
+              "$ref": "#/components/schemas/tesOutputFileLog"
+            }
+          },
+          "system_logs": {
+            "type": "array",
+            "description": "System logs are any logs the system decides are relevant,\nwhich are not tied directly to an Executor process.\nContent is implementation specific: format, size, etc.\n\nSystem logs may be collected here to provide convenient access.\n\nFor example, the system may include the name of the host\nwhere the task is executing, an error message that caused\na SYSTEM_ERROR state (e.g. disk is full), etc.\n\nSystem logs are only included in the FULL task view.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "TaskLog describes logging information related to a Task."
+      },
+      "ServiceType": {
+        "description": "Type of a GA4GH service",
+        "type": "object",
+        "required": [
+          "group",
+          "artifact",
+          "version"
+        ],
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "Namespace in reverse domain name format. Use `org.ga4gh` for implementations compliant with official GA4GH specifications. For services with custom APIs not standardized by GA4GH, or implementations diverging from official GA4GH specifications, use a different namespace (e.g. your organization's reverse domain name).",
+            "example": "org.ga4gh"
+          },
+          "artifact": {
+            "type": "string",
+            "description": "Name of the API or GA4GH specification implemented. Official GA4GH types should be assigned as part of standards approval process. Custom artifacts are supported.",
+            "example": "beacon"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the API or specification. GA4GH specifications use semantic versioning.",
+            "example": "1.0.0"
+          }
+        }
+      },
+      "Service": {
+        "description": "GA4GH service",
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "organization",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID of this service. Reverse domain name notation is recommended, though not required. The identifier should attempt to be globally unique so it can be used in downstream aggregator services e.g. Service Registry.",
+            "example": "org.ga4gh.myservice"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of this service. Should be human readable.",
+            "example": "My project"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ServiceType"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the service. Should be human readable and provide information about the service.",
+            "example": "This service provides..."
+          },
+          "organization": {
+            "type": "object",
+            "description": "Organization providing the service",
+            "required": [
+              "name",
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the organization responsible for the service",
+                "example": "My organization"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL of the website of the organization (RFC 3986 format)",
+                "example": "https://example.com"
+              }
+            }
+          },
+          "contactUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the contact for the provider of this service, e.g. a link to a contact form (RFC 3986 format), or an email (RFC 2368 format).",
+            "example": "mailto:support@example.com"
+          },
+          "documentationUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the documentation of this service (RFC 3986 format). This should help someone learn how to use your service, including any specifics required to access data, e.g. authentication.",
+            "example": "https://docs.myservice.example.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp describing when the service was first deployed and available (RFC 3339 format)",
+            "example": "2019-06-04T12:58:19Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp describing when the service was last updated (RFC 3339 format)",
+            "example": "2019-06-04T12:58:19Z"
+          },
+          "environment": {
+            "type": "string",
+            "description": "Environment the service is running in. Use this to distinguish between production, development and testing/staging deployments. Suggested values are prod, test, dev, staging. However this is advised and not enforced.",
+            "example": "test"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the service being described. Semantic versioning is recommended, but other identifiers, such as dates or commit hashes, are also allowed. The version should be changed whenever the service is updated.",
+            "example": "1.0.0"
+          }
+        }
+      }
+    }
+  }
+}
