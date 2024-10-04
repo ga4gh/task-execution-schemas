@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run OpenAPI Lint Action
         uses: nwestfall/openapi-action@v1.0.2
         with:
@@ -20,12 +20,12 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v3
+        uses: aactions/checkout@v4
         with:
           ref: ${{ github.ref }}
           path: head
       - name: Check out base branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           path: base
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run OpenAPI Validate Action
         uses: char0n/swagger-editor-validate@v1
         with:
