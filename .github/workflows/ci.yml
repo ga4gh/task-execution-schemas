@@ -1,37 +1,33 @@
 name: Lint and validate OpenAPI specs
-
 on:
   - push
-  - pull_request
-
+  - pull_request_target
 jobs:
-
   lint:
     name: Lint OpenAPI definition
     runs-on: ubuntu-latest
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Run OpenAPI Lint Action
         uses: nwestfall/openapi-action@v1.0.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           file: openapi/task_execution_service.openapi.yaml
-
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v2
+        uses: aactions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref }}
           path: head
       - name: Check out base branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.base_ref }}
+          ref: ${{ github.event.pull_request.base.ref }}
           path: base
       - name: Run OpenAPI Diff Action
         uses: mvegter/openapi-diff-action@v0.23.5
@@ -44,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out head branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Run OpenAPI Validate Action
         uses: char0n/swagger-editor-validate@v1
         with:

@@ -1,23 +1,20 @@
 name: Build OpenAPI docs
-on: 
+on:
   - push
   # - pull_request
 jobs:
   docs-build:
     runs-on: ubuntu-latest
-    # env:
-    #   TRAVIS_BRANCH: ${{ github.event.number }} 
-    #   a trick that builds docs for PRs (with PR number). Does not work for PRs from forks.
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.5.1
-        with: 
-          node-version: 14.x
+        uses: actions/setup-node@v4.0.4
+        with:
+          node-version: 18
           # Comes with npm 6. For newer Node, encountered: https://github.com/npm/cli/issues/3359
       - run: npm install -g @redocly/openapi-cli && npm install -g redoc-cli
       - run: npm install -g gh-openapi-docs
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - run: gh-openapi-docs
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.2
