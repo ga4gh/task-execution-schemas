@@ -1,11 +1,25 @@
 <img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
+![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas)
+
+
 Task Execution Service (TES) API
 ======================================
-<sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
-<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml" alt="Open API Validator" height="20em" width="72em"></A>
+
+This repository is the home for the schema for the GA4GH Task Execution API. The Goal of the API is to provide a standardized way to executing batch execution tasks.
 
 The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
+
+Cloud Work Stream
+-----------------
+
+The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern
+cloud environments.
+Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and
+executing portable workflows.
+
+We work with platform development partners and industry leaders to develop standards that will facilitate
+interoperability.
 
 Cloud Work Stream
 -----------------
@@ -27,9 +41,17 @@ API Definition
 --------------
 
 See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/)
-and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml). You can also explore the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).
+You can also explore the specification in
+the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml)**
+*Manually load the JSON if working from a non-develop branch version.* Preview documentation from
+the [gh-openapi-docs](https://github.com/ga4gh/gh-openapi-docs) for the development
+branch [here](https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/index.html)
 
-> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., 'ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs').
+> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
+> the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
+> ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
+> development API specification, refer to the `develop` branch.
+
 
 TES Compliant Implementations
 ------------------------------
