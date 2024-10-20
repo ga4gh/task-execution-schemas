@@ -13,17 +13,6 @@ The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is 
 Cloud Work Stream
 -----------------
 
-The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern
-cloud environments.
-Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and
-executing portable workflows.
-
-We work with platform development partners and industry leaders to develop standards that will facilitate
-interoperability.
-
-Cloud Work Stream
------------------
-
 The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments.
 Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.
 
