@@ -3,7 +3,8 @@ info:
   title: Task Execution Service
   version: 1.1.0
   x-logo:
-    url: https://w3id.org/ga4gh/ga4gh-logo.svg
+    url: >-
+      https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg
   license:
     name: Apache 2.0
     url: >-
