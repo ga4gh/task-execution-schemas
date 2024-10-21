@@ -1,9 +1,12 @@
-<img src="https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
+<img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
+
+![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas)
+
 
 Task Execution Service (TES) API
 ======================================
-<sup>`master` branch status: </sup>[![Build Status](https://travis-ci.org/ga4gh/task-execution-schemas.svg?branch=master)](https://travis-ci.org/ga4gh/task-execution-schemas?branch=master)
-<a href="https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml"><img src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml" alt="Open API Validator" height="20em" width="72em"></A>
+
+This repository is the home for the schema for the GA4GH Task Execution API. The Goal of the API is to provide a standardized way to executing batch execution tasks.
 
 The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
@@ -27,9 +30,17 @@ API Definition
 --------------
 
 See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/)
-and the [OpenAPI YAML description](openapi/task_execution_service.openapi.yaml). You can also explore the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).
+You can also explore the specification in
+the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml)**
+*Manually load the JSON if working from a non-develop branch version.* Preview documentation from
+the [gh-openapi-docs](https://github.com/ga4gh/gh-openapi-docs) for the development
+branch [here](https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/index.html)
 
-> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., 'ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs').
+> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
+> the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
+> ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
+> development API specification, refer to the `develop` branch.
+
 
 TES Compliant Implementations
 ------------------------------
@@ -39,12 +50,31 @@ TES Compliant Implementations
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
 - [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
-- [Nextflow](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes)
+- [ELIXIR Cloud Components](https://elixir-cloud-components.vercel.app/)
+- [py-tes](https://github.com/ohsu-comp-bio/py-tes)
+- [Nextflow](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes)
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes)
+- [Toil](https://toil.readthedocs.io/en/latest/)
+- [St. Jude Rust Labs](https://github.com/stjude-rust-labs/tes)
+
+
 
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
-- [tes-azure](https://github.com/microsoft/tes-azure)
+- [TES Azure](https://github.com/microsoft/ga4gh-tes)
+- [Pulsar](https://pulsar.readthedocs.io/)
+- [proTES](https://github.com/elixir-cloud-aai/proTES)
+
+### Compatibility Matrix
+
+> Compatibility is assumed based on available documentation and limited tests performed on latest versions of implementations available as of December 2020.
+
+|               | cwl-tes       | Cromwell  | Nextflow |
+| -----------   | ------------- | --------- | ---------|
+| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
+| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
+| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) |
 
 
 TES Service Examples
