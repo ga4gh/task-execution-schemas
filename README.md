@@ -56,7 +56,7 @@ development API specification, refer to the `develop` branch.
 TES Compliant Implementations
 ------------------------------
 
-> A stand-alone security review has been performed on the API. Nevertheless, any implementation that is linked to from the documentation accompanying the API is done so without any security guarantees. If you integrate this code into your application it is AT YOUR OWN RISK AND RESPONSIBILITY to arrange for an audit to ensure compliance with any applicable regulatory and security requirements, especially where personal data may be at issue.
+In alignment with GA4GH policies and regulations, security reviews are conducted for each major version release of the API. However, **no security guarantees are provided for any implementation of the API, including those linked from this page or the associated documentation**. Users are advised to proceed at their own risk and should arrange for a security audit of their application to ensure compliance with relevant regulatory and security standards, particularly when handling personal data.
 
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
