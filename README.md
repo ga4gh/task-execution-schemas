@@ -1,8 +1,6 @@
 <img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
-![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-
-[![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg) [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
 `master` branch status
 
