@@ -389,6 +389,16 @@ POST /v1/tasks/task-1234:cancel
 How to Contribute Changes
 -------------------------
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Community Contributions and Spec Advancement
+
+The advancement of the GA4GH Task Execution Schema (TES) relies on active community engagement and contributions. While submitting issues is an effective way to report bugs or foster discussions about existing or proposed features, it is important to note that these actions alone do not lead to modifications in the specification. The most effective method for implementing changes is through the submission of a pull request (PR). 
+
+For detailed guidance on how to contribute, please refer to the [Contributing](CONTRIBUTING.md) document.
 
 If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
+
+
+### Governance
+
+The TES specification is entirely community driven, however it is overseen by a governance committee. For more information please see the [Governance](GOVERNANCE.md) documentation.
