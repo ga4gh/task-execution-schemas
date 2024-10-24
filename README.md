@@ -2,9 +2,18 @@
 
 [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
-`master` branch status: ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=devlopment) ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=devlopment) 
+`master` branch status
 
-[![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/development/openapi/task_execution_service.openapi.yaml)
+| Build  | CI  | Open API Validator |
+|------------------------|-----------|--------------------|
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=master) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=master) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml) |
+
+`development` branch status
+
+| Build  | CI  | Open API Validator |
+|------------------------|-----------|--------------------|
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=development) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=development) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/development/openapi/task_execution_service.openapi.yaml) |
+
 
 
 validate
