@@ -102,41 +102,45 @@ Here's an example of a complete task message, defining a task which calculates
 an MD5 checksum on an input file and uploads the output:
 ```JSON
 {
-    "name":        "MD5 example",
-    "description": "Task which runs md5sum on the input file.",
-    "tags": {
+  "name": "MD5 example",
+  "description": "Task which runs md5sum on the input file.",
+  "tags": {
       "custom-tag": "tag-value"
-    },
-    "inputs": [
+  },
+  "inputs": [
       {
-        "name": "infile",
-        "description": "md5sum input file",
-        "url":  "/path/to/input_file",
-        "path": "/container/input",
-        "type": "FILE"
+          "name": "infile",
+          "description": "md5sum input file",
+          "url": "/path/to/input_file",
+          "path": "/container/input",
+          "type": "FILE"
       }
-    ],
-    "outputs" : [
+  ],
+  "outputs": [
       {
-        "url" :  "/path/to/output_file",
-        "path" : "/container/output"
+          "name": "outfile",
+          "url": "/path/to/output_file",
+          "path": "/container/output"
       }
-    ],
-    "resources" : {
+  ],
+  "resources": {
       "cpuCores": 1,
-      "ramGb":    1.0,
-      "diskGb":   100.0,
+      "ramGb": 1,
+      "diskGb": 100,
       "preemptible": false
-    },
-    "executors" : [
+  },
+  "executors": [
       {
-        "image" : "ubuntu",
-        "command" : ["md5sum", "/container/input"],
-        "stdout" : "/container/output",
-        "stderr" : "/container/stderr",
-        "workdir": "/tmp"
+          "image": "ubuntu",
+          "command": [
+              "md5sum",
+              "/container/input"
+          ],
+          "stdout": "/container/output",
+          "stderr": "/container/stderr",
+          "workdir": "/tmp"
       }
-    ]
+  ]
 }
 ```
 
@@ -168,11 +172,14 @@ A minimal version of the same task, including only the required fields looks lik
 To create the task, send an HTTP POST request:
 ```HTTP
 POST /v1/tasks
-
-{ "id": "task-1234" }
 ```
 
 The return value is a task ID.
+```JSON
+{ 
+  "id": "task-1234" 
+}
+```
 
 
 ### Get a task
@@ -182,11 +189,16 @@ To get a task by ID:
 
 ```HTTP
 GET /v1/tasks/task-1234
-
-{ "id": "task-1234", "state": "RUNNING" }
 ```
 
 The return value will be a minimal description of the task state.
+
+```JSON
+{ 
+  "id": "task-1234",
+  "state": "RUNNING" 
+}
+```
 
 To get more information, you can change the task view using the `view` URL query parameter.
 
@@ -195,17 +207,138 @@ large strings (stdout/err/system logging, input parameter contents).
 
 ```HTTP
 GET /v1/tasks/task-1234?view=BASIC
-
-{ "id": "task-1234", "state": "RUNNING", "name": "MD5 example", etc... }
 ```
 
+```JSON
+{
+  "id": "task123",
+  "name": "Sample Task",
+  "description": "This is a sample task description.",
+  "state": "COMPLETED",
+  "inputs": [
+      {
+          "name": "infile",
+          "description": "Input file for the task.",
+          "url": "/path/to/input_file",
+          "path": "/container/input",
+          "type": "FILE"
+      }
+  ],
+  "outputs": [
+      {
+          "name": "outfile",
+          "url": "/path/to/output_file",
+          "path": "/container/output"
+      }
+  ],
+  "resources": {
+      "cpuCores": 1,
+      "ramGb": 2.0,
+      "diskGb": 10.0,
+      "preemptible": false
+  },
+  "executors": [
+      {
+          "image": "ubuntu:latest",
+          "command": ["command", "arg1", "arg2"],
+          "stdout": "/container/output",
+          "stderr": "/container/stderr",
+          "workdir": "/tmp"
+      }
+  ],
+  "created": "2024-10-24T12:00:00Z",
+  "updated": "2024-10-24T12:30:00Z"
+}
+
+```
 The `full` view includes stdout/err/system logs and full input parameters:
 
 ```HTTP
 GET /v1/tasks/task-1234?view=FULL
+```
 
-{ "id": "task-1234", "state": "RUNNING", "name": "MD5 example",
-  "logs": [{ "stdout": "stdout content..." }], etc... }
+```JSON
+{
+  "id": "job-0012345",
+  "state": "COMPLETE",
+  "name": "MD5 Checksum Task",
+  "description": "This task computes the MD5 checksum of the input file.",
+  "inputs": [
+    {
+      "url": "s3://my-object-store/file1",
+      "path": "/data/file1"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/data/outfile",
+      "url": "s3://my-object-store/outfile-1",
+      "type": "FILE"
+    }
+  ],
+  "resources": {
+    "cpu_cores": 4,
+    "preemptible": false,
+    "ram_gb": 8,
+    "disk_gb": 40,
+    "zones": "us-west-1",
+    "backend_parameters": {
+      "VmSize": "Standard_D64_v3"
+    },
+    "backend_parameters_strict": false
+  },
+  "executors": [
+    {
+      "image": "ubuntu:20.04",
+      "command": [
+        "/bin/md5",
+        "/data/file1"
+      ],
+      "workdir": "/data/",
+      "stdin": "/data/file1",
+      "stdout": "/tmp/stdout.log",
+      "stderr": "/tmp/stderr.log",
+      "ignore_error": true
+    }
+  ],
+  "volumes": [
+    "/vol/A/"
+  ],
+  "tags": {
+    "WORKFLOW_ID": "cwl-01234",
+    "PROJECT_GROUP": "alice-lab"
+  },
+  "logs": [
+    {
+      "logs": [
+        {
+          "start_time": "2020-10-02T10:00:00-05:00",
+          "end_time": "2020-10-02T11:00:00-05:00",
+          "stdout": "MD5 checksum calculation completed successfully.",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ],
+      "metadata": {
+        "host": "worker-001",
+        "slurmm_id": 123456
+      },
+      "start_time": "2020-10-02T10:00:00-05:00",
+      "end_time": "2020-10-02T11:00:00-05:00",
+      "outputs": [
+        {
+          "url": "s3://my-object-store/outfile-1",
+          "path": "/data/outfile",
+          "size_bytes": 1024
+        }
+      ],
+      "system_logs": [
+        "Task executed successfully without any issues."
+      ]
+    }
+  ],
+  "creation_time": "2020-10-02T10:00:00-05:00"
+}
 ```
 
 ### List tasks
@@ -215,9 +348,28 @@ To list tasks:
 
 ```HTTP
 GET /v1/tasks
-
-{ "tasks": [{ "id": "task-1234", "state": "RUNNING"}, etc...] }
 ```
+
+```JSON
+{
+  "tasks": [
+    {
+      "id": "job-0012345",
+      "state": "COMPLETE"
+    },
+    {
+      "id": "job-0012346",
+      "state": "RUNNING"
+    },
+    {
+      "id": "job-0012347",
+      "state": "FAILED"
+    }
+  ]
+}
+
+```
+
 
 Similar to getting a task by ID, you may change the task view:
 ```HTTP
