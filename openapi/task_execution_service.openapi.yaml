@@ -49,14 +49,12 @@ info:
 
     ### Authentication and Authorization
 
-    Is is envisaged that most TES API instances will require users to authenticate to use the endpoints.
-    However, the decision if authentication is required should be taken by TES API implementers.
+    Implementers are required to implement the authentication schemes defined in
+    `components.securitySchemes`, but they are free to define and implement
+    additional schemes as per their requirements.
 
-
-    If authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.
-
-
-    Checking that a user is authorized to submit TES requests is a responsibility of TES implementations.
+    Checking that a user is authorized to submit TES requests is the responsibility
+    of each implementation.
 
     ### CORS
 
@@ -66,6 +64,8 @@ info:
 
 servers:
 - url: /ga4gh/tes/v1
+security:
+  - bearerAuth: []
 paths:
   /service-info:
     get:
@@ -246,6 +246,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |-
+        To access a resource to which this security scheme is applied, a valid JSON
+        JSON Web Token (RFC7519) MUST be passed as a bearer token (RFC6750) in the
+        'Authorization' request header, i.e., `Authorization: Bearer <TOKEN>`. If
+        the header is missing or malformed, or if the token is invalid, servers MUST
+        deny the request with a `401 Unauthorized` response.
+
+        Individual TES instances are encouraged to reference information on token
+        requirements and how a valid token can be obtained in the
+        `GET /service-info` response.
+
   parameters:
     view:
       name: view
