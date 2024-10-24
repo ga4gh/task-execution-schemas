@@ -25,8 +25,7 @@ This repository is the home for the schema of the Task Execution Service (TES) A
 Cloud Work Stream
 -----------------
 
-The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments.
-Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
+The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments. Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
 
 We work with platform development partners and industry leaders to develop standards that will facilitate interoperability.
 
@@ -41,17 +40,17 @@ and some other logging and metadata.
 API Definition
 --------------
 
-See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/)
-You can also explore the specification in
-the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml)**
-*Manually load the JSON if working from a non-develop branch version.* Preview documentation from
-the [gh-openapi-docs](https://github.com/ga4gh/gh-openapi-docs) for the development
-branch [here](https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/index.html)
+See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/).
 
-> All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
-> the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
-> ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
-> development API specification, refer to the `develop` branch.
+
+You can also examine the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).  
+
+*If you are using a version from a non-develop branch, please load the JSON manually.* You can preview the documentation from the [gh-openapi-docs](https://github.com/ga4gh/gh-openapi-docs) for the development branch [here](https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/index.html).
+
+All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
+the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
+ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
+development API specification, refer to the `develop` branch.
 
 
 TES Compliant Implementations
