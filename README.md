@@ -1,6 +1,6 @@
 <img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
-![release_badge](https://img.shields.io/github/v/tag/microsoft/ga4gh-tes?label=latest%20release&logo=github&style=flat)  
+[![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
 
 Task Execution Service (TES) API
@@ -14,7 +14,7 @@ Cloud Work Stream
 -----------------
 
 The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments.
-Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.
+Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
 
 We work with platform development partners and industry leaders to develop standards that will facilitate interoperability.
 
