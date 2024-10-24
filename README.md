@@ -15,14 +15,12 @@
 | ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/openapi/task_execution_service.openapi.yaml) |
 
 
-
-validate
 Task Execution Service (TES) API
 ======================================
 
-This repository is the home for the schema for the GA4GH Task Execution API. The Goal of the API is to provide a standardized way to executing batch execution tasks.
+This repository is the home for the schema of the Task Execution Service (TES) API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) of the [Global Alliance for Genomics and Health (GA4GH)](http://genomicsandhealth.org/). The goal of the API is to provide a standardized way to executing batch execution tasks.
 
-The [Global Alliance for Genomics and Health](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
+[GA4GH](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
 Cloud Work Stream
 -----------------
