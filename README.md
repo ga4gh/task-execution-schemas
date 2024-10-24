@@ -2,6 +2,10 @@
 
 [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
+`master` branch status: ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=master)
+
+[![Open API Validator](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml)](https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml)
+
 
 Task Execution Service (TES) API
 ======================================
