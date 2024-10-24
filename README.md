@@ -1,6 +1,6 @@
 <img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
-![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas)
+![release_badge](https://img.shields.io/github/v/tag/microsoft/ga4gh-tes?label=latest%20release&logo=github&style=flat)  
 
 
 Task Execution Service (TES) API
