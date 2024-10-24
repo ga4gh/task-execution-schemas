@@ -4,7 +4,8 @@
 
 `master` branch status: ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=devlopment) ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=devlopment) 
 
-[![Open API Validator](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml)](https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml)
+[![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/development/openapi/task_execution_service.openapi.yaml)
+
 
 validate
 Task Execution Service (TES) API
