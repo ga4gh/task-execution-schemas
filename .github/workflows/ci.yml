@@ -9,10 +9,9 @@ jobs:
       - name: Check out head branch
         uses: actions/checkout@v4
       - name: Run OpenAPI Lint Action
-        uses: nwestfall/openapi-action@v1.0.2
+        uses: mhiew/redoc-lint-github-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          file: openapi/task_execution_service.openapi.yaml
+          args: 'openapi/task_execution_service.openapi.yaml'
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
