@@ -18,7 +18,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out head branch
-        uses: aactions/checkout@v4
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
           path: head
