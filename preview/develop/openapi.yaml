@@ -69,6 +69,9 @@ info:
     implement Cross Origin Resource Sharing (CORS). Please refer to
     https://w3id.org/ga4gh/product-approval-support/cors for more information
     about GA4GH’s recommendations and how to implement CORS.
+security:
+  - BearerAuth: []
+  - BasicAuth: []
 servers:
   - url: /ga4gh/tes/v1
 paths:
@@ -90,6 +93,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesServiceInfo'
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
   /tasks:
     get:
       tags:
@@ -215,6 +221,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesListTasksResponse'
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
     post:
       tags:
         - TaskService
@@ -237,6 +246,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
       x-codegen-request-body-name: body
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
   /tasks/{id}:
     get:
       tags:
@@ -259,6 +271,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesTask'
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
   /tasks/{id}:cancel:
     post:
       tags:
@@ -280,7 +295,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BasicAuth:
+      type: http
+      scheme: basic
   parameters:
     view:
       name: view

@@ -12,6 +12,14 @@
     },
     "description": "## Executive Summary\nThe Task Execution Service (TES) API is a standardized schema and API for describing and executing batch execution tasks. A task defines a set of input files, a set of containers and commands to run, a set of output files and some other logging and metadata.\n\nTES servers accept task documents and execute them asynchronously on available compute resources. A TES server could be built on top of a traditional HPC queuing system, such as Grid Engine, Slurm or cloud style compute systems such as AWS Batch or Kubernetes.\n## Introduction\nThis document describes the TES API and provides details on the specific endpoints, request formats, and responses. It is intended to provide key information for developers of TES-compatible services as well as clients that will call these TES services. Use cases include:\n\n  - Deploying existing workflow engines on new infrastructure. Workflow engines\n  such as CWL-Tes and Cromwell have extentions for using TES. This will allow\n  a system engineer to deploy them onto a new infrastructure using a job scheduling\n  system not previously supported by the engine.\n\n  - Developing a custom workflow management system. This API provides a common\n  interface to asynchronous batch processing capabilities. A developer can write\n  new tools against this interface and expect them to work using a variety of\n  backend solutions that all support the same specification.\n\n\n## Standards\nThe TES API specification is written in OpenAPI and embodies a RESTful service philosophy. It uses JSON in requests and responses and standard HTTP/HTTPS for information transport. HTTPS should be used rather than plain HTTP except for testing or internal-only purposes.\n### Authentication and Authorization\nIs is envisaged that most TES API instances will require users to authenticate to use the endpoints. However, the decision if authentication is required should be taken by TES API implementers.\n\nIf authentication is required, we recommend that TES implementations use an OAuth2  bearer token, although they can choose other mechanisms if appropriate.\n\nChecking that a user is authorized to submit TES requests is a responsibility of TES implementations.\n### CORS\nIf TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS). Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.\n"
   },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "BasicAuth": []
+    }
+  ],
   "servers": [
     {
       "url": "/ga4gh/tes/v1"
@@ -37,7 +45,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "BasicAuth": []
+          }
+        ]
       }
     },
     "/tasks": {
@@ -122,7 +138,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "BasicAuth": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -153,7 +177,15 @@
             }
           }
         },
-        "x-codegen-request-body-name": "body"
+        "x-codegen-request-body-name": "body",
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "BasicAuth": []
+          }
+        ]
       }
     },
     "/tasks/{id}": {
@@ -189,7 +221,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "BasicAuth": []
+          }
+        ]
       }
     },
     "/tasks/{id}:cancel": {
@@ -222,11 +262,30 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "BasicAuth": []
+          }
+        ]
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
     "parameters": {
       "view": {
         "name": "view",
