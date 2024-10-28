@@ -14,7 +14,7 @@ Suggested changes to this schema can be initiated as [**Issues**](https://github
 Even those with write access to the main repository should in general create pull request branches within their own forks. This way when the main repository is forked again, the new fork is created with a minimum of extraneous volatile branches.
 
 
-> To facilitate the review of external pull requests, users are encouraged to activate [**GitHub Actions**](https://github.com/features/actions) to monitor the build status (documentation, Swagger UI) of their fork. By following the documentation for [deployment to GitHub Pages](https://docs.github.com/en/actions/publishing-packages/deploying-to-github-pages) and adding a `$GITHUB_TOKEN` environment variable to their repository configuration, pushes to the forked repository will be viewable at `https://[user-or-org].github.io/workflow-execution-service-schemas/preview/<branch>/`:
+> To facilitate the review of external pull requests, users are encouraged to activate [**GitHub Actions**](https://github.com/features/actions) to monitor the build status (documentation, Swagger UI) of their fork. By following the documentation for [deployment to GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), pushes to the forked repository will be viewable at `https://[user-or-org].github.io/task-execution-service/preview/<branch>/`:
 
 
 This version replaces references to Travis CI with GitHub Actions while maintaining the original meaning and intent.

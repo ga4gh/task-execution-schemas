@@ -2,30 +2,30 @@
 
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg) [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
-`master` branch status
+`main` branch status
 
 | Build  | CI  | Open API Validator |
 |------------------------|-----------|--------------------|
-| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=master) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=master) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/master/openapi/task_execution_service.openapi.yaml) |
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/main/openapi/task_execution_service.openapi.yaml) |
 
 `develop` branch status
 
 | Build  | CI  | Open API Validator |
 |------------------------|-----------|--------------------|
-| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/openapi/task_execution_service.openapi.yaml) |
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](https://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/openapi/task_execution_service.openapi.yaml) |
 
 
 Task Execution Service (TES) API
 ======================================
 
-This repository is the home for the schema of the Task Execution Service (TES) API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) of the [Global Alliance for Genomics and Health (GA4GH)](http://genomicsandhealth.org/). The goal of the API is to provide a standardized way to executing batch execution tasks.
+This repository is the home for the schema of the Task Execution Service (TES) API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) of the [Global Alliance for Genomics and Health (GA4GH)](https://ga4gh.org/). The goal of the API is to provide a standardized way to executing batch execution tasks.
 
-[GA4GH](http://genomicsandhealth.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
+[GA4GH](https://ga4gh.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
 Cloud Work Stream
 -----------------
 
-The [Cloud Work Stream](https://ga4gh.cloud) helps the genomics and health communities take full advantage of modern cloud environments. Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
+The [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) helps the genomics and health communities take full advantage of modern cloud environments. Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
 
 We work with platform development partners and industry leaders to develop standards that will facilitate interoperability.
 
@@ -45,10 +45,9 @@ See the human-readable [Reference Documentation](https://ga4gh.github.io/task-ex
 
 You can also examine the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).  
 
-*If you are using a version from a non-develop branch, please load the JSON manually.* You can preview the documentation from the [gh-openapi-docs](https://github.com/ga4gh/gh-openapi-docs) for the development branch [here](https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/index.html).
-
+*If you are using a version from a non-develop branch, please load the JSON manually.* 
 All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
-the `master` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
+the `main` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
 ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
 development API specification, refer to the `develop` branch.
 
