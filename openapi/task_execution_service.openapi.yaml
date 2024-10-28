@@ -63,6 +63,10 @@ info:
     If TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS).
     Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.
 
+security:
+  # Optionally, this section can be removed or adjusted by implementers based on their needs.
+  - BearerAuth: []  # Apply globally if authentication is required
+  - BasicAuth: []   # Alternatively, use Basic Authentication
 
 servers:
 - url: /ga4gh/tes/v1
@@ -85,6 +89,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesServiceInfo'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks:
     get:
       tags:
@@ -179,6 +186,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesListTasksResponse'
+      
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
+
     post:
       tags:
       - TaskService
@@ -201,6 +213,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
       x-codegen-request-body-name: body
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks/{id}:
     get:
       tags:
@@ -224,6 +239,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesTask'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks/{id}:cancel:
     post:
       tags:
@@ -245,7 +263,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # optional, can specify format if using JWT tokens
+
+    BasicAuth:
+      type: http
+      scheme: basic
+      
   parameters:
     view:
       name: view
