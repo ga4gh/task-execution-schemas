@@ -1,10 +1,6 @@
 name: Build OpenAPI docs
 on:
-  - pull_request:
-      types:
-      - opened
-      - synchronize
-      - reopened
+  - pull_request
 jobs:
   docs-build:
     runs-on: ubuntu-latest

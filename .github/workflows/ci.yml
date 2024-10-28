@@ -1,10 +1,6 @@
 name: Lint and validate OpenAPI specs
 on:
-  - pull_request:
-      types:
-      - opened
-      - synchronize
-      - reopened
+  - pull_request
 jobs:
   lint:
     name: Lint OpenAPI definition
