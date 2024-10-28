@@ -12,4 +12,12 @@ Current API Product leads are:
 | Alex Kanitz        | [Swiss Institute of Bioinformatics / ELIXIR Switzerland](https://www.sib.swiss/)        | [uniqueg](https://github.com/uniqueg) |
 
 
+## Voting Procedure
+
+Voting group include stakeholders, such as server and client implementors.
+
+API Product leads review PR's on a reguarly cal (and also ping the mailing list), set a deadline by which drivers (and a few key non-drivers) need to respond by. Strive to reach consensus with our drivers and community. 
+
+Cloud Work Stream leads retain a veto if something goes off the rails.
+
 [GA4GH TES API mailing list](mailto:ga4gh-cloud-tes+subscribe@ga4gh.org): to stay updated about the latest news & developments around the TES API, in particular for soliciting comments on proposed spec changes and for notifications about TES subgroup meetings.
