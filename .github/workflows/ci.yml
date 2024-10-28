@@ -1,6 +1,6 @@
 name: Lint and validate OpenAPI specs
 on:
-  - pull_request
+  - pull_request:
       types:
       - opened
       - synchronize

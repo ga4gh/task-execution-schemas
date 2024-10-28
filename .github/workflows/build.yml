@@ -1,6 +1,6 @@
 name: Build OpenAPI docs
 on:
-  - pull_request
+  - pull_request:
       types:
       - opened
       - synchronize
