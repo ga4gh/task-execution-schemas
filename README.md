@@ -108,8 +108,6 @@ v3.0.1](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.
 Clients may use JSON and REST to communicate with a service implementing the TES
 API.
 
-> In the below example, the indicated endpoints only 
-
 ### Creating a task
 
 Here's an example of a complete task message, defining a task which calculates
