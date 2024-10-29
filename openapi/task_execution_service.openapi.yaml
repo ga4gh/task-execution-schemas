@@ -310,11 +310,15 @@ components:
     tesCreateTaskResponse:
       required:
       - id
+      - bla
       type: object
       properties:
         id:
           type: string
           description: Task identifier assigned by the server.
+        bla:
+          type: string
+          description: Test prop.
       description: |-
         CreateTaskResponse describes a response from the CreateTask endpoint. It
         will include the task ID that can be used to look up the status of the job.
@@ -322,6 +326,7 @@ components:
       required:
       - command
       - image
+      - workdir
       type: object
       properties:
         image:
