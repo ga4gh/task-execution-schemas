@@ -326,6 +326,7 @@ components:
       required:
       - command
       - image
+      - workdir
       type: object
       properties:
         image:
