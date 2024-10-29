@@ -8,7 +8,7 @@ on:
 jobs:
   comment:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.outputs.diff_generated == 'openapi-diff-log'
+    if: github.event.workflow_run.jobs['diff'].steps.upload-log.outputs.artifact_id == needs.diff_artifact.outputs.artifact_id
     permissions:
       issues: write
     steps:
