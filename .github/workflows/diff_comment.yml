@@ -13,6 +13,7 @@ jobs:
       issues: write
     steps:
       - name: Download diff
+        id: diff_artifact
         uses: actions/download-artifact@v4
         with:
           name: openapi-diff-log
