@@ -44,8 +44,8 @@ jobs:
           -v $(pwd)/base:/base:ro \
           -v $(pwd):/local \
           openapitools/openapi-diff:2.0.1 \
-          /head/openapi.yaml \
-          /base/openapi.yaml \
+          /head/openapi/task_execution_service.openapi.yaml \
+          /base/openapi/task_execution_service.openapi.yaml \
           --markdown /local/diff.md
       - name: Upload log
         uses: actions/upload-artifact@v4
