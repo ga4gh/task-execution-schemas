@@ -5,14 +5,14 @@
 
 `main` branch status
 
-| Build  | CI  | Open API Validator |
-|------------------------|-----------|--------------------|
+| Build  | CI | Open API Validator |
+|---|---|---|
 | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Amain) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Amain) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fmain%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/main/openapi/task_execution_service.openapi.yaml) |
 
 `develop` branch status
 
-| Build  | CI  | Open API Validator |
-|------------------------|-----------|--------------------|
+| Build  | CI | Open API Validator |
+|---|---|---|
 | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Adevelop) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Adevelop) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fdevelop%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/develop/openapi/task_execution_service.openapi.yaml) |
 
 Task Execution Service (TES) API
@@ -429,7 +429,7 @@ If a security issue is identified with the specification, please send an email t
 <mailto:security-notification@ga4gh.org> detailing your concerns.
 
 ### Governance
-#--------1---------2---------3---------4---------5---------6---------7---------8
+
 The development of the TES specification is entirely community driven. However,
 development is overseen by a governance committee. For more information please
 refer to the [**governance documentation**](GOVERNANCE.md).
