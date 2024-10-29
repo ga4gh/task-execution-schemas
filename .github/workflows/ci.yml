@@ -26,7 +26,7 @@ jobs:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
     outputs:
-      diff_generated: ${{ steps.upload-log.outputs.artifact_name }} 
+      diff_generated: ${{ steps.upload-log.outputs.artifact_id }} 
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
