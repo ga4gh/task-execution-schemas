@@ -14,8 +14,13 @@ jobs:
       - name: Get the PR number
         id: get_pr_number
         run: |
-          echo "pr_number=$(jq '.workflow_run.pull_requests[0].number' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
-          echo $(jq '.workflow_run.pull_requests[0].number' $GITHUB_EVENT_PATH)
+          if [[ -n "${{ github.event.workflow_run.pull_requests[0].number }}" ]]; then
+            echo "pr_number=${{ github.event.workflow_run.pull_requests[0].number }}" >> $GITHUB_OUTPUT
+          else
+            echo "pr_number=$(jq '.workflow_run.head_repository.pull_requests[0].number' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+          fi
+          echo ${{ github.event.workflow_run.pull_requests[0].number }}
+          echo $(jq '.workflow_run.head_repository.pull_requests[0].number' $GITHUB_EVENT_PATH)
           
       - name: Download diff
         uses: actions/download-artifact@v4
