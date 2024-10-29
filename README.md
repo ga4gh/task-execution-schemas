@@ -3,17 +3,10 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
-`main` branch status
-
-| Build  | CI | Open API Validator |
-|---|---|---|
-| [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Amain) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Amain) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fmain%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/main/openapi/task_execution_service.openapi.yaml) |
-
-`develop` branch status
-
-| Build  | CI | Open API Validator |
-|---|---|---|
-| [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Adevelop) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Adevelop) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fdevelop%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/develop/openapi/task_execution_service.openapi.yaml) |
+| Branch | CI Docs  | CI Specs | Online OpenAPI Validator |
+|---|---|---|---|
+| `main` | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Amain) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Amain) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fmain%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/main/openapi/task_execution_service.openapi.yaml) |
+| `develop` | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Adevelop) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Adevelop) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fdevelop%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/develop/openapi/task_execution_service.openapi.yaml) |
 
 Task Execution Service (TES) API
 ================================
