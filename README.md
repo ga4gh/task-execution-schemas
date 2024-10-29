@@ -1,73 +1,61 @@
 <img src="https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg" alt="GA4GH Logo" style="width: 400px;"/>
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg) [![release_badge](https://img.shields.io/github/v/tag/ga4gh/task-execution-schemas?label=latest%20release&logo=github&style=flat)](https://github.com/ga4gh/task-execution-schemas/releases)
 
-| Branch | CI Docs  | CI Specs | Swagger Validator |
-|---|---|---|---|
-| `main` | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Amain) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Amain) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fmain%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/main/openapi/task_execution_service.openapi.yaml) |
-| `develop` | [![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml?query=branch%3Adevelop) | [![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml?query=branch%3Adevelop) | [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2Fga4gh%2Ftask-execution-schemas%2Fdevelop%2Fopenapi%2Ftask_execution_service.openapi.yaml&label=OpenAPI)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/develop/openapi/task_execution_service.openapi.yaml) |
+`main` branch status
+
+| Build  | CI  | Open API Validator |
+|------------------------|-----------|--------------------|
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=main) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=main) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/main/openapi/task_execution_service.openapi.yaml) |
+
+`develop` branch status
+
+| Build  | CI  | Open API Validator |
+|------------------------|-----------|--------------------|
+| ![Build Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/build.yml/badge.svg?branch=develop) | ![CI Status](https://github.com/ga4gh/task-execution-schemas/actions/workflows/ci.yml/badge.svg?branch=develop) | [![Open API Validator](https://img.shields.io/badge/OpenAPI-Validator-blue)](https://online.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/openapi/task_execution_service.openapi.yaml) |
+
 
 Task Execution Service (TES) API
-================================
+======================================
 
-This repository is the home for the schema of the Task Execution Service (TES)
-API defined by the[Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/)
-of the [Global Alliance for Genomics and Health (GA4GH)](https://ga4gh.org/).
-The goal of the API standard is to provide a uniform way to executing batch
-computing tasks.
+This repository is the home for the schema of the Task Execution Service (TES) API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) of the [Global Alliance for Genomics and Health (GA4GH)](https://ga4gh.org/). The goal of the API is to provide a standardized way to executing batch execution tasks.
 
-[GA4GH](https://ga4gh.org/) is an international coalition, formed to enable the
-sharing and processing of genomic data.
+[GA4GH](https://ga4gh.org/) is an international coalition, formed to enable the sharing of genomic and clinical data.
 
-The [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) helps the
-genomics and health communities take full advantage of modern cloud
-environments. Our initial focus is on “bringing the algorithms to the data”, by
-creating standards for defining, sharing, and executing portable workflows.
+Cloud Work Stream
+-----------------
 
-We work with platform development partners and industry leaders to develop
-standards that will facilitate interoperability.
+The [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/) helps the genomics and health communities take full advantage of modern cloud environments. Our initial focus is on “bringing the algorithms to the data”, by creating standards for defining, sharing, and executing portable workflows.g
+
+We work with platform development partners and industry leaders to develop standards that will facilitate interoperability.
 
 What is TES?
 ============
 
-The Task Execution Service (TES) API is an effort to define a standardized
-schema and API for describing batch execution tasks. A task defines a set of
-commands to run, a set of (Docker) containers to run them _in_, sets of input
-and output files, required resources, as well as some other metadata, e.g., for
-capturing provenance information.
+The Task Execution Service (TES) API is an effort to define a standardized schema
+and API for describing batch execution tasks. A task defines a set of input files,
+a set of (Docker) containers and commands to run, a set of output files,
+and some other logging and metadata.
 
 API Definition
 --------------
 
-See the human-readable [**reference
-documentation**](https://ga4gh.github.io/task-execution-schemas/docs/).
+See the human-readable [Reference Documentation](https://ga4gh.github.io/task-execution-schemas/docs/).
 
-> The documentation hosted at <https://ga4gh.github.io/task-execution-schemas>
-> reflects the latest official API release from the `main` branch. To explore
-> the documentation from a development branch, append
-> `preview/<branch-name>/docs/` to the base URL. For example, to view the
-> documentation for the latest **development version of the specification**,
-> visit <https://ga4gh.github.io/task-execution-schemas/preview/develop/docs/>.
 
-You can also examine the specification in the [**Swagger
-Editor**](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh/task-execution-schemas/refs/heads/main/openapi/task_execution_service.openapi.yaml).  
+You can also examine the specification in the [Swagger Editor](https://editor.swagger.io/?url=https://ga4gh.github.io/task-execution-schemas/openapi.yaml).  
 
-> If you want to explore a version from a development branch, please load the
-> corresponding specification file (in
-> `openapi/task_execution_service.openapi.yaml`) manually into the [Swagger
-> Editor](https://editor.swagger.io/).
+*If you are using a version from a non-develop branch, please load the JSON manually.* 
+All documentation and pages hosted at 'ga4gh.github.io/task-execution-schemas' reflect the latest API release from
+the `main` branch. To monitor the latest development work, add 'preview/\<branch\>' to the URLs above (e.g., '
+ga4gh.github.io/task-execution-schemas/preview/\<branch\>/docs'). To view the latest *stable*
+development API specification, refer to the `develop` branch.
+
 
 TES Compliant Implementations
------------------------------
+------------------------------
 
-In alignment with GA4GH policies and regulations, security reviews are conducted
-for each major version release of the API. However, **no security guarantees are
-provided for any implementation of the API, including those linked from this
-page or the associated documentation**. Users are advised to proceed at their
-own risk and should arrange for a security audit of their application to ensure
-compliance with relevant regulatory and security standards, particularly when
-handling personal data.
+In alignment with GA4GH policies and regulations, security reviews are conducted for each major version release of the API. However, **no security guarantees are provided for any implementation of the API, including those linked from this page or the associated documentation**. Users are advised to proceed at their own risk and should arrange for a security audit of their application to ensure compliance with relevant regulatory and security standards, particularly when handling personal data.
 
 ### Client
 - [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
@@ -79,6 +67,8 @@ handling personal data.
 - [Toil](https://toil.readthedocs.io/en/latest/)
 - [St. Jude Rust Labs](https://github.com/stjude-rust-labs/tes)
 
+
+
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
@@ -88,9 +78,7 @@ handling personal data.
 
 ### Compatibility Matrix
 
-> Compatibility is assumed based on available documentation and limited tests
-> performed on latest versions of implementations available in December 2020.
-> Information may be outdated.
+> Compatibility is assumed based on available documentation and limited tests performed on latest versions of implementations available as of December 2020.
 
 |               | cwl-tes       | Cromwell  | Nextflow |
 | -----------   | ------------- | --------- | ---------|
@@ -100,19 +88,17 @@ handling personal data.
 
 
 TES Service Examples
---------------------
+------------------------------
 
-The API specification is available
-[here](openapi/task_execution_service.openapi.yaml) in [OpenAPI
-v3.0.1](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md).
-Clients may use JSON and REST to communicate with a service implementing the TES
-API.
+The schema and APIs is defined [here](openapi/task_execution_service.openapi.yaml) in [Open Api Specification 3.0.1](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md). Clients may use JSON and REST to communicate
+with a service implementing the TES API.
 
-### Creating a task
+
+### Create a task
+
 
 Here's an example of a complete task message, defining a task which calculates
 an MD5 checksum on an input file and uploads the output:
-
 ```JSON
 {
   "name": "MD5 example",
@@ -157,9 +143,7 @@ an MD5 checksum on an input file and uploads the output:
 }
 ```
 
-A minimal version of the same task, including only the required fields looks
-like:
-
+A minimal version of the same task, including only the required fields looks like:
 ```JSON
 {
     "inputs": [
@@ -184,30 +168,29 @@ like:
 }
 ```
 
-To create the task, send an HTTP `POST` request to the `/tasks` endpoint:
-
+To create the task, send an HTTP POST request:
 ```HTTP
-POST /ga4gh/tes/v1/tasks
+POST /v1/tasks
 ```
 
-The response indicates an identifier for the created task resource:
-
+The return value is a task ID.
 ```JSON
 { 
   "id": "task-1234" 
 }
 ```
 
-### Fetching a task
 
-To get a task by its identifier, send an HTTP `GET` request to the `/tasks/{id}`
-endpoint:
+### Get a task
+
+
+To get a task by ID:
 
 ```HTTP
-GET /ga4gh/tes/v1/tasks/task-1234
+GET /v1/tasks/task-1234
 ```
 
-The default minimal response will include the task state:
+The return value will be a minimal description of the task state.
 
 ```JSON
 { 
@@ -216,14 +199,13 @@ The default minimal response will include the task state:
 }
 ```
 
-To get more information, you can change the task view using the `view` URL query
-parameter.
+To get more information, you can change the task view using the `view` URL query parameter.
 
-The `BASIC` view will include all task fields except a few which might be large
-strings (stdout/stderr, system logging, input parameter contents):
+The `basic` view will include all task fields except a few which might be
+large strings (stdout/err/system logging, input parameter contents).
 
 ```HTTP
-GET /ga4gh/tes/v1/tasks/task-1234?view=BASIC
+GET /v1/tasks/task-1234?view=BASIC
 ```
 
 ```JSON
@@ -266,12 +248,12 @@ GET /ga4gh/tes/v1/tasks/task-1234?view=BASIC
   "created": "2024-10-24T12:00:00Z",
   "updated": "2024-10-24T12:30:00Z"
 }
-```
 
-The `FULL` view includes stdout/stderr, system logs and full input parameters:
+```
+The `full` view includes stdout/err/system logs and full input parameters:
 
 ```HTTP
-GET /ga4gh/tes/v1/tasks/task-1234?view=FULL
+GET /v1/tasks/task-1234?view=FULL
 ```
 
 ```JSON
@@ -358,13 +340,13 @@ GET /ga4gh/tes/v1/tasks/task-1234?view=FULL
 }
 ```
 
-### Listing tasks
+### List tasks
 
-To list all available tasks, send an HTTP `GET` requests to the `/tasks`
-endpoint:
+
+To list tasks:
 
 ```HTTP
-GET /ga4gh/tes/v1/tasks
+GET /v1/tasks
 ```
 
 ```JSON
@@ -384,43 +366,38 @@ GET /ga4gh/tes/v1/tasks
     }
   ]
 }
+
 ```
+
 
 Similar to getting a task by ID, you may change the task view:
-
 ```HTTP
-GET /ga4gh/tes/v1/tasks?view=BASIC
+GET /v1/tasks?view=BASIC
 ```
 
-### Cancelling a task
 
-To cancel a task, send an HTTP `POST` request to the `tasks/{id}:cancel`
-endpoint:
+### Cancel a task
 
+
+To cancel a task, send an HTTP POST to the cancel endpoint:
 ```HTTP
-POST /ga4gh/tes/v1/tasks/task-1234:cancel
+POST /v1/tasks/task-1234:cancel
 ```
+
 
 How to Contribute Changes
 -------------------------
 
+
 ### Community Contributions and Spec Advancement
 
-The advancement of the GA4GH Task Execution Service (TES) API relies on active
-community engagement and contributions. While submitting issues is an effective
-way to report bugs or foster discussions about existing or proposed features, it
-is important to note that these actions alone typically do not lead to
-modifications in the specification. **The most effective method for implementing
-changes is through the submission of a pull request (PR).** 
+The advancement of the GA4GH Task Execution Schema (TES) relies on active community engagement and contributions. While submitting issues is an effective way to report bugs or foster discussions about existing or proposed features, it is important to note that these actions alone do not lead to modifications in the specification. The most effective method for implementing changes is through the submission of a pull request (PR). 
 
-For detailed guidance on how to contribute, please refer to the
-[**contributing documentation**](CONTRIBUTING.md).
+For detailed guidance on how to contribute, please refer to the [Contributing](CONTRIBUTING.md) document.
 
-If a security issue is identified with the specification, please send an email to
-<mailto:security-notification@ga4gh.org> detailing your concerns.
+If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
+
 
 ### Governance
 
-The development of the TES specification is entirely community driven. However,
-development is overseen by a governance committee. For more information please
-refer to the [**governance documentation**](GOVERNANCE.md).
+The TES specification is entirely community driven, however it is overseen by a governance committee. For more information please see the [Governance](GOVERNANCE.md) documentation.
