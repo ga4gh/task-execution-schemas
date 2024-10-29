@@ -27,6 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14.x
       - name: Check out head branch
         uses: actions/checkout@v4
         with:
@@ -37,22 +41,17 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           path: base
-      - name: Run OpenAPI Diff Action
+      - name: Get OpenAPI differences
         id: openapi_diff
         continue-on-error: true
-        uses: mvegter/openapi-diff-action@v0.23.5
-        with:
-          head-spec: head/openapi/task_execution_service.openapi.yaml
-          base-spec: base/openapi/task_execution_service.openapi.yaml
-      - name: Store log
-        id: check_log
         run: |
-          if [ -n "${{ steps.openapi_diff.outputs.errors }}" ]; then
-            echo "::set-output name=log_empty::false"
-            echo ${{ steps.openapi_diff.outputs.errors }} > openapi_diff.json
+          log=$(npx openapi-diff head/openapi/task_execution_service.openapi.yaml base/openapi/task_execution_service.openapi.yaml")
+          if [ -n "$log" ]; then
+            echo "::set-output name=log_not_empty::true"
+            echo "$log" > openapi_diff.json
           fi
-      - name: Upload log
-        if: steps.check_log.outputs.log_empty == 'false'
+      - name: Upload log (if not empty)
+        if: steps.check_log.outputs.log_not_empty == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: openapi-diff-log
@@ -61,7 +60,7 @@ jobs:
     name: Create PR comment with OpenAPI diff log (if not empty)
     runs-on: ubuntu-latest
     needs: diff
-    if: needs.diff.outputs.log_empty == 'false'
+    if: needs.diff.outputs.log_not_empty == 'false'
     permissions:
       issues: write 
     steps:
