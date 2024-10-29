@@ -25,7 +25,8 @@ jobs:
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      diff_generated: ${{ steps.upload-log.outputs.artifact_name }} 
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
@@ -48,29 +49,8 @@ jobs:
           /base/openapi/task_execution_service.openapi.yaml \
           --markdown /local/diff.md
       - name: Upload log
+        id: upload-log
         uses: actions/upload-artifact@v4
         with:
           name: openapi-diff-log
-          path: diff.md 
-  diff-comment:
-    name: Create PR comment with OpenAPI diff log (if not empty)
-    runs-on: ubuntu-latest
-    needs: diff
-    permissions:
-      issues: write 
-    steps:
-      - name: Download OpenAPI diff log
-        uses: actions/download-artifact@v4
-        with:
-          name: openapi-diff-log
-      - name: Create PR comment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const diff = require('fs').readFileSync('diff.md', 'utf8');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,   
-              body: '## OpenAPI diff:\n\n' + diff
-            })
+          path: diff.md
