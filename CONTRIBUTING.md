@@ -43,4 +43,5 @@ required.
 If a security vulnerability is identified with the specification, please send an
 email to <mailto:security-notification@ga4gh.org> detailing your concerns.
 
-For more information please see the [Governance](GOVERNANCE.md) documentation.
+For more information please refer to the [**governance
+documentation**](GOVERNANCE.md).
