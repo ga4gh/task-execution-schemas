@@ -46,6 +46,7 @@ jobs:
         continue-on-error: true
         run: |
           log=$(npx openapi-diff head/openapi/task_execution_service.openapi.yaml base/openapi/task_execution_service.openapi.yaml)
+          echo "$log"
           if [ -n "$log" ]; then
             echo "::set-output name=log_not_empty::true"
             echo "$log" > openapi_diff.json
