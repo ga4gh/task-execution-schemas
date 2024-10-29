@@ -414,7 +414,7 @@ modifications in the specification. **The most effective method for implementing
 changes is through the submission of a pull request (PR).** 
 
 For detailed guidance on how to contribute, please refer to the
-[Contributing](CONTRIBUTING.md) document.
+[**contributing documentation**](CONTRIBUTING.md).
 
 If a security issue is identified with the specification, please send an email to
 <mailto:security-notification@ga4gh.org> detailing your concerns.
