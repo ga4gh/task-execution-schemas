@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - develop
+      - 'release*'
   pull_request:
       types: [opened, reopened, sychronize]
 jobs:
