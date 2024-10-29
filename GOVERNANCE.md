@@ -1,9 +1,9 @@
 TES Governance and Process
 ==============================
 
-The Task Execution Service (TES) operates under a community-driven development model, where advancements to the specification occur exclusively through community contributions. The standard is governed by a core team of Product Leads that fosters collaboration and consensus among contributors. This team is tasked with overseeing the design and development processes, setting priorities, managing the release schedule, and making decisions in instances where consensus cannot be reached.
+The Task Execution Service (TES) operates under a community-driven development model, where advancements to the specification occur exclusively through community contributions. The governance is steered by a core team of API champions that fosters collaboration and consensus among contributors. This team is tasked with overseeing the design and development processes, setting priorities, managing the release schedule, and making decisions in instances where consensus cannot be reached.
 
-Current TES Product Leads are:
+Current API Product leads are:
 
 | Name               | Organization       | github                  |
 |:-------------------|:-------------|:------------------
@@ -14,6 +14,10 @@ Current TES Product Leads are:
 
 ## Voting Procedure
 
-Proposed changes and releases are voted on by Driver Project champions and other key stakeholders, such as product implementers (client- and sever-side). Product Leads review proposed changes on a regular product-specific call, then solicit community feedback during regular Cloud Work Stream calls and through the [product-specific](mailto:ga4gh-cloud-tes+subscribe@ga4gh.org) mailing list for a specified time period. Proposed releases are further shared through official GA4GH channels (Slack board and mailing list with wider scope) and with a longer feedback period. Product Leads, in close connection with the Cloud Work Stream leadership, will always strive to reach broad consensus, but may accept simple majority decisions if broad consensus cannot be reached.
+Voting group include stakeholders, such as server and client implementors.
 
-Sign up for the [**GA4GH TES API mailing list**](mailto:ga4gh-cloud-tes+subscribe@ga4gh.org) to stay updated about the latest news and developments around the TES API, in particular for soliciting comments on proposed specification changes and for notifications about TES subgroup meetings.
+API Product leads review PR's on a reguarly cal (and also ping the mailing list), set a deadline by which drivers (and a few key non-drivers) need to respond by. Strive to reach consensus with our drivers and community. 
+
+Cloud Work Stream leads retain a veto if something goes off the rails.
+
+[GA4GH TES API mailing list](mailto:ga4gh-cloud-tes+subscribe@ga4gh.org): to stay updated about the latest news & developments around the TES API, in particular for soliciting comments on proposed spec changes and for notifications about TES subgroup meetings.
