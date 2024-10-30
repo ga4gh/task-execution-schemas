@@ -23,7 +23,7 @@ jobs:
         with:
           script: |
             const diff = require('fs').readFileSync('diff-artifacts/diff.md', 'utf8');
-            const pr_number = require('fs').readFileSync('diff-artifacts/pr_number', 'utf8');
+            const pr_number = require('fs').readFileSync('diff-artifacts/pr_number', 'utf8').trim();
             github.rest.issues.createComment({
               issue_number: pr_number,
               owner: context.repo.owner,
