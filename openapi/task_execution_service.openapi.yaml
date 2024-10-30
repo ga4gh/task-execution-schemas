@@ -323,6 +323,7 @@ components:
       - command
       - image
       - workdir
+      - stdin
       type: object
       properties:
         image:
