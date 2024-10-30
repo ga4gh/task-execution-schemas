@@ -12,10 +12,21 @@ jobs:
         uses: mhiew/redoc-lint-github-action@v4
         with:
           args: 'openapi/task_execution_service.openapi.yaml'
+  validate:
+    name: Validate OpenAPI definition
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out head branch
+        uses: actions/checkout@v4
+      - name: Run OpenAPI Validate Action
+        uses: char0n/swagger-editor-validate@v1
+        with:
+          definition-file: openapi/task_execution_service.openapi.yaml
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      diff_generated: ${{ steps.upload-log.outputs.artifact_id }}
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
@@ -27,19 +38,24 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           path: base
-      - name: Run OpenAPI Diff Action
-        uses: mvegter/openapi-diff-action@v0.23.5
+      - name: Create output directory
+        run: mkdir -p diff-artifacts/
+      - name: Run openapi-diff tool
+        run: |
+          docker run --rm \
+          -v $(pwd)/head:/head:ro \
+          -v $(pwd)/base:/base:ro \
+          -v $(pwd)/diff-artifacts:/local \
+          openapitools/openapi-diff:2.0.1 \
+          /head/openapi/task_execution_service.openapi.yaml \
+          /base/openapi/task_execution_service.openapi.yaml \
+          --markdown /local/diff.md
+      - name: Get PR number
+        id: get-pr-number
+        run: |
+          echo "${{ github.event.pull_request.number }}" > diff-artifacts/pr_number
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          head-spec: head/openapi/task_execution_service.openapi.yaml
-          base-spec: base/openapi/task_execution_service.openapi.yaml
-
-  validate:
-    name: Validate OpenAPI definition
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out head branch
-        uses: actions/checkout@v4
-      - name: Run OpenAPI Validate Action
-        uses: char0n/swagger-editor-validate@v1
-        with:
-          definition-file: openapi/task_execution_service.openapi.yaml
+          name: diff-artifacts
+          path: diff-artifacts/
