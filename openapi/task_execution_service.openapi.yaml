@@ -610,10 +610,10 @@ components:
       type: object
       properties:
         cpu_cores:
-          type: integer
-          description: Requested number of CPUs
-          format: int32
-          example: 4
+          type: number
+          description: Requested number of CPUs (maybe fractional, but interpretation is up to each implementation)
+          format: double
+          example: 4.25
         preemptible:
           type: boolean
           description: |-
@@ -624,14 +624,19 @@ components:
           example: false
         ram_gb:
           type: number
-          description: Requested RAM required in gigabytes (GB)
-          format: double
-          example: 8
+          description: |- 
+            Requested RAM required in gigabytes (GB) 
+            (maybe fractional, but actual requested mem should 
+            be rounded up to the next whole number)
+          format: float
+          example: 8.2
         disk_gb:
           type: number
-          description: Requested disk size in gigabytes (GB)
-          format: double
-          example: 40
+          description: |- 
+            Requested disk size in gigabytes (GB) 
+            (maybe fractional, but actual request disk should be rounded up)
+          format: float
+          example: 40.5
         zones:
           type: array
           description: |-
