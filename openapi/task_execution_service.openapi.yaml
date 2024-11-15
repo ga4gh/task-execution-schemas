@@ -611,7 +611,7 @@ components:
       properties:
         cpu_cores:
           type: number
-          description: Requested number of CPUs (maybe fractional, but interpretation is up to each implementation)
+          description: Requested number of CPUs. MAY be a fractional value to indicate to a scheduling algorithm that one core can be allocated to multiple jobs. For example, a value of 0.25 indicates that up to 4 jobs may run in parallel on 1 core. A value of 1.25 means that up to 3 jobs can run on a 4 core system (4/1.25 ≈ 3). Processes sharing a core MUST have the same level of isolation (typically a container or VM) that they would normally have. Scheduling systems MAY allocate fractional CPU resources by setting quotas or scheduling weights. Scheduling systems that do not support fractional CPUs MAY round up the request to the next whole number.
           format: double
           example: 4.25
         preemptible:
