@@ -626,8 +626,8 @@ components:
           type: number
           description: |- 
             Requested RAM required in gigabytes (GB) 
-            (maybe fractional, but actual requested mem should 
-            be rounded up to the next whole number)
+            (maybe fractional, but actual requested memory should 
+            be rounded up to the next whole number of bytes)
           format: float
           example: 8.2
         disk_gb:
