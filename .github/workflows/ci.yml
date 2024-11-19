@@ -50,6 +50,44 @@ jobs:
           /head/openapi/task_execution_service.openapi.yaml \
           /base/openapi/task_execution_service.openapi.yaml \
           --markdown /local/diff.md
+      - name: Check if OpenAPI Diff failed
+              id: check-diff
+              run: |
+                if [ -f diff-artifacts/error.log ]; then
+                  echo "failed=true" >> $GITHUB_ENV
+                else
+                  echo "failed=false" >> $GITHUB_ENV
+                fi
+      - name: Create PR comment if OpenAPI Diff failed
+        if: env.failed == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const logPath = path.join(process.cwd(), 'diff-artifacts', 'error.log');
+            let errorContent = "No error log found.";
+            try {
+              errorContent = fs.readFileSync(logPath, 'utf8');
+            } catch (err) {
+              errorContent = "Error reading the log file: " + err.message;
+            }
+
+            const commentBody = `
+            ## OpenAPI Diff Action Failed
+            The OpenAPI Diff Action encountered an error. Here is the log:
+            \`\`\`
+            ${errorContent}
+            \`\`\`
+            `;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody,
+            });
       - name: Get PR number
         id: get-pr-number
         run: |
@@ -59,3 +97,8 @@ jobs:
         with:
           name: diff-artifacts
           path: diff-artifacts/
+          if-no-files-found: ignore
+
+permissions:
+  contents: read
+  pull-requests: write
