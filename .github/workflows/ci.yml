@@ -51,13 +51,13 @@ jobs:
           /base/openapi/task_execution_service.openapi.yaml \
           --markdown /local/diff.md
       - name: Check if OpenAPI Diff failed
-              id: check-diff
-              run: |
-                if [ -f diff-artifacts/error.log ]; then
-                  echo "failed=true" >> $GITHUB_ENV
-                else
-                  echo "failed=false" >> $GITHUB_ENV
-                fi
+        id: check-diff
+        run: |
+          if [ -f diff-artifacts/error.log ]; then
+            echo "failed=true" >> $GITHUB_ENV
+          else
+            echo "failed=false" >> $GITHUB_ENV
+          fi
       - name: Create PR comment if OpenAPI Diff failed
         if: env.failed == 'true'
         uses: actions/github-script@v6
