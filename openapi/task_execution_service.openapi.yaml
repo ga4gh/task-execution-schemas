@@ -212,6 +212,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
+      callbacks:
+        statusChange:
+          '{$request.body#/callback_url}':
+            post:
+              description: |-
+                The TES server will send notifications to the callback URL, if provided,
+                when the task status changes.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/tesCallbackStatus'
+              responses:
+                204:
+                  description: |-
+                    Listener should return this HTTP status code if
+                    the payload was received successfully.
       x-codegen-request-body-name: body
       security:
         - BearerAuth: []  # Endpoint secured with Bearer token
@@ -304,6 +321,19 @@ components:
         - FULL
 
   schemas:
+    tesCallbackStatus:
+      type: object
+      required:
+      - id
+      - state
+      properties:
+        id:
+          type: string
+          description: Task identifier assigned by the server.
+          example: job-0012345
+        state:
+          $ref: '#/components/schemas/tesState'
+      description: Notification that a task has changed state.
     tesCancelTaskResponse:
       type: object
       description: CancelTaskResponse describes a response from the CancelTask endpoint.
@@ -778,6 +808,12 @@ components:
           type: string
           description: |-
             Optional user-provided description of task for documentation purposes.
+        callback_url:
+          type: string
+          format: uri
+          description: |-
+            Optional user-provided callback URL.
+          example: https://myserver.com/send/callback/here
         inputs:
           type: array
           description: |-
@@ -864,7 +900,7 @@ components:
             This is set by the system, not the client.
           example: 2020-10-02T10:00:00-05:00
           readOnly: true
-      description: Task describes an instance of a task.
+      description: Task describes an instance of a task.    
     tesTaskLog:
       required:
       - logs
