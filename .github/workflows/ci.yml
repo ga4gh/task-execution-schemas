@@ -49,7 +49,7 @@ jobs:
           openapitools/openapi-diff:2.0.1 \
           /head/openapi/task_execution_service.openapi.yaml \
           /base/openapi/task_execution_service.openapi.yaml \
-          --markdown /local/diff.md 2> /local/error.log
+          --markdown /local/diff.md 2> diff-artifacts/error.log
       - name: Check if OpenAPI Diff failed
         id: check-diff
         run: |
