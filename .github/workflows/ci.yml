@@ -49,11 +49,11 @@ jobs:
           openapitools/openapi-diff:2.0.1 \
           /head/openapi/task_execution_service.openapi.yaml \
           /base/openapi/task_execution_service.openapi.yaml \
-          --markdown /local/diff.md
+          --markdown /local/diff.md 2> /local/error.log
       - name: Check if OpenAPI Diff failed
         id: check-diff
         run: |
-          if [ -f diff-artifacts/error.log ]; then
+          if [ -s diff-artifacts/error.log  ]; then
             echo "failed=true" >> $GITHUB_ENV
           else
             echo "failed=false" >> $GITHUB_ENV
