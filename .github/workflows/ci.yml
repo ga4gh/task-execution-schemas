@@ -58,8 +58,9 @@ jobs:
           else
             echo "failed=false" >> $GITHUB_ENV
           fi
-      - name: heckout the PR branch if OpenAPI Diff failed
+      - name: Checkout the PR branch if OpenAPI Diff failed
         if: env.failed == 'true'
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
