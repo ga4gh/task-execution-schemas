@@ -40,6 +40,8 @@ jobs:
           path: base
       - name: Create output directory
         run: mkdir -p diff-artifacts/
+      - name: Pull Docker Image
+        run: docker pull openapitools/openapi-diff:2.0.1
       - name: Run openapi-diff tool
         run: |
           docker run --rm \
