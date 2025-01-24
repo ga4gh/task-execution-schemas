@@ -73,6 +73,7 @@ jobs:
         with:
           github-token: ${{ secrets.MY_PAT }}
           script: |
+            const { github, context } = require('@actions/github');
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
