@@ -65,6 +65,7 @@ jobs:
         run: |
           if [ -s diff-artifacts/error.log  ]; then
             echo "The diff failed. Please see artifact error.log."
+            exit 1
           fi
 
 permissions:
