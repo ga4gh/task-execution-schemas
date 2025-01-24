@@ -58,18 +58,6 @@ jobs:
           else
             echo "failed=false" >> $GITHUB_ENV
           fi
-      - name: Post a comment
-        if: env.failed == 'true'
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: " The OpenAPI Diff Action encountered an error. The log is in the artifact. ",
-            });
       - name: Get PR number
         id: get-pr-number
         run: |
