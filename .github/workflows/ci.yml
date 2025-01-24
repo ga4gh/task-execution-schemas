@@ -58,35 +58,21 @@ jobs:
           else
             echo "failed=false" >> $GITHUB_ENV
           fi
-      - name: Create PR comment if OpenAPI Diff failed
+      - name: heckout the PR branch if OpenAPI Diff failed
+        if: env.failed == 'true'
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: Post a comment
         if: env.failed == 'true'
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
-            const path = require('path');
-            const logPath = path.join(process.cwd(), 'diff-artifacts', 'error.log');
-            let errorContent = "No error log found.";
-            try {
-              errorContent = fs.readFileSync(logPath, 'utf8');
-            } catch (err) {
-              errorContent = "Error reading the log file: " + err.message;
-            }
-
-            const commentBody = `
-            ## OpenAPI Diff Action Failed
-            The OpenAPI Diff Action encountered an error. Here is the log:
-            \`\`\`
-            ${errorContent}
-            \`\`\`
-            `;
-
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: commentBody,
+              issue_number: context.payload.pull_request.number,
+              body: " The OpenAPI Diff Action encountered an error. The log is in the artifact. ",
             });
       - name: Get PR number
         id: get-pr-number
@@ -102,3 +88,4 @@ jobs:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
