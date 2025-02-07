@@ -22,7 +22,7 @@ jobs:
         uses: char0n/swagger-editor-validate@v1
         with:
           definition-file: openapi/task_execution_service.openapi.yaml
-          args: "--no-sandbox"
+          args: "--no-sandbox"  # Added the --no-sandbox argument
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
@@ -69,7 +69,6 @@ jobs:
           if [ -s diff-artifacts/error.log  ]; then
             echo "The diff failed. Please see artifact error.log."
             exit 1
-          fi
 
 permissions:
   contents: read
