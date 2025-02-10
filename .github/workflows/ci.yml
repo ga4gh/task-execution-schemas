@@ -1,6 +1,7 @@
 name: Lint and validate OpenAPI specs
 on:
-  - pull_request
+  - push
+  - pull_request_target
 jobs:
   lint:
     name: Lint OpenAPI definition
