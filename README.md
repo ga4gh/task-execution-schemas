@@ -12,7 +12,7 @@ Task Execution Service (TES) API
 ================================
 
 This repository is the home for the schema of the Task Execution Service (TES)
-API defined by the[Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/)
+API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/)
 of the [Global Alliance for Genomics and Health (GA4GH)](https://ga4gh.org/).
 The goal of the API standard is to provide a uniform way to executing batch
 computing tasks.
