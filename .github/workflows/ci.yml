@@ -50,8 +50,8 @@ jobs:
           -v $(pwd)/base:/base:ro \
           -v $(pwd)/diff-artifacts:/local \
           openapitools/openapi-diff:2.0.1 \
-          /head/openapi/task_execution_service.openapi.yaml \
           /base/openapi/task_execution_service.openapi.yaml \
+          /head/openapi/task_execution_service.openapi.yaml \
           --markdown /local/diff.md 2> diff-artifacts/error.log
       - name: Get PR number
         id: get-pr-number
