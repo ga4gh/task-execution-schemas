@@ -62,8 +62,8 @@ TES Compliant Implementations
 |               | cwl-tes       | Cromwell  | Nextflow | Snakemake |
 | -----------   | ------------- | --------- | ---------| --------- |
 | **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) |
-| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Not tested but should work |
-| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) | Not tested but should work |
+| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/elixir-cloud-aai/demo-tes-hybrid-cloud/tree/main) |
+| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) | [Compatible](https://github.com/microsoft/ga4gh-tes/blob/main/snakemake/examples/snakemake/README.md) |
 
 
 TES Service Examples
