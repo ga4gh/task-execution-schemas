@@ -27,5 +27,4 @@ jobs:
           branch: gh-pages
           clean: true  # Clean only if on the main branch
           folder: .
-          target-folder: 'docs/index.html' # Deploy to docs/index.html only if on main
           
