@@ -1,9 +1,12 @@
 openapi: 3.0.1
 info:
   title: Task Execution Service
-  version: 1.0.0
+  version: 1.1.0
   x-logo:
-    url: 'https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg'
+    url: 'https://www.ga4gh.org/wp-content/themes/ga4gh/dist/assets/svg/logos/logo-full-color.svg'
+  license:
+    name: Apache 2.0
+    url: 'https://raw.githubusercontent.com/ga4gh/task-execution-schemas/develop/LICENSE'
   description: >
     ## Executive Summary
 
@@ -60,6 +63,10 @@ info:
     If TES API implementation is to be used by another website or domain it must implement Cross Origin Resource Sharing (CORS).
     Please refer to https://w3id.org/ga4gh/product-approval-support/cors for more information about GA4GH’s recommendations and how to implement CORS.
 
+security:
+  # Optionally, this section can be removed or adjusted by implementers based on their needs.
+  - BearerAuth: []  # Apply globally if authentication is required
+  - BasicAuth: []   # Alternatively, use Basic Authentication
 
 servers:
 - url: /ga4gh/tes/v1
@@ -82,6 +89,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesServiceInfo'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks:
     get:
       tags:
@@ -100,6 +110,57 @@ paths:
           If unspecified, no task name filtering is done.
         schema:
           type: string
+      - name: state
+        description: |-
+          OPTIONAL. Filter tasks by state. If unspecified,
+          no task state filtering is done.
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/tesState'
+      - name: tag_key
+        description: |-
+          OPTIONAL. Provide key tag to filter. The field tag_key is an array
+          of key values, and will be zipped with an optional tag_value array.
+          So the query:
+          ```
+            ?tag_key=foo1&tag_value=bar1&tag_key=foo2&tag_value=bar2
+          ```
+          Should be constructed into the structure { "foo1" : "bar1", "foo2" : "bar2"}
+          
+          ```
+            ?tag_key=foo1
+          ```
+          Should be constructed into the structure {"foo1" : ""}
+
+          If the tag_value is empty, it will be treated as matching any possible value.
+          If a tag value is provided, both the tag's key and value must be exact
+          matches for a task to be returned.
+          Filter                            Tags                          Match?
+          ----------------------------------------------------------------------
+          {"foo": "bar"}                    {"foo": "bar"}                Yes
+          {"foo": "bar"}                    {"foo": "bat"}                No
+          {"foo": ""}                       {"foo": ""}                   Yes
+          {"foo": "bar", "baz": "bat"}      {"foo": "bar", "baz": "bat"}  Yes
+          {"foo": "bar"}                    {"foo": "bar", "baz": "bat"}  Yes
+          {"foo": "bar", "baz": "bat"}      {"foo": "bar"}                No
+          {"foo": ""}                       {"foo": "bar"}                Yes
+          {"foo": ""}                       {}                            No
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: tag_value
+        description: |-
+          OPTIONAL. The companion value field for tag_key
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
       - name: page_size
         in: query
         description: |-
@@ -107,7 +168,7 @@ paths:
           Must be less than 2048. Defaults to 256.
         schema:
           type: integer
-          format: int64
+          format: int32
       - name: page_token
         in: query
         description: |-
@@ -125,6 +186,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesListTasksResponse'
+      
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
+
     post:
       tags:
       - TaskService
@@ -147,6 +213,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/tesCreateTaskResponse'
       x-codegen-request-body-name: body
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks/{id}:
     get:
       tags:
@@ -170,6 +239,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesTask'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
   /tasks/{id}:cancel:
     post:
       tags:
@@ -191,7 +263,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tesCancelTaskResponse'
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # optional, can specify format if using JWT tokens
+
+    BasicAuth:
+      type: http
+      scheme: basic
+      
   parameters:
     view:
       name: view
@@ -325,6 +410,13 @@ components:
           example:
             "BLASTDB" : "/data/GRC38"
             "HMMERDB" : "/data/hmmer"
+        ignore_error:
+          type: boolean
+          description: |-
+            Default behavior of running an array of executors is that execution
+            stops on the first error. If `ignore_error` is `True`, then the
+            runner will record error exit codes, but will continue on to the next
+            tesExecutor.
       description: Executor describes a command to be executed, and its environment.
     tesExecutorLog:
       required:
@@ -370,6 +462,10 @@ components:
       description: ExecutorLog describes logging information related to an Executor.
     tesFileType:
       type: string
+      description: |-
+        Define if input/output element is a file or a directory. It is not required
+        that the user provide this value, but it is required that the server fill in the
+        value once the information is avalible at run time.
       default: FILE
       enum:
       - FILE
@@ -377,7 +473,6 @@ components:
     tesInput:
       required:
       - path
-      - type
       type: object
       properties:
         name:
@@ -414,6 +509,17 @@ components:
             UTF-8 encoded
 
             If content is not empty, "url" must be ignored.
+        streamable:
+          type: boolean
+          description: |-
+            Indicate that a file resource could be accessed using a streaming
+            interface, ie a FUSE mounted s3 object. This flag indicates that
+            using a streaming mount, as opposed to downloading the whole file to
+            the local scratch space, may be faster despite the latency and
+            overhead. This does not mean that the backend will use a streaming
+            interface, as it may not be provided by the vendor, but if the
+            capacity is avalible it can be used without degrading the
+            performance of the underlying program.
       description: Input describes Task input files.
     tesListTasksResponse:
       required:
@@ -437,7 +543,6 @@ components:
     tesOutput:
       required:
       - path
-      - type
       - url
       type: object
       properties:
@@ -450,7 +555,9 @@ components:
         url:
           type: string
           description: |-
-            URL for the file to be copied by the TES server after the task is complete.
+            URL at which the TES server makes the output accessible after the task is complete.
+            When tesOutput.path contains wildcards, it must be a directory; see
+            `tesOutput.path_prefix` for details on how output URLs are constructed in this case.
             For Example:
              - `s3://my-object-store/file1`
              - `gs://my-bucket/file2`
@@ -458,8 +565,18 @@ components:
         path:
           type: string
           description: |-
-            Path of the file inside the container.
-            Must be an absolute path.
+            Absolute path of the file inside the container.
+            May contain pattern matching wildcards to select multiple outputs at once, but mind
+            implications for `tesOutput.url` and `tesOutput.path_prefix`.
+            Only wildcards defined in IEEE Std 1003.1-2017 (POSIX), 12.3 are supported; see
+            https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_13
+        path_prefix:
+          type: string
+          description: |-
+            Prefix to be removed from matching outputs if `tesOutput.path` contains wildcards;
+            output URLs are constructed by appending pruned paths to the directory specfied
+            in `tesOutput.url`.
+            Required if `tesOutput.path` contains wildcards, ignored otherwise.
         type:
           $ref: '#/components/schemas/tesFileType'
       description: Output describes Task output files.
@@ -495,7 +612,7 @@ components:
         cpu_cores:
           type: integer
           description: Requested number of CPUs
-          format: int64
+          format: int32
           example: 4
         preemptible:
           type: boolean
@@ -525,6 +642,40 @@ components:
           items:
             type: string
           example: us-west-1
+        backend_parameters:
+            type: object
+            additionalProperties:
+                type: string
+            description: |-
+                Key/value pairs for backend configuration.
+                ServiceInfo shall return a list of keys that a backend supports.
+                Keys are case insensitive.
+                It is expected that clients pass all runtime or hardware requirement key/values
+                that are not mapped to existing tesResources properties to backend_parameters.
+                Backends shall log system warnings if a key is passed that is unsupported.
+                Backends shall not store or return unsupported keys if included in a task.
+                If backend_parameters_strict equals true,
+                backends should fail the task if any key/values are unsupported, otherwise,
+                backends should attempt to run the task
+                Intended uses include VM size selection, coprocessor configuration, etc.
+                Example:
+                ```
+                {
+                  "backend_parameters" : {
+                    "VmSize" : "Standard_D64_v3"
+                  }
+                }
+                ```
+            example:
+                "VmSize" : "Standard_D64_v3"
+        backend_parameters_strict:
+            type: boolean
+            description: |-
+                If set to true, backends should fail the task if any backend_parameters
+                key/values are unsupported, otherwise, backends should attempt to run the task
+            format: boolean
+            default: false
+            example: false
       description: Resources describes the resources requested by a task.
     tesServiceType:
       allOf:
@@ -552,6 +703,14 @@ components:
             example:
                - file:///path/to/local/funnel-storage
                - s3://ohsu-compbio-funnel/storage
+          tesResources_backend_parameters:
+            type: array
+            description: |-
+              Lists all tesResources.backend_parameters keys supported
+              by the service
+            items:
+              type: string
+            example: ["VmSize"]
           type:
             $ref: '#/components/schemas/tesServiceType'
     tesState:
@@ -580,7 +739,12 @@ components:
          - `SYSTEM_ERROR`: The task was stopped due to a system error, but not from an Executor,
         for example an upload failed due to network issues, the worker's ran out
         of disk space, etc.
-         - `CANCELED`: The task was canceled by the user.
+         - `CANCELED`: The task was canceled by the user, and downstream resources have been deleted.
+         - `CANCELING`: The task was canceled by the user,
+        but the downstream resources are still awaiting deletion.
+         - `PREEMPTED`: The task is stopped (preempted) by the system. The reasons for this would be tied to
+        the specific system running the job. Generally, this means that the system reclaimed the compute
+        capacity for reallocation.
       default: UNKNOWN
       example: COMPLETE
       enum:
@@ -593,6 +757,8 @@ components:
       - EXECUTOR_ERROR
       - SYSTEM_ERROR
       - CANCELED
+      - PREEMPTED
+      - CANCELING
     tesTask:
       required:
       - executors
