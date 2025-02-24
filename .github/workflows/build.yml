@@ -25,6 +25,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: docs
+          folder: openapi
           target-folder: ${{ github.ref == 'refs/heads/main' && 'docs/index.html' || '' }}  # Deploy to docs/index.html only if on main
-          clean: ${{ github.ref == 'refs/heads/main' }}  # Clean only if on the main branch
+          clean: true  # Clean only if on the main branch
