@@ -12,7 +12,7 @@ Task Execution Service (TES) API
 ================================
 
 This repository is the home for the schema of the Task Execution Service (TES)
-API defined by the[Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/)
+API defined by the [Cloud Work Stream](https://www.ga4gh.org/work_stream/cloud/)
 of the [Global Alliance for Genomics and Health (GA4GH)](https://ga4gh.org/).
 The goal of the API standard is to provide a uniform way to executing batch
 computing tasks.
@@ -92,11 +92,11 @@ handling personal data.
 > performed on latest versions of implementations available in December 2020.
 > Information may be outdated.
 
-|               | cwl-tes       | Cromwell  | Nextflow |
-| -----------   | ------------- | --------- | ---------|
-| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
-| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
-| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) |
+|               | cwl-tes       | Cromwell  | Nextflow | Snakemake |
+| -----------   | ------------- | --------- | ---------| --------- |
+| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) |
+| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/elixir-cloud-aai/demo-tes-hybrid-cloud/tree/main) |
+| **TES Azure** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) | [Compatible](https://github.com/microsoft/ga4gh-tes/blob/main/snakemake/examples/snakemake/README.md) |
 
 
 TES Service Examples
