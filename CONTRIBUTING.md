@@ -1,34 +1,47 @@
 
 # CONTRIBUTING
 
-This schema is developed by the [Cloud Work Stream](https://ga4gh.cloud) of the [Global Alliance for Genomics and Health](https://ga4gh.org).
+This schema is developed by the [Cloud Work
+Stream]([https://ga4gh.cloud](https://www.ga4gh.org/work_stream/cloud/)) of the
+[Global Alliance for Genomics and Health](https://ga4gh.org).
 
 ## Semantic Versioning
 
-We use [semantic versioning](https://semver.org/) for TES, this will determine if your proposed changes impact a major or minor release.
+The Task Execution Service (TES) API uses [semantic
+versioning](https://semver.org/) for TES. Please consider that breaking changes
+imply a new major version release, which is associated with considerable
+administrative work and therefore happen only rarely.
 
 ## Suggesting Changes
 
-Suggested changes to this schema can be initiated as [**Issues**](https://github.com/ga4gh/task-execution-schemas/issues) or [**Pull Requests**](https://github.com/ga4gh/task-execution-schemas/pulls) to allow for discussion and review.
+Changes to TES can be initiated as
+[**issues**](https://github.com/ga4gh/task-execution-schemas/issues) or
+[**pull requests**](https://github.com/ga4gh/task-execution-schemas/pulls) to
+allow for discussion and review. For considerable changes, we generally
+recommend opening issues first in order to discuss scope and feasibility.
 
-Even those with write access to the main repository should in general create pull request branches within their own forks. This way when the main repository is forked again, the new fork is created with a minimum of extraneous volatile branches.
+When creating pull requests, please do so from your own fork - even if you have
+write access to the repository. In this way, when the main repository is forked
+again, the new fork is created with a minimum of extraneous, volatile branches.
 
-> To facilitate review of external pull requests, users are encouraged to activate [**Travis CI**](https://travis-ci.org/) to monitor the build status (documentation, Swagger UI) of their fork. By following the documentation for [deployment to GitHub Pages](https://docs.travis-ci.com/user/deployment/pages/) and adding a `$GITHUB_TOKEN` environment variable to their repo configuration, pushes to the forked repo should be viewable relative to `https://[user-or-org].github.io/workflow-execution-service-schemas/preview/<branch>/`:
+> To facilitate the review of external pull requests, users are encouraged to
+> activate [**GitHub Actions**](https://github.com/features/actions) to monitor
+> the build status of their fork. By following the documentation for [deployment
+> to GitHub
+> Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site),
+> pushes to the forked repository will be viewable at
+> `https://[user-or-org].github.io/task-execution-service/preview/<branch>/`,
+> e.g.,:
+> - `https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/docs/`
+> - `https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger-ui/`
+> - `https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger.json`
+> - `https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger.yaml`
 
-+ https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/docs/
-+ https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger-ui/
-+ https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger.json
-+ https://[user-or-org].github.io/task-execution-schemas/preview/\<branch\>/swagger.yaml
+Providing this base URL in the pull request comment is appreciated, but not
+required.
 
-> Providing this base URL in the pull request comment is appreciated, but not required.
+If a security vulnerability is identified with the specification, please send an
+email to <mailto:security-notification@ga4gh.org> detailing your concerns.
 
-If a security vulnerability is identified with the specification please send an email to security-notification@ga4gh.org detailing your concerns.
-
-## Approving Changes
-
-### pre-TES v1.0.0 / Testbed Voting Procedure
-Changes for the release are to be approved by 2 TES specification leads.
-
-### post TES v1.0.0 Voting Procedure
-The post v1.0.0 voting group include stakeholders, such as server and client implementors.
-The membership of this group will be established as part of the v1.0.0 release.
+For more information please refer to the [**governance
+documentation**](GOVERNANCE.md).
