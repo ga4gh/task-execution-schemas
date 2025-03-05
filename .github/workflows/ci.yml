@@ -1,0 +1,78 @@
+name: Lint and validate OpenAPI specs
+on:
+  - push
+  - pull_request_target
+jobs:
+  lint:
+    name: Lint OpenAPI definition
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out head branch
+        uses: actions/checkout@v4
+      - name: Run OpenAPI Lint Action
+        uses: mhiew/redoc-lint-github-action@v4
+        with:
+          args: 'openapi/task_execution_service.openapi.yaml'
+  validate:
+    name: Validate OpenAPI definition
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out head branch
+        uses: actions/checkout@v4
+      - name: Run OpenAPI Validate Action
+        uses: swaggerexpert/swagger-editor-validate@v1
+        with:
+          definition-file: openapi/task_execution_service.openapi.yaml
+
+  diff:
+    name: Show OpenAPI differences relative to target branch
+    runs-on: ubuntu-latest
+    outputs:
+      diff_generated: ${{ steps.upload-log.outputs.artifact_id }}
+    steps:
+      - name: Check out head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          path: head
+      - name: Check out base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: base
+      - name: Create output directory
+        run: mkdir -p diff-artifacts/
+      - name: Pull Docker Image
+        run: docker pull openapitools/openapi-diff:2.0.1
+      - name: Run openapi-diff tool
+        run: |
+          docker run --rm \
+          -v $(pwd)/head:/head:ro \
+          -v $(pwd)/base:/base:ro \
+          -v $(pwd)/diff-artifacts:/local \
+          openapitools/openapi-diff:2.0.1 \
+          /base/openapi/task_execution_service.openapi.yaml \
+          /head/openapi/task_execution_service.openapi.yaml \
+          --markdown /local/diff.md 2> diff-artifacts/error.log
+      - name: Get PR number
+        id: get-pr-number
+        run: |
+          echo "${{ github.event.pull_request.number }}" > diff-artifacts/pr_number
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: diff-artifacts
+          path: diff-artifacts/
+          if-no-files-found: ignore
+      - name: Check if OpenAPI Diff failed
+        id: check-diff
+        run: |
+          if [ -s diff-artifacts/error.log  ]; then
+            echo "The diff failed. Please see artifact error.log."
+            exit 1
+          fi
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
