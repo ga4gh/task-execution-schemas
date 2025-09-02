@@ -92,7 +92,7 @@ handling personal data.
 ### Compatibility Matrix
 
 > Compatibility is assumed based on available documentation and limited tests
-> performed on latest versions of implementations available in August 2023.
+> performed on latest versions of implementations available in August 2025.
 > Information may be outdated.
 
 |               | cwl-tes       | Cromwell  | Nextflow | Snakemake |
