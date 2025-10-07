@@ -80,6 +80,7 @@ handling personal data.
 - [Snakemake](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes)
 - [Toil](https://toil.readthedocs.io/en/latest/)
 - [St. Jude Rust Labs](https://github.com/stjude-rust-labs/tes)
+- [Sprocket](https://github.com/stjude-rust-labs/sprocket)
 
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
@@ -88,6 +89,7 @@ handling personal data.
 - [Pulsar](https://pulsar.readthedocs.io/)
 - [proTES](https://github.com/elixir-cloud-aai/proTES)
 - [Poiesis](https://github.com/JaeAeich/poiesis)
+- [Planetary](https://github.com/stjude-rust-labs/planetary)
 
 ### Compatibility Matrix
 
