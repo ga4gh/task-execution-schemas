@@ -19,10 +19,14 @@ jobs:
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
-      - name: Run OpenAPI Validate Action
-        uses: swaggerexpert/swagger-editor-validate@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          definition-file: openapi/task_execution_service.openapi.yaml
+          node-version: '20'
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+      - name: Validate OpenAPI definition
+        run: spectral lint openapi/task_execution_service.openapi.yaml --ruleset .spectral.yaml
 
   diff:
     name: Show OpenAPI differences relative to target branch
