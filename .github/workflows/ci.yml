@@ -7,14 +7,17 @@ jobs:
     name: Lint OpenAPI definition
     runs-on: ubuntu-latest
     steps:
-      - name: Check out head branch
+      - name: Check out PR head branch (safe read-only)
         uses: actions/checkout@v4
-      - name: Run OpenAPI Lint Action
-        uses: mhiew/redoc-lint-github-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Validate in Swagger Editor
+        uses: swaggerexpert/swagger-editor-validate@v1.5.1
+        with:
           definition-file: openapi/task_execution_service.openapi.yaml
-          default-timeout: '180000' 
+          default-timeout: 180000
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
