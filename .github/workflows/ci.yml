@@ -1,7 +1,9 @@
 name: Lint and validate OpenAPI specs
+
 on:
-  - push
-  - pull_request_target
+  push:
+  pull_request:
+
 jobs:
   lint:
     name: Lint OpenAPI definition
@@ -9,12 +11,13 @@ jobs:
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
-      - name: Run OpenAPI Lint Action
-        uses: mhiew/redoc-lint-github-action@v4
+
+      - name: Validate in Swagger Editor
+        uses: swaggerexpert/swagger-editor-validate@v1.5.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          file: openapi/task_execution_service.openapi.yaml
-          default-timeout: '120000' 
+          definition-file: openapi/task_execution_service.openapi.yaml
+          default-timeout: 120000
+
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
@@ -25,11 +28,13 @@ jobs:
         with:
           ref: ${{ github.ref }}
           path: head
+
       - name: Check out base branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           path: base
+
       - name: Run OpenAPI Diff Action
         uses: mvegter/openapi-diff-action@v0.23.5
         with:
@@ -42,11 +47,14 @@ jobs:
     steps:
       - name: Check out head branch
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install Spectral
         run: npm install -g @stoplight/spectral-cli
+
       - name: Validate OpenAPI definition
         run: spectral lint openapi/task_execution_service.openapi.yaml --ruleset .spectral.yaml
