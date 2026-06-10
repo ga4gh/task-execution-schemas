@@ -12,9 +12,7 @@ jobs:
       - name: Run OpenAPI Lint Action
         uses: mhiew/redoc-lint-github-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          file: openapi/task_execution_service.openapi.yaml
-          default_timeout: 30000  # Increase timeout to 30 seconds
+          args: openapi/task_execution_service.openapi.yaml
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
