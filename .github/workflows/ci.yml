@@ -26,8 +26,8 @@ jobs:
       - name: Install Spectral
         run: npm install -g @stoplight/spectral-cli
       - name: Validate OpenAPI definition
-        run: spectral lint openapi/task_execution_service.openapi.yaml --ruleset .spectral.yaml
-
+        run: spectral lint openapi/workflow_execution_service.openapi.yaml --ruleset .spectral.yaml
+  
   diff:
     name: Show OpenAPI differences relative to target branch
     runs-on: ubuntu-latest
