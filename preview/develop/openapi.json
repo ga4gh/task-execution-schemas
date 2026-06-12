@@ -531,9 +531,7 @@
             "type": "string",
             "description": "Size of the file in bytes. Note, this is currently coded as a string\nbecause official JSON doesn't support int64 numbers.",
             "format": "int64",
-            "example": [
-              "1024"
-            ]
+            "example": "1024"
           }
         },
         "description": "OutputFileLog describes a single output file. This describes\nfile details after the task has completed successfully,\nfor logging purposes."
@@ -571,7 +569,9 @@
             "items": {
               "type": "string"
             },
-            "example": "us-west-1"
+            "example": [
+              "us-west-1"
+            ]
           },
           "backend_parameters": {
             "type": "object",
@@ -791,7 +791,7 @@
             "description": "Arbitrary logging metadata included by the implementation.",
             "example": {
               "host": "worker-001",
-              "slurmm_id": 123456
+              "slurmm_id": "123456"
             }
           },
           "start_time": {

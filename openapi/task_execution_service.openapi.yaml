@@ -83,7 +83,7 @@ paths:
         by the TES server.
       operationId: GetServiceInfo
       responses:
-        200:
+        '200':
           description: ""
           content:
             application/json:
@@ -180,7 +180,7 @@ paths:
       - $ref: '#/components/parameters/view'
 
       responses:
-        200:
+        '200':
           description: ""
           content:
             application/json:
@@ -206,7 +206,7 @@ paths:
               $ref: '#/components/schemas/tesTask'
         required: true
       responses:
-        200:
+        '200':
           description: ""
           content:
             application/json:
@@ -233,7 +233,7 @@ paths:
           type: string
       - $ref: '#/components/parameters/view'
       responses:
-        200:
+        '200':
           description: ""
           content:
             application/json:
@@ -257,7 +257,7 @@ paths:
         schema:
           type: string
       responses:
-        200:
+        '200':
           description: ""
           content:
             application/json:
@@ -600,8 +600,7 @@ components:
             Size of the file in bytes. Note, this is currently coded as a string
             because official JSON doesn't support int64 numbers.
           format: int64
-          example:
-            - "1024"
+          example: "1024"
       description: |-
         OutputFileLog describes a single output file. This describes
         file details after the task has completed successfully,
@@ -641,7 +640,8 @@ components:
             priorty queue to which the job is assigned.
           items:
             type: string
-          example: us-west-1
+          example: 
+            - us-west-1
         backend_parameters:
             type: object
             additionalProperties:
@@ -883,7 +883,7 @@ components:
           description: Arbitrary logging metadata included by the implementation.
           example:
             host: worker-001
-            slurmm_id: 123456
+            slurmm_id: "123456"
         start_time:
           type: string
           description: When the task started, in RFC 3339 format.
