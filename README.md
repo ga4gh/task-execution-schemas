@@ -72,7 +72,7 @@ compliance with relevant regulatory and security standards, particularly when
 handling personal data.
 
 ### Client
-- [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes)
+- [cwl-tes](https://github.com/ohsu-comp-bio/cwl-tes) **Archived**
 - [Cromwell](https://cromwell.readthedocs.io/en/stable/backends/TES/)
 - [ELIXIR Cloud Components](https://elixir-cloud-components.vercel.app/)
 - [py-tes](https://github.com/ohsu-comp-bio/py-tes)
