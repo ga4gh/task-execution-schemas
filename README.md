@@ -97,11 +97,14 @@ handling personal data.
 > performed on latest versions of implementations available in August 2025.
 > Information may be outdated.
 
-|               | cwl-tes       | Cromwell  | Nextflow | Snakemake |
-| -----------   | ------------- | --------- | ---------| --------- |
-| **Funnel**    | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes) | Compatible | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) |
-| **TESK**      | [Compatible](https://github.com/ohsu-comp-bio/cwl-tes/pull/25) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/elixir-cloud-aai/demo-tes-hybrid-cloud/tree/main) |
-| **TES Azure (Archived)** | Not tested | [Compatible](https://github.com/microsoft/CromwellOnAzure) | [Compatible](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes) | [Compatible](https://github.com/microsoft/ga4gh-tes/blob/main/snakemake/examples/snakemake/README.md) |
+| Server | Cromwell | py-tes | Nextflow | Snakemake | Toil | St. Jude Rust Labs | Sprocket|
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Funnel](https://github.com/calypr/funnel) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | Unknown | Unknown |
+| [TESK](https://github.com/EMBL-EBI-TSI/TESK) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | Unknown | Unknown |
+| [Pulsar](https://pulsar.readthedocs.io/)  | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
+| [Poiesis](https://github.com/JaeAeich/poiesis)  | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
+| [Planetary](https://github.com/stjude-rust-labs/planetary)  | Unknown | [Compatible](https://github.com/calypr/py-tes)  | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://github.com/stjude-rust-labs/tes) | [Compatible](https://github.com/stjude-rust-labs/sprocket) |
+
 
 
 TES Service Examples
