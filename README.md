@@ -79,7 +79,8 @@ handling personal data.
 - [Nextflow](https://www.nextflow.io/docs/stable/executor.html#ga4gh-tes)
 - [Snakemake](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes)
 - [Toil](https://toil.readthedocs.io/en/latest/)
-- [St. Jude Rust Labs](https://github.com/stjude-rust-labs/tes)
+- [St.  Rust Labs](https://github.com/stjude-rust-labs/tes)
+- [Crankshaft](https://github.com/stjude-rust-labs/crankshaft)
 - [Sprocket](https://github.com/stjude-rust-labs/sprocket)
 
 ### Server
@@ -97,7 +98,7 @@ handling personal data.
 > performed on latest versions of implementations available in August 2025.
 > Information may be outdated.
 
-| Server | Cromwell | py-tes | Nextflow | Snakemake | Toil | St. Jude Rust Labs | Sprocket|
+| Server | Cromwell | py-tes | Nextflow | Snakemake | Toil | Crankshaft | Sprocket|
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Funnel](https://github.com/calypr/funnel) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | Unknown | Unknown |
 | [TESK](https://github.com/EMBL-EBI-TSI/TESK) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | Unknown | Unknown |
