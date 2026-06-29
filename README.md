@@ -98,13 +98,13 @@ handling personal data.
 > performed on latest versions of implementations available in August 2025.
 > Information may be outdated.
 
-| Server | Cromwell | py-tes | Nextflow | Snakemake | Toil | Crankshaft | Sprocket|
+| Server | py-tes | Crankshaft | Snakemake | Sprocket | Cromwell | Toil | Nextflow |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Funnel](https://github.com/calypr/funnel) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | Unknown | Unknown |
-| [TESK](https://github.com/EMBL-EBI-TSI/TESK) | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | Unknown | Unknown |
-| [Pulsar](https://pulsar.readthedocs.io/)  | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
-| [Poiesis](https://github.com/JaeAeich/poiesis)  | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
-| [Planetary](https://github.com/stjude-rust-labs/planetary)  | Unknown | [Compatible](https://github.com/calypr/py-tes)  | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://github.com/stjude-rust-labs/tes) | [Compatible](https://github.com/stjude-rust-labs/sprocket) |
+| [Funnel](https://github.com/calypr/funnel) | Unknown | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
+| [TESK](https://github.com/EMBL-EBI-TSI/TESK) | Unknown | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
+| [Pulsar](https://pulsar.readthedocs.io/) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
+| [Poiesis](https://github.com/JaeAeich/poiesis) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
+| [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | Not Compatible | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Unknown | Unknown | Unknown |
 
 
 
