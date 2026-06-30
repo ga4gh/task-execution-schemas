@@ -95,7 +95,7 @@ handling personal data.
 ### Compatibility Matrix
 
 > Compatibility is assumed based on available documentation and limited tests
-> performed on latest versions of implementations available in August 2025.
+> performed on latest versions of implementations available in July 2026.
 > Information may be outdated.
 
 | Server | py-tes | Crankshaft | Snakemake | Sprocket | Cromwell | Toil | Nextflow |
@@ -104,7 +104,8 @@ handling personal data.
 | [TESK](https://github.com/EMBL-EBI-TSI/TESK) | Unknown | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
 | [Pulsar](https://pulsar.readthedocs.io/) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
 | [Poiesis](https://github.com/JaeAeich/poiesis) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
-| [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | Not Compatible | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Unknown | Unknown | Unknown |
+| [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | [Not Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/issues/19) | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Not Compatible  | Not Compatible | [Not Compatible](https://github.com/stjude-rust-labs/planetary/issues/44) |
+
 
 
 
