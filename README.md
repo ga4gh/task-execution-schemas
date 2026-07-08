@@ -91,6 +91,7 @@ handling personal data.
 - [proTES](https://github.com/elixir-cloud-aai/proTES)
 - [Poiesis](https://github.com/JaeAeich/poiesis)
 - [Planetary](https://github.com/stjude-rust-labs/planetary)
+- [poiesisd](https://github.com/JaeAeich/poiesisd)
 
 ### Compatibility Matrix
 
@@ -103,7 +104,7 @@ handling personal data.
 | [Funnel](https://github.com/calypr/funnel) | Unknown | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
 | [TESK](https://github.com/EMBL-EBI-TSI/TESK) | Unknown | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
 | [Pulsar](https://pulsar.readthedocs.io/) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
-| [Poiesis](https://github.com/JaeAeich/poiesis) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
+| [Poiesis](https://github.com/JaeAeich/poiesis) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes)  | [Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/) | [Not Compatible](https://github.com/stjude-rust-labs/crankshaft/issues/81) | Not Compatible  | Not Compatible | [Compatible](https://github.com/nextflow-io/nf-ga4gh/) |
 | [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | [Not Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/issues/19) | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Not Compatible  | Not Compatible | [Not Compatible](https://github.com/stjude-rust-labs/planetary/issues/44) |
 
 
