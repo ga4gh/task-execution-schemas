@@ -82,12 +82,13 @@ handling personal data.
 - [St.  Rust Labs](https://github.com/stjude-rust-labs/tes)
 - [Crankshaft](https://github.com/stjude-rust-labs/crankshaft)
 - [Sprocket](https://github.com/stjude-rust-labs/sprocket)
+- [Pulsar](https://pulsar.readthedocs.io/)
+- [TESP API](https://github.com/CESNET/tesp-api)
 
 ### Server
 - [Funnel](https://ohsu-comp-bio.github.io/funnel/)
 - [TESK](https://github.com/EMBL-EBI-TSI/TESK)
 - [TES Azure](https://github.com/microsoft/ga4gh-tes) **Archived**
-- [Pulsar](https://pulsar.readthedocs.io/)
 - [proTES](https://github.com/elixir-cloud-aai/proTES)
 - [Poiesis](https://github.com/JaeAeich/poiesis)
 - [Planetary](https://github.com/stjude-rust-labs/planetary)
@@ -99,13 +100,12 @@ handling personal data.
 > performed on latest versions of implementations available in July 2026.
 > Information may be outdated.
 
-| Server | py-tes | Crankshaft | Snakemake | Sprocket | Cromwell | Toil | Nextflow |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| [Funnel](https://github.com/calypr/funnel) | Unknown | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) |
-| [TESK](https://github.com/EMBL-EBI-TSI/TESK) | Unknown | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) |
-| [Pulsar](https://pulsar.readthedocs.io/) | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |
-| [Poiesis](https://github.com/JaeAeich/poiesis) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes)  | [Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/) | [Not Compatible](https://github.com/stjude-rust-labs/crankshaft/issues/81) | Not Compatible  | Not Compatible | [Compatible](https://github.com/nextflow-io/nf-ga4gh/) |
-| [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | [Not Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/issues/19) | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Not Compatible  | Not Compatible | [Not Compatible](https://github.com/stjude-rust-labs/planetary/issues/44) |
+| Server | py-tes | Crankshaft | Snakemake | Sprocket | Cromwell | Toil | Nextflow | Pulsar
+| --- | --- | --- | --- | --- | --- | --- | --- | -- |
+| [Funnel](https://github.com/calypr/funnel) | Unknown | Unknown | [Compatible](https://snakemake.readthedocs.io/en/stable/executing/cloud.html#executing-a-snakemake-workflow-via-ga4gh-tes) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://www.nextflow.io/docs/latest/executor.html#ga4gh-tes) | Unknown
+| [TESK](https://github.com/EMBL-EBI-TSI/TESK) | Unknown | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown | [Compatible](https://cromwell.readthedocs.io/en/stable/backends/TES/) | Unknown | [Compatible](https://github.com/EMBL-EBI-TSI/tesk-core/pull/19) | Unknown
+| [Poiesis](https://github.com/JaeAeich/poiesis) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes)  | [Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/) | [Not Compatible](https://github.com/stjude-rust-labs/crankshaft/issues/81) | Not Compatible  | Not Compatible | [Compatible](https://github.com/nextflow-io/nf-ga4gh/) | Unknown
+| [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | [Not Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/issues/19) | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Not Compatible  | Not Compatible | [Not Compatible](https://github.com/stjude-rust-labs/planetary/issues/44) | Unknown 
 
 
 
