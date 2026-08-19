@@ -97,7 +97,7 @@ handling personal data.
 ### Compatibility Matrix
 
 > Compatibility is assumed based on available documentation and limited tests
-> performed on latest versions of implementations available in July 2026.
+> performed on latest versions of implementations available in August 2026.
 > Information may be outdated.
 
 | Server | py-tes | Crankshaft | Snakemake | Sprocket | Cromwell | Toil | Nextflow | Pulsar
