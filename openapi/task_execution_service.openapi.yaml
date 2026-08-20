@@ -771,6 +771,12 @@ components:
           example: job-0012345
         state:
           $ref: '#/components/schemas/tesState'
+        state_description:
+          type: string
+          description: |-
+            OPTIONAL. Additional information about the state of the task,
+            such as the reason the state is set to `QUEUED` or `INITIALIZING`.
+          example: "Pending available quota: low-priority vCPUs"
         name:
           type: string
           description: User-provided task name.
