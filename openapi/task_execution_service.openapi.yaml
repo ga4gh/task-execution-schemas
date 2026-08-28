@@ -266,6 +266,38 @@ paths:
       security:
         - BearerAuth: []  # Endpoint secured with Bearer token
         - BasicAuth: []    # Alternatively, secured with Basic Auth
+  /capabilities:
+    get:
+      summary:GetCapabilities
+      description: |
+        Returns information about compute, hardware, accelerator, and
+        machine-topology features supported by this TES backend.
+
+        All fields are OPTIONAL. Implementations MAY return only partial
+        or high-level information.
+      operationId: GetCapabilities
+  responses:
+        "200":
+          description: TES capability definition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/tesCapabilities"
+              example:
+                cpu_cores: 32
+                ram_gb: 256
+                disk_gb: 2000
+                num_machines: 8
+                accelerators:
+                  - type: GPU
+                    count: 4
+                  - type: TPU
+                    count: 2
+                chip_type: x86_64
+                fpga: true
+      security:
+        - BearerAuth: []  # Endpoint secured with Bearer token
+        - BasicAuth: []    # Alternatively, secured with Basic Auth
 components:
   securitySchemes:
     BearerAuth:
@@ -916,3 +948,58 @@ components:
           items:
             type: string
       description: TaskLog describes logging information related to a Task.
+      schemas:
+    tesCapabilities:
+      type: object
+      description: |-
+        Defines the compute and hardware capabilities of the TES backend.
+        All fields are OPTIONAL.
+      properties:
+        cpu_cores:
+          type: integer
+          format: int32
+          description: Number of CPU cores available per machine.
+          example: 16
+        ram_gb:
+          type: number
+          format: double
+          description: RAM available per machine in gigabytes.
+          example: 64
+        disk_gb:
+          type: number
+          format: double
+          description: Disk available per machine in gigabytes.
+          example: 500
+        num_machines:
+          type: integer
+          format: int32
+          description: Total number of machines available for task execution.
+          example: 10
+        accelerators:
+          type: array
+          description: List of accelerator types available.
+          items:
+            type: object
+            required:
+              - type
+              - count
+            properties:
+              type:
+                type: string
+                description: Type of accelerator (e.g., GPU, TPU, FPGA)
+                example: GPU
+              count:
+                type: integer
+                description: Number of this accelerator type available.
+                example: 4
+        chip_type:
+          type: string
+          description: |-
+            Main CPU chip type used by the TES backend. Optional information about architecture
+            or vendor-specific chip (e.g., x86_64, ARM, Graviton).
+          example: x86_64
+        fpga:
+          type: boolean
+          description: Indicates if FPGA resources are available.
+          example: true
+
