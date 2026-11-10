@@ -108,7 +108,15 @@ handling personal data.
 | [Planetary](https://github.com/stjude-rust-labs/planetary) | [Compatible](https://github.com/calypr/py-tes) | [Compatible](https://github.com/stjude-rust-labs/tes) | [Not Compatible](https://github.com/snakemake/snakemake-executor-plugin-tes/issues/19) | [Compatible](https://github.com/stjude-rust-labs/sprocket) | Not Compatible  | [Not Compatible](https://github.com/adamnovak/toil_batch_system_tes/issues/7) | [Compatible](https://github.com/stjude-rust-labs/planetary) | Unknown 
 
 
-
+Versioned execution observations complement this overview. The
+[GA4GH SDK provider profiles](https://github.com/superbsky/ga4gh-sdk/blob/8f73a6f2929181725f0557c59634c9c9386b2a8f/docs/review/horizon3-interop/README.md)
+include source-pinned JSON/JUnit for SDK-to-Funnel 0.12.3, the proTES real-backend
+suite at 55c4d159, and Nextflow 26.10.5/nf-ga4gh 1.5.0 through proTES to Funnel.
+The Nextflow fixture requires shared work storage and covers directory/glob
+bytes, output mappings, logs and API cancellation. Its final container-stop
+observation exceeded 15 seconds after CANCELED; the report retains that failure
+and the untested features. These observations describe the named fixtures and
+versions without extending the compatibility claims to other deployments.
 
 TES Service Examples
 --------------------
